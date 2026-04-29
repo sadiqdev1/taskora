@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Clean rounded square -->
+  <rect width="48" height="48" rx="11" fill="#F97316"/>
+  
+  <!-- Simple, bold smile arc -->
+  <path d="M 14 24 Q 24 34 34 24" 
+        stroke="white" 
+        stroke-width="4" 
+        stroke-linecap="round" 
+        fill="none"/>
+  
+  <!-- Clean circular eyes -->
+  <circle cx="17" cy="17" r="3" fill="white"/>
+  <circle cx="31" cy="17" r="3" fill="white"/>
+</svg>
