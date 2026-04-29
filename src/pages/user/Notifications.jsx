@@ -72,7 +72,7 @@ const Notifications = () => {
             Mark All as Read
           </Button>
         )}
-      </div>
+      </motion.div>
 
       {/* Notifications List */}
       {notifications.length === 0 ? (
@@ -83,46 +83,53 @@ const Notifications = () => {
         />
       ) : (
         <div className="space-y-3">
-          {notifications.map((notification) => (
-            <Card
+          {notifications.map((notification, index) => (
+            <motion.div
               key={notification.id}
-              hover
-              onClick={() => {
-                markAsRead(notification.id);
-                if (notification.link) {
-                  navigate(notification.link);
-                }
-              }}
-              className={`p-6 cursor-pointer ${
-                !notification.read ? 'border-l-4 border-blue-500' : ''
-              }`}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 + index * 0.05 }}
+              whileHover={{ x: 4 }}
             >
-              <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${getNotificationColor(notification.type)}`}>
-                  {getNotificationIcon(notification.type)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-4 mb-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-white">
-                      {notification.title}
-                    </h3>
-                    {!notification.read && (
-                      <Badge variant="primary" size="sm">New</Badge>
-                    )}
+              <Card
+                hover
+                onClick={() => {
+                  markAsRead(notification.id);
+                  if (notification.link) {
+                    navigate(notification.link);
+                  }
+                }}
+                className={`p-6 cursor-pointer ${
+                  !notification.read ? 'border-l-4 border-blue-500' : ''
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${getNotificationColor(notification.type)}`}>
+                    {getNotificationIcon(notification.type)}
                   </div>
-                  <p className="text-gray-600 dark:text-zinc-400 mb-2">
-                    {notification.message}
-                  </p>
-                  <p className="text-sm text-gray-500 dark:text-zinc-500">
-                    {formatRelativeTime(notification.createdAt)}
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-4 mb-1">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                        {notification.title}
+                      </h3>
+                      {!notification.read && (
+                        <Badge variant="primary" size="sm">New</Badge>
+                      )}
+                    </div>
+                    <p className="text-gray-600 dark:text-zinc-400 mb-2">
+                      {notification.message}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-zinc-500">
+                      {formatRelativeTime(notification.createdAt)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Card>
+              </Card>
+            </motion.div>
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
