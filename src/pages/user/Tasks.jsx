@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
-import Select from '../../components/common/Select';
+import Dropdown from '../../components/common/Dropdown';
 import Pagination from '../../components/common/Pagination';
 import { mockTasks } from '../../data/mockData';
 import { formatCurrency } from '../../utils/formatters';
 import { IoTime, IoPeople, IoTrophy } from 'react-icons/io5';
+import { motion } from 'framer-motion';
 
 const Tasks = () => {
   const navigate = useNavigate();
@@ -60,88 +61,115 @@ const Tasks = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
       {/* Header */}
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Task Marketplace
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
           Browse and complete tasks to earn rewards
         </p>
-      </div>
+      </motion.div>
 
       {/* Filters */}
-      <Card className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Select
-            label="Task Type"
-            value={filter}
-            onChange={setFilter}
-            options={taskTypeOptions}
-          />
-          <Select
-            label="Sort By"
-            value={sortBy}
-            onChange={setSortBy}
-            options={sortOptions}
-          />
-        </div>
-      </Card>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <Card className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Dropdown
+              label="Task Type"
+              value={filter}
+              onChange={setFilter}
+              options={taskTypeOptions}
+            />
+            <Dropdown
+              label="Sort By"
+              value={sortBy}
+              onChange={setSortBy}
+              options={sortOptions}
+            />
+          </div>
+        </Card>
+      </motion.div>
 
       {/* Task Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {paginatedTasks.map((task) => (
-          <Card
+        {paginatedTasks.map((task, index) => (
+          <motion.div
             key={task.id}
-            hover
-            onClick={() => navigate(`/tasks/${task.id}`)}
-            className="p-6 cursor-pointer"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 + index * 0.05 }}
+            whileHover={{ y: -8, transition: { duration: 0.2 } }}
           >
-            <div className="flex items-start justify-between mb-3">
-              <Badge variant={getTaskTypeColor(task.type)} size="sm">
-                {task.type.toUpperCase()}
-              </Badge>
-              <div className="text-right">
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {formatCurrency(task.reward)}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-zinc-500">Reward</p>
+            <Card
+              hover
+              onClick={() => navigate(`/tasks/${task.id}`)}
+              className="p-6 cursor-pointer h-full"
+            >
+              <div className="flex items-start justify-between mb-3">
+                <Badge variant={getTaskTypeColor(task.type)} size="sm">
+                  {task.type.toUpperCase()}
+                </Badge>
+                <div className="text-right">
+                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    {formatCurrency(task.reward)}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-zinc-500">Reward</p>
+                </div>
               </div>
-            </div>
 
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              {task.title}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
-              {task.description}
-            </p>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                {task.title}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                {task.description}
+              </p>
 
-            <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-zinc-400">
-              <div className="flex items-center gap-1">
-                <IoTime />
-                <span>{task.estimatedTime} min</span>
+              <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-zinc-400">
+                <div className="flex items-center gap-1">
+                  <IoTime />
+                  <span>{task.estimatedTime} min</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <IoPeople />
+                  <span>{task.remainingSlots} left</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <IoPeople />
-                <span>{task.remainingSlots} left</span>
-              </div>
-            </div>
-          </Card>
+            </Card>
+          </motion.div>
         ))}
       </div>
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="flex justify-center"
+        >
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
           />
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

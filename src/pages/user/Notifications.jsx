@@ -7,6 +7,7 @@ import EmptyState from '../../components/common/EmptyState';
 import { mockNotifications } from '../../data/mockData';
 import { formatRelativeTime } from '../../utils/formatters';
 import { IoNotifications, IoCheckmarkCircle, IoWallet, IoInformationCircle, IoBriefcase } from 'react-icons/io5';
+import { motion } from 'framer-motion';
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -45,9 +46,19 @@ const Notifications = () => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="flex items-center justify-between"
+      >
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Notifications

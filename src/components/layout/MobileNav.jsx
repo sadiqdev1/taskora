@@ -10,7 +10,6 @@ import {
   IoCheckmarkDone,
   IoBriefcase,
   IoSwapHorizontal,
-  IoNotifications,
   IoSettings,
   IoAdd,
   IoGrid,
@@ -31,7 +30,6 @@ const MobileNav = () => {
   const moreItems = [
     { path: '/my-tasks', label: 'My Tasks', icon: IoCheckmarkDone },
     { path: '/transactions', label: 'Transactions', icon: IoSwapHorizontal },
-    { path: '/notifications', label: 'Notifications', icon: IoNotifications },
     { path: '/settings', label: 'Settings', icon: IoSettings },
   ];
 
