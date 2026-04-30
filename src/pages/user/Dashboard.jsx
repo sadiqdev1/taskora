@@ -271,21 +271,21 @@ const Dashboard = () => {
       </motion.div>
 
       {/* Affiliate & Daily Tasks Cards */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 rounded-xl flex items-center justify-center">
-                <IoTrendingUp size={24} />
+          <Card className="p-3 sm:p-5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 rounded-xl flex items-center justify-center flex-shrink-0">
+                <IoTrendingUp size={20} className="sm:w-6 sm:h-6" />
               </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-zinc-400">Affiliate</p>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Affiliate</p>
+                <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
                   {formatCurrency(0.00)}
                 </p>
               </div>
@@ -299,14 +299,14 @@ const Dashboard = () => {
           transition={{ delay: 0.3 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center">
-                <IoCheckmarkCircle size={24} />
+          <Card className="p-3 sm:p-5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center flex-shrink-0">
+                <IoCheckmarkCircle size={20} className="sm:w-6 sm:h-6" />
               </div>
-              <div>
-                <p className="text-sm text-gray-600 dark:text-zinc-400">Daily Tasks</p>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Daily Tasks</p>
+                <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
                   {formatCurrency(0.00)}
                 </p>
               </div>
