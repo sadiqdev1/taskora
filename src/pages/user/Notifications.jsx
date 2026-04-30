@@ -52,18 +52,13 @@ const Notifications = () => {
       transition={{ duration: 0.4 }}
       className="space-y-6"
     >
-      {/* Header */}
+      {/* Header Actions */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="flex items-center justify-between"
+        className="flex items-center justify-end"
       >
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Notifications
-          </h1>
-        </div>
         {unreadCount > 0 && (
           <Button variant="outline" onClick={markAllAsRead}>
             Mark All as Read

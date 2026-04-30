@@ -135,17 +135,6 @@ const Wallet = () => {
       transition={{ duration: 0.4 }}
       className="space-y-4 sm:space-y-6"
     >
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-          Wallet
-        </h1>
-      </motion.div>
-
       {/* Balance Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <motion.div

@@ -53,17 +53,6 @@ const Transactions = () => {
       transition={{ duration: 0.4 }}
       className="space-y-6"
     >
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-          Transactions
-        </h1>
-      </motion.div>
-
       {/* Filter */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
