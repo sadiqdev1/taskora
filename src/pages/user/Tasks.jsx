@@ -76,9 +76,6 @@ const Tasks = () => {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Task Marketplace
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Browse and complete tasks to earn rewards
-        </p>
       </motion.div>
 
       {/* Filters */}

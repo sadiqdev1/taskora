@@ -85,9 +85,6 @@ const Settings = () => {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           Settings
         </h1>
-        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
-          Manage your account settings and preferences
-        </p>
       </motion.div>
 
       {/* Profile Settings */}

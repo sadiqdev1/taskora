@@ -63,9 +63,6 @@ const Notifications = () => {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Notifications
           </h1>
-          <p className="text-gray-600 dark:text-zinc-400 mt-1">
-            {unreadCount > 0 ? `You have ${unreadCount} unread notifications` : 'All caught up!'}
-          </p>
         </div>
         {unreadCount > 0 && (
           <Button variant="outline" onClick={markAllAsRead}>

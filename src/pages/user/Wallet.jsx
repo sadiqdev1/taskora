@@ -6,9 +6,9 @@ import Input from '../../components/common/Input';
 import Badge from '../../components/common/Badge';
 import Modal from '../../components/common/Modal';
 import { useToast } from '../../contexts/ToastContext';
-import { mockWallet } from '../../data/mockData';
-import { formatCurrency } from '../../utils/formatters';
-import { IoWallet, IoTrendingUp, IoTrendingDown, IoCard, IoAdd, IoTrash, IoPencil } from 'react-icons/io5';
+import { mockWallet, mockTransactions } from '../../data/mockData';
+import { formatCurrency, formatDate } from '../../utils/formatters';
+import { IoWallet, IoTrendingUp, IoTrendingDown, IoCard, IoAdd, IoTrash, IoPencil, IoSwapHorizontal, IoArrowForward } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 
 const Wallet = () => {
@@ -107,6 +107,27 @@ const Wallet = () => {
     setAccountName('');
   };
 
+  // Get recent transactions (last 5)
+  const recentTransactions = mockTransactions.slice(0, 5);
+
+  const getTransactionIcon = (type) => {
+    const icons = {
+      earning: <IoTrendingUp size={20} />,
+      withdrawal: <IoTrendingDown size={20} />,
+      refund: <IoSwapHorizontal size={20} />,
+    };
+    return icons[type] || <IoSwapHorizontal size={20} />;
+  };
+
+  const getTransactionColor = (type) => {
+    const colors = {
+      earning: 'bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400',
+      withdrawal: 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400',
+      refund: 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400',
+    };
+    return colors[type] || 'bg-gray-50 dark:bg-zinc-800 text-gray-600 dark:text-zinc-400';
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -123,9 +144,6 @@ const Wallet = () => {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           Wallet
         </h1>
-        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
-          Manage your earnings and bank accounts
-        </p>
       </motion.div>
 
       {/* Balance Cards */}
@@ -160,6 +178,7 @@ const Wallet = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           whileHover={{ y: -4 }}
+          className="hidden md:block"
         >
           <Card className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
@@ -180,6 +199,7 @@ const Wallet = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           whileHover={{ y: -4 }}
+          className="hidden md:block"
         >
           <Card className="p-4 sm:p-6">
             <div className="flex items-center justify-between mb-4">
@@ -280,6 +300,76 @@ const Wallet = () => {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </Card>
+      </motion.div>
+
+      {/* Recent Transactions Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+      >
+        <Card className="p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
+              Recent Transactions
+            </h2>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/transactions')}
+              className="flex items-center gap-2"
+            >
+              View All
+              <IoArrowForward size={16} />
+            </Button>
+          </div>
+
+          <div className="space-y-3">
+            {recentTransactions.length > 0 ? (
+              recentTransactions.map((transaction, index) => (
+                <motion.div
+                  key={transaction.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.7 + index * 0.05 }}
+                  whileHover={{ x: 4 }}
+                  className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-zinc-700 cursor-pointer"
+                  onClick={() => navigate('/transactions')}
+                >
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${getTransactionColor(transaction.type)}`}>
+                    {getTransactionIcon(transaction.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-sm text-gray-900 dark:text-white truncate">
+                      {transaction.description}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-zinc-400">
+                      {formatDate(transaction.createdAt)}
+                    </p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className={`font-bold text-base ${
+                      transaction.amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                    }`}>
+                      {transaction.amount > 0 ? '+' : ''}{formatCurrency(transaction.amount)}
+                    </p>
+                    <Badge
+                      variant={transaction.status === 'completed' ? 'success' : transaction.status === 'pending' ? 'warning' : 'danger'}
+                      size="sm"
+                    >
+                      {transaction.status}
+                    </Badge>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="text-center py-8">
+                <IoSwapHorizontal size={48} className="mx-auto text-gray-300 dark:text-zinc-600 mb-3" />
+                <p className="text-gray-500 dark:text-zinc-400 text-sm">No transactions yet</p>
+              </div>
+            )}
           </div>
         </Card>
       </motion.div>
