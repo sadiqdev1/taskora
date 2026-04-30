@@ -88,19 +88,23 @@ const Tasks = () => {
         transition={{ delay: 0.2 }}
       >
         <Card className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Dropdown
-              label="Task Type"
-              value={filter}
-              onChange={setFilter}
-              options={taskTypeOptions}
-            />
-            <Dropdown
-              label="Sort By"
-              value={sortBy}
-              onChange={setSortBy}
-              options={sortOptions}
-            />
+          <div className="flex flex-col sm:flex-row justify-between gap-4">
+            <div className="flex-1">
+              <Dropdown
+                label="Task Type"
+                value={filter}
+                onChange={setFilter}
+                options={taskTypeOptions}
+              />
+            </div>
+            <div className="flex-1">
+              <Dropdown
+                label="Sort By"
+                value={sortBy}
+                onChange={setSortBy}
+                options={sortOptions}
+              />
+            </div>
           </div>
         </Card>
       </motion.div>
