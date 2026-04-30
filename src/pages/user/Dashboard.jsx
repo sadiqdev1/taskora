@@ -204,7 +204,7 @@ const Dashboard = () => {
             <div className="flex items-start justify-between mb-8">
               <div>
                 <p className="text-sm opacity-90 mb-2">Available Balance</p>
-                <p className="text-4xl sm:text-5xl font-bold">
+                <p className="text-3xl sm:text-4xl font-bold">
                   {formatCurrency(1250.50)}
                 </p>
               </div>
@@ -224,11 +224,11 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Earned</p>
-                <p className="text-xl sm:text-2xl font-bold">{formatCurrency(3420.00)}</p>
+                <p className="text-lg sm:text-xl font-bold">{formatCurrency(3420.00)}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Withdrawn</p>
-                <p className="text-xl sm:text-2xl font-bold">{formatCurrency(850.00)}</p>
+                <p className="text-lg sm:text-xl font-bold">{formatCurrency(850.00)}</p>
               </div>
             </div>
           </div>

@@ -48,7 +48,7 @@ const MyTasks = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-zinc-400">Total Earnings</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-xl font-bold text-gray-900 dark:text-white">
                 {formatCurrency(1250.50)}
               </p>
             </div>
@@ -61,7 +61,7 @@ const MyTasks = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-zinc-400">Completed Tasks</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">45</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">45</p>
             </div>
             <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
               <IoList size={24} />
@@ -72,7 +72,7 @@ const MyTasks = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-zinc-400">Pending Review</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-xl font-bold text-gray-900 dark:text-white">
                 {mockSubmissions.filter(s => s.status === 'pending').length}
               </p>
             </div>
@@ -144,7 +144,7 @@ const MyTasks = () => {
                     </div>
                   </div>
                   <div className="text-right ml-4">
-                    <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                    <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
                       {formatCurrency(task?.reward || 0)}
                     </p>
                     {submission.status === 'approved' && (

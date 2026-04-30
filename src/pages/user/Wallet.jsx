@@ -148,7 +148,7 @@ const Wallet = () => {
               <p className="text-xs sm:text-sm opacity-90">Current Balance</p>
               <IoWallet size={20} className="sm:w-6 sm:h-6" />
             </div>
-            <p className="text-3xl sm:text-4xl font-bold mb-2">
+            <p className="text-2xl sm:text-3xl font-bold mb-2">
               {formatCurrency(mockWallet.balance)}
             </p>
             <Button
@@ -176,7 +176,7 @@ const Wallet = () => {
                 <IoTrendingUp size={16} className="sm:w-5 sm:h-5" />
               </div>
             </div>
-          <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(mockWallet.totalEarnings)}
           </p>
           <p className="text-xs sm:text-sm text-green-600 dark:text-green-400 mt-2">All time</p>
@@ -197,7 +197,7 @@ const Wallet = () => {
                 <IoTrendingDown size={16} className="sm:w-5 sm:h-5" />
               </div>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               {formatCurrency(mockWallet.totalWithdrawals)}
             </p>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400 mt-2">All time</p>

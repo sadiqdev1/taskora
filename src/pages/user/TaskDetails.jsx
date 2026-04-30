@@ -54,7 +54,7 @@ const TaskDetails = () => {
             <div className="flex items-start justify-between mb-4">
               <Badge variant="info">{task.type.toUpperCase()}</Badge>
               <div className="text-right">
-                <p className="text-3xl font-bold text-primary">
+                <p className="text-2xl font-bold text-primary">
                   {formatCurrency(task.reward)}
                 </p>
                 <p className="text-sm text-gray-500">Reward</p>
