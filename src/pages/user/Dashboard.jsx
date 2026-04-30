@@ -194,12 +194,12 @@ const Dashboard = () => {
         transition={{ delay: 0.1 }}
         whileHover={{ y: -4 }}
       >
-        <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+        <Card className="p-4 sm:p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
           {/* Wallet Balance & Withdraw Button */}
-          <div className="flex items-start justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-4 mb-6">
             <div>
               <p className="text-sm opacity-90 mb-1">Wallet Balance</p>
-              <p className="text-4xl font-bold mb-4">
+              <p className="text-3xl sm:text-4xl font-bold mb-2 sm:mb-4">
                 {formatCurrency(1250.50)}
               </p>
             </div>
@@ -208,7 +208,7 @@ const Dashboard = () => {
                 variant="secondary"
                 size="sm"
                 onClick={() => navigate('/withdrawal')}
-                className="bg-white text-blue-600 hover:bg-gray-100"
+                className="bg-white text-blue-600 hover:bg-gray-100 w-full sm:w-auto"
               >
                 <IoWallet className="mr-2" />
                 Withdraw
@@ -220,26 +220,26 @@ const Dashboard = () => {
           <div className="border-t border-white/20 mb-6"></div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
             <div>
               <p className="text-xs opacity-75 mb-1">Total Earned</p>
-              <p className="text-2xl font-bold">{formatCurrency(3420.00)}</p>
+              <p className="text-lg sm:text-2xl font-bold">{formatCurrency(3420.00)}</p>
             </div>
             <div>
               <p className="text-xs opacity-75 mb-1">Withdrawn</p>
-              <p className="text-2xl font-bold">{formatCurrency(850.00)}</p>
+              <p className="text-lg sm:text-2xl font-bold">{formatCurrency(850.00)}</p>
             </div>
             <div>
               <p className="text-xs opacity-75 mb-1">Tasks Completed</p>
-              <p className="text-2xl font-bold">45</p>
+              <p className="text-lg sm:text-2xl font-bold">45</p>
             </div>
           </div>
 
           {/* Today's Progress */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 sm:p-4">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium">Today's Progress</p>
-              <p className="text-sm font-bold">80%</p>
+              <p className="text-xs sm:text-sm font-medium">Today's Progress</p>
+              <p className="text-xs sm:text-sm font-bold">80%</p>
             </div>
             <div className="w-full bg-white/20 rounded-full h-2 mb-2">
               <motion.div 

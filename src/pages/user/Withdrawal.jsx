@@ -85,7 +85,7 @@ const Withdrawal = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="flex items-center gap-4"
+        className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
       >
         <Button
           variant="outline"
@@ -97,10 +97,10 @@ const Withdrawal = () => {
           Back
         </Button>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
             Withdraw Funds
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
             Request a withdrawal or manage your bank details
           </p>
         </div>
@@ -112,14 +112,14 @@ const Withdrawal = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+        <Card className="p-4 sm:p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm opacity-90 mb-1">Available Balance</p>
-              <p className="text-4xl font-bold">{formatCurrency(mockWalletBalance)}</p>
+              <p className="text-xs sm:text-sm opacity-90 mb-1">Available Balance</p>
+              <p className="text-3xl sm:text-4xl font-bold">{formatCurrency(mockWalletBalance)}</p>
             </div>
-            <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
-              <IoWallet size={32} />
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+              <IoWallet size={24} className="sm:w-8 sm:h-8" />
             </div>
           </div>
         </Card>
@@ -211,7 +211,7 @@ const Withdrawal = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
                   Quick Amount
                 </label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[50, 100, 250, 500].map((amount) => (
                     <Button
                       key={amount}
@@ -226,7 +226,7 @@ const Withdrawal = () => {
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
                 <Button
                   variant="secondary"
                   onClick={() => navigate('/wallet')}
@@ -305,7 +305,7 @@ const Withdrawal = () => {
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-4">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
                 <Button
                   variant="secondary"
                   onClick={() => {
