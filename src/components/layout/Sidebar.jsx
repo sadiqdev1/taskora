@@ -58,7 +58,7 @@ const Sidebar = () => {
             </div>
             <div>
               <h1 className="text-base font-bold tracking-tight text-gray-900 dark:text-white">Taskora</h1>
-              <p className="text-[11px] text-gray-400 dark:text-zinc-500 leading-none mt-0.5">Task platform</p>
+              <p className="text-[11px] text-gray-400 dark:text-zinc-500 leading-none mt-0.5">Earning platform</p>
             </div>
           </Link>
         </div>
