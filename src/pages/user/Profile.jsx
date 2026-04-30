@@ -47,18 +47,18 @@ const Profile = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Card */}
         <Card className="p-6 lg:col-span-2">
-          <div className="flex items-start justify-between mb-6">
-            <div className="flex items-center gap-4">
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
               <img
                 src={user?.avatar}
                 alt={user?.name}
-                className="w-20 h-20 rounded-full"
+                className="w-14 h-14 rounded-full"
               />
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-base font-bold text-gray-900 dark:text-white">
                   {user?.name}
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400">{user?.email}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{user?.email}</p>
               </div>
             </div>
             {!editing && (

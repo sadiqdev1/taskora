@@ -44,14 +44,14 @@ const Register = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 flex items-center justify-center p-4 py-8">
       <div className="w-full max-w-sm">
         {/* Logo + heading */}
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-primary shadow-lg shadow-primary/30 mb-4">
-            <span className="text-white font-bold text-2xl">T</span>
+        <div className="text-center mb-5">
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary shadow-lg shadow-primary/30 mb-3">
+            <span className="text-white font-bold text-base">T</span>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
+          <h1 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">
             Create account
           </h1>
-          <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">
+          <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">
             Join the Taskora community
           </p>
         </div>

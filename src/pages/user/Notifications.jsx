@@ -69,7 +69,7 @@ const Notifications = () => {
       {/* Notifications List */}
       {notifications.length === 0 ? (
         <EmptyState
-          icon={<IoNotifications size={48} />}
+          icon={<IoNotifications size={32} />}
           title="No notifications"
           description="You're all caught up! Check back later for updates."
         />

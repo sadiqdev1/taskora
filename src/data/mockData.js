@@ -224,7 +224,12 @@ export const mockTransactions = [
     amount: 12.00,
     status: TRANSACTION_STATUS.COMPLETED,
     description: 'Task completed: Download and rate our app',
-    metadata: { taskId: '3' },
+    metadata: { 
+      taskId: '3',
+      accountName: 'Abubakar Ibrahim',
+      bankName: 'First Bank of Nigeria',
+      accountNumber: '1234567890'
+    },
     createdAt: '2024-04-28T14:30:00Z',
     completedAt: '2024-04-28T14:30:00Z',
   },
@@ -235,7 +240,12 @@ export const mockTransactions = [
     amount: 8.00,
     status: TRANSACTION_STATUS.COMPLETED,
     description: 'Task completed: Share our Instagram post',
-    metadata: { taskId: '2' },
+    metadata: { 
+      taskId: '2',
+      accountName: 'Abubakar Ibrahim',
+      bankName: 'First Bank of Nigeria',
+      accountNumber: '1234567890'
+    },
     createdAt: '2024-04-27T10:15:00Z',
     completedAt: '2024-04-27T10:15:00Z',
   },
@@ -245,8 +255,13 @@ export const mockTransactions = [
     type: TRANSACTION_TYPES.WITHDRAWAL,
     amount: -200.00,
     status: TRANSACTION_STATUS.COMPLETED,
-    description: 'Withdrawal to PayPal',
-    metadata: { withdrawalMethod: 'paypal' },
+    description: 'Withdrawal to Bank Account',
+    metadata: { 
+      withdrawalMethod: 'Bank Transfer',
+      bankName: 'First Bank of Nigeria',
+      accountNumber: '1234567890',
+      accountName: 'Abubakar Ibrahim'
+    },
     createdAt: '2024-04-25T09:00:00Z',
     completedAt: '2024-04-25T12:00:00Z',
   },
@@ -257,9 +272,28 @@ export const mockTransactions = [
     amount: 5.00,
     status: TRANSACTION_STATUS.COMPLETED,
     description: 'Task completed: Follow us on Twitter',
-    metadata: { taskId: '1' },
+    metadata: { 
+      taskId: '1',
+      accountName: 'Abubakar Ibrahim',
+      bankName: 'First Bank of Nigeria',
+      accountNumber: '1234567890'
+    },
     createdAt: '2024-04-24T16:45:00Z',
     completedAt: '2024-04-24T16:45:00Z',
+  },
+  {
+    id: 'txn_5',
+    userId: '1',
+    type: TRANSACTION_TYPES.DEPOSIT,
+    amount: 100.00,
+    status: TRANSACTION_STATUS.COMPLETED,
+    description: 'Wallet Top-up via Bank Transfer',
+    metadata: { 
+      depositMethod: 'Bank Transfer',
+      referenceNumber: 'DEP20240426001'
+    },
+    createdAt: '2024-04-26T08:30:00Z',
+    completedAt: '2024-04-26T08:35:00Z',
   },
 ];
 

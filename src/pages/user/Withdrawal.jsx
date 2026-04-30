@@ -82,10 +82,10 @@ const Withdrawal = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs sm:text-sm opacity-90 mb-1">Available Balance</p>
-              <p className="text-2xl sm:text-3xl font-bold">{formatCurrency(mockWalletBalance)}</p>
+              <p className="text-lg sm:text-xl font-bold">{formatCurrency(mockWalletBalance)}</p>
             </div>
-            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-2xl flex items-center justify-center">
-              <IoWallet size={24} className="sm:w-8 sm:h-8" />
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+              <IoWallet size={20} />
             </div>
           </div>
         </Card>
@@ -133,8 +133,8 @@ const Withdrawal = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+          <Card className="p-4 sm:p-6">
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
               Request Withdrawal
             </h2>
 
@@ -219,9 +219,9 @@ const Withdrawal = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <Card className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
                 Saved Bank Accounts
               </h2>
               <Button
@@ -236,7 +236,7 @@ const Withdrawal = () => {
 
             {bankAccounts.length === 0 ? (
               <EmptyState
-                icon={<IoCard size={48} />}
+                icon={<IoCard size={32} />}
                 title="No Bank Accounts"
                 description="You haven't added any bank accounts yet. Add a bank account in your Wallet to receive withdrawals."
                 action={

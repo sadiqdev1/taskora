@@ -44,6 +44,7 @@ export const CAMPAIGN_STATUS = {
 export const TRANSACTION_TYPES = {
   EARNING: 'earning',
   WITHDRAWAL: 'withdrawal',
+  DEPOSIT: 'deposit',
   REFUND: 'refund',
   BONUS: 'bonus',
 };

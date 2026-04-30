@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
 import Dropdown from '../../components/common/Dropdown';
@@ -9,6 +10,7 @@ import { IoTrendingUp, IoTrendingDown, IoSwapHorizontal } from 'react-icons/io5'
 import { motion } from 'framer-motion';
 
 const Transactions = () => {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const transactionsPerPage = 10;
@@ -16,6 +18,7 @@ const Transactions = () => {
   const filterOptions = [
     { value: 'all', label: 'All Transactions' },
     { value: 'earning', label: 'Earnings' },
+    { value: 'deposit', label: 'Deposits' },
     { value: 'withdrawal', label: 'Withdrawals' },
     { value: 'refund', label: 'Refunds' },
   ];
@@ -107,7 +110,8 @@ const Transactions = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 + index * 0.05 }}
-                    className="border-b border-gray-50 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+                    onClick={() => navigate(`/transactions/${transaction.id}`)}
+                    className="border-b border-gray-50 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
                   >
                     <td className="py-4 px-4">
                       <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getTransactionColor(transaction.type)}`}>
@@ -156,8 +160,9 @@ const Transactions = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 + index * 0.05 }}
+            onClick={() => navigate(`/transactions/${transaction.id}`)}
           >
-            <Card className="p-4">
+            <Card className="p-4 cursor-pointer hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-3">
                 {/* Icon */}
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${getTransactionColor(transaction.type)}`}>

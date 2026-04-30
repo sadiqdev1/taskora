@@ -21,7 +21,6 @@ const Sidebar = () => {
   const menuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: <IoHome />, roles: ['user', 'creator', 'admin'] },
     { path: '/tasks', label: 'Marketplace', icon: <IoStorefront />, roles: ['user', 'creator', 'admin'] },
-    { path: '/my-tasks', label: 'My Tasks', icon: <IoCheckmarkDone />, roles: ['user'] },
     { path: '/wallet', label: 'Wallet', icon: <IoWallet />, roles: ['user', 'creator', 'admin'] },
     { path: '/transactions', label: 'Transactions', icon: <IoSwapHorizontal />, roles: ['user', 'creator', 'admin'] },
     { path: '/notifications', label: 'Notifications', icon: <IoNotifications />, roles: ['user', 'creator', 'admin'] },

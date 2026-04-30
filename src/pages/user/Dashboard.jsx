@@ -196,15 +196,15 @@ const Dashboard = () => {
       >
         <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
           {/* Decorative circles */}
-          <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full"></div>
-          <div className="absolute -right-5 top-20 w-32 h-32 bg-white/10 rounded-full"></div>
+          <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/10 rounded-full"></div>
+          <div className="absolute -right-4 top-16 w-20 h-20 bg-white/10 rounded-full"></div>
           
           <div className="relative z-10">
             {/* Available Balance & Withdraw Button */}
-            <div className="flex items-start justify-between mb-8">
+            <div className="flex items-start justify-between mb-4">
               <div>
-                <p className="text-sm opacity-90 mb-2">Available Balance</p>
-                <p className="text-3xl sm:text-4xl font-bold">
+                <p className="text-xs opacity-90 mb-1">Available Balance</p>
+                <p className="text-base sm:text-lg font-bold">
                   {formatCurrency(1250.50)}
                 </p>
               </div>
@@ -224,11 +224,11 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Earned</p>
-                <p className="text-lg sm:text-xl font-bold">{formatCurrency(3420.00)}</p>
+                <p className="text-sm sm:text-base font-bold">{formatCurrency(3420.00)}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Withdrawn</p>
-                <p className="text-lg sm:text-xl font-bold">{formatCurrency(850.00)}</p>
+                <p className="text-sm sm:text-base font-bold">{formatCurrency(850.00)}</p>
               </div>
             </div>
           </div>
@@ -285,7 +285,7 @@ const Dashboard = () => {
               </div>
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Affiliate</p>
-                <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
+                <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-white truncate">
                   {formatCurrency(0.00)}
                 </p>
               </div>
@@ -306,7 +306,7 @@ const Dashboard = () => {
               </div>
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Daily Tasks</p>
-                <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
+                <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-white truncate">
                   {formatCurrency(0.00)}
                 </p>
               </div>
