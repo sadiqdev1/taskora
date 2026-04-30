@@ -1,5 +1,6 @@
 import { useAuth } from '../../contexts/AuthContext';
 import Card from '../../components/common/Card';
+import Button from '../../components/common/Button';
 import { IoWallet, IoCheckmarkCircle, IoTrendingDown, IoNotifications, IoFlame, IoTrendingUp, IoTime, IoList } from 'react-icons/io5';
 import { formatCurrency } from '../../utils/formatters';
 import {
