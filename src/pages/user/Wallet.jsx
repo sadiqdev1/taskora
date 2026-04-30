@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
@@ -6,9 +6,9 @@ import Input from '../../components/common/Input';
 import Badge from '../../components/common/Badge';
 import Modal from '../../components/common/Modal';
 import { useToast } from '../../contexts/ToastContext';
-import { mockWallet, mockTransactions } from '../../data/mockData';
-import { formatCurrency, formatDate } from '../../utils/formatters';
-import { IoWallet, IoTrendingUp, IoTrendingDown, IoCard, IoAdd, IoTrash, IoPencil, IoSwapHorizontal, IoArrowForward } from 'react-icons/io5';
+import { mockWallet } from '../../data/mockData';
+import { formatCurrency } from '../../utils/formatters';
+import { IoWallet, IoTrendingUp, IoTrendingDown, IoCard, IoAdd, IoTrash, IoPencil } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 
 const Wallet = () => {
@@ -16,9 +16,7 @@ const Wallet = () => {
   const { showToast } = useToast();
 
   // Bank Details State
-  const [bankAccounts, setBankAccounts] = useState([
-    { id: 1, bankName: 'First Bank', accountNumber: '1234567890', accountName: 'Abubakar Ibrahim', isDefault: true },
-  ]);
+  const [bankAccounts, setBankAccounts] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
@@ -27,6 +25,21 @@ const Wallet = () => {
   const [accountNumber, setAccountNumber] = useState('');
   const [accountName, setAccountName] = useState('');
   const [saving, setSaving] = useState(false);
+
+  // Load bank accounts from localStorage on mount
+  useEffect(() => {
+    const savedAccounts = localStorage.getItem('bankAccounts');
+    if (savedAccounts) {
+      setBankAccounts(JSON.parse(savedAccounts));
+    }
+  }, []);
+
+  // Save bank accounts to localStorage whenever they change
+  useEffect(() => {
+    if (bankAccounts.length > 0) {
+      localStorage.setItem('bankAccounts', JSON.stringify(bankAccounts));
+    }
+  }, [bankAccounts]);
 
   const handleAddBank = () => {
     if (!bankName || !accountNumber || !accountName) {
@@ -43,7 +56,9 @@ const Wallet = () => {
         accountName,
         isDefault: bankAccounts.length === 0,
       };
-      setBankAccounts([...bankAccounts, newAccount]);
+      const updatedAccounts = [...bankAccounts, newAccount];
+      setBankAccounts(updatedAccounts);
+      localStorage.setItem('bankAccounts', JSON.stringify(updatedAccounts));
       setBankName('');
       setAccountNumber('');
       setAccountName('');
@@ -61,11 +76,13 @@ const Wallet = () => {
 
     setSaving(true);
     setTimeout(() => {
-      setBankAccounts(bankAccounts.map(acc => 
+      const updatedAccounts = bankAccounts.map(acc => 
         acc.id === editingAccount.id 
           ? { ...acc, bankName, accountNumber, accountName }
           : acc
-      ));
+      );
+      setBankAccounts(updatedAccounts);
+      localStorage.setItem('bankAccounts', JSON.stringify(updatedAccounts));
       setSaving(false);
       setShowEditModal(false);
       setEditingAccount(null);
@@ -78,15 +95,19 @@ const Wallet = () => {
       showToast('error', 'You must have at least one bank account');
       return;
     }
-    setBankAccounts(bankAccounts.filter(acc => acc.id !== id));
+    const updatedAccounts = bankAccounts.filter(acc => acc.id !== id);
+    setBankAccounts(updatedAccounts);
+    localStorage.setItem('bankAccounts', JSON.stringify(updatedAccounts));
     showToast('success', 'Bank account deleted successfully!');
   };
 
   const handleSetDefault = (id) => {
-    setBankAccounts(bankAccounts.map(acc => ({
+    const updatedAccounts = bankAccounts.map(acc => ({
       ...acc,
       isDefault: acc.id === id
-    })));
+    }));
+    setBankAccounts(updatedAccounts);
+    localStorage.setItem('bankAccounts', JSON.stringify(updatedAccounts));
     showToast('success', 'Default account updated!');
   };
 

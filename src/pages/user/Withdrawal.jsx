@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Dropdown from '../../components/common/Dropdown';
 import Badge from '../../components/common/Badge';
+import EmptyState from '../../components/common/EmptyState';
 import { useToast } from '../../contexts/ToastContext';
 import { formatCurrency } from '../../utils/formatters';
-import { IoWallet, IoCard, IoCheckmarkCircle, IoInformationCircle, IoArrowBack } from 'react-icons/io5';
+import { IoWallet, IoCard, IoCheckmarkCircle, IoInformationCircle, IoArrowBack, IoPencil, IoTrash, IoAdd } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 
 const Withdrawal = () => {
@@ -18,14 +19,18 @@ const Withdrawal = () => {
   const [withdrawMethod, setWithdrawMethod] = useState('');
   const [processing, setProcessing] = useState(false);
 
-  // Bank Details State
-  const [bankName, setBankName] = useState('');
-  const [accountNumber, setAccountNumber] = useState('');
-  const [accountName, setAccountName] = useState('');
-  const [routingNumber, setRoutingNumber] = useState('');
-  const [savingBankDetails, setSavingBankDetails] = useState(false);
+  // Bank Accounts from Wallet page (using localStorage for demo)
+  const [bankAccounts, setBankAccounts] = useState([]);
 
   const mockWalletBalance = 1250.50;
+
+  // Load bank accounts from localStorage
+  useEffect(() => {
+    const savedAccounts = localStorage.getItem('bankAccounts');
+    if (savedAccounts) {
+      setBankAccounts(JSON.parse(savedAccounts));
+    }
+  }, [activeTab]); // Reload when switching tabs
 
   const withdrawMethods = [
     { value: 'bank', label: 'Bank Transfer' },
@@ -57,19 +62,6 @@ const Withdrawal = () => {
       setWithdrawMethod('');
       showToast('success', 'Withdrawal request submitted successfully!');
       setTimeout(() => navigate('/wallet'), 1500);
-    }, 1500);
-  };
-
-  const handleSaveBankDetails = () => {
-    if (!bankName || !accountNumber || !accountName) {
-      showToast('error', 'Please fill all required fields');
-      return;
-    }
-
-    setSavingBankDetails(true);
-    setTimeout(() => {
-      setSavingBankDetails(false);
-      showToast('success', 'Bank details saved successfully!');
     }, 1500);
   };
 
@@ -228,80 +220,80 @@ const Withdrawal = () => {
           transition={{ duration: 0.3 }}
         >
           <Card className="p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-              Bank Account Details
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Saved Bank Accounts
+              </h2>
+              <Button
+                size="sm"
+                onClick={() => navigate('/wallet')}
+                className="flex items-center gap-2"
+              >
+                <IoAdd size={18} />
+                Add Account
+              </Button>
+            </div>
 
-            <div className="space-y-4">
-              <Input
-                type="text"
-                label="Bank Name"
-                placeholder="Enter bank name"
-                value={bankName}
-                onChange={setBankName}
-                required
+            {bankAccounts.length === 0 ? (
+              <EmptyState
+                icon={<IoCard size={48} />}
+                title="No Bank Accounts"
+                description="You haven't added any bank accounts yet. Add a bank account in your Wallet to receive withdrawals."
+                action={
+                  <Button onClick={() => navigate('/wallet')}>
+                    <IoAdd className="mr-2" />
+                    Add Bank Account
+                  </Button>
+                }
               />
+            ) : (
+              <div className="space-y-3">
+                {bankAccounts.map((account, index) => (
+                  <motion.div
+                    key={account.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="p-4 bg-gray-50 dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-zinc-700"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-3 flex-1 min-w-0">
+                        <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center flex-shrink-0">
+                          <IoCard size={24} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <p className="font-semibold text-gray-900 dark:text-white">
+                              {account.bankName}
+                            </p>
+                            {account.isDefault && (
+                              <Badge variant="success" size="sm">Default</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-zinc-400 truncate">
+                            {account.accountName}
+                          </p>
+                          <p className="text-sm text-gray-500 dark:text-zinc-500">
+                            {account.accountNumber}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
 
-              <Input
-                type="text"
-                label="Account Number"
-                placeholder="Enter account number"
-                value={accountNumber}
-                onChange={setAccountNumber}
-                required
-              />
-
-              <Input
-                type="text"
-                label="Account Holder Name"
-                placeholder="Enter account holder name"
-                value={accountName}
-                onChange={setAccountName}
-                required
-              />
-
-              <Input
-                type="text"
-                label="Routing Number (Optional)"
-                placeholder="Enter routing number"
-                value={routingNumber}
-                onChange={setRoutingNumber}
-              />
-
-              {/* Security Notice */}
-              <div className="p-4 bg-green-50 dark:bg-green-500/10 rounded-xl border border-green-100 dark:border-green-500/20">
-                <div className="flex gap-3">
-                  <IoCheckmarkCircle className="text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" size={20} />
-                  <div className="text-sm text-gray-600 dark:text-zinc-400">
-                    <p className="font-medium text-gray-900 dark:text-white mb-1">Secure & Encrypted</p>
-                    <p>Your bank details are encrypted and stored securely. We never share your information with third parties.</p>
+                {/* Info Box */}
+                <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-500/10 rounded-xl border border-blue-100 dark:border-blue-500/20">
+                  <div className="flex gap-3">
+                    <IoInformationCircle className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" size={20} />
+                    <div className="text-sm text-gray-600 dark:text-zinc-400">
+                      <p className="font-medium text-gray-900 dark:text-white mb-1">Manage Bank Accounts</p>
+                      <p>To add, edit, or remove bank accounts, please visit your Wallet page.</p>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    setBankName('');
-                    setAccountNumber('');
-                    setAccountName('');
-                    setRoutingNumber('');
-                  }}
-                  className="flex-1"
-                >
-                  Clear
-                </Button>
-                <Button
-                  onClick={handleSaveBankDetails}
-                  loading={savingBankDetails}
-                  className="flex-1"
-                >
-                  <IoCheckmarkCircle className="mr-2" />
-                  Save Details
-                </Button>
-              </div>
-            </div>
+            )}
           </Card>
         </motion.div>
       )}
