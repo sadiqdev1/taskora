@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
@@ -12,6 +13,7 @@ import { IoWallet, IoTrendingUp, IoTrendingDown, IoCash } from 'react-icons/io5'
 import { motion } from 'framer-motion';
 
 const Wallet = () => {
+  const navigate = useNavigate();
   const { showToast } = useToast();
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState('');
@@ -99,7 +101,7 @@ const Wallet = () => {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => setShowWithdrawModal(true)}
+              onClick={() => navigate('/withdrawal')}
               className="mt-4"
             >
               Withdraw Funds

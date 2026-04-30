@@ -1,7 +1,8 @@
 import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
-import { IoWallet, IoCheckmarkCircle, IoTrendingDown, IoNotifications, IoFlame, IoTrendingUp, IoTime, IoList } from 'react-icons/io5';
+import { IoWallet, IoCheckmarkCircle, IoTrendingDown, IoTrendingUp, IoTime, IoList } from 'react-icons/io5';
 import { formatCurrency } from '../../utils/formatters';
 import {
   Chart as ChartJS,
@@ -33,6 +34,7 @@ ChartJS.register(
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
@@ -185,25 +187,11 @@ const Dashboard = () => {
       transition={{ duration: 0.4 }}
       className="space-y-6"
     >
-      {/* Welcome Section */}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.1 }}
-      >
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          Welcome back, {user?.name}! <IoFlame className="text-orange-500" size={24} />
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">
-          Here's what's happening with your account today.
-        </p>
-      </motion.div>
-
       {/* Hero Wallet Summary Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.1 }}
         whileHover={{ y: -4 }}
       >
         <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
@@ -219,6 +207,7 @@ const Dashboard = () => {
               <Button
                 variant="secondary"
                 size="sm"
+                onClick={() => navigate('/withdrawal')}
                 className="bg-white text-blue-600 hover:bg-gray-100"
               >
                 <IoWallet className="mr-2" />
@@ -276,7 +265,10 @@ const Dashboard = () => {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
-            <Card className="p-4 cursor-pointer hover:border-blue-300 dark:hover:border-blue-500 transition-colors">
+            <Card 
+              className="p-4 cursor-pointer hover:border-blue-300 dark:hover:border-blue-500 transition-colors"
+              onClick={() => navigate('/tasks')}
+            >
               <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-3">
                 <IoList size={24} />
               </div>
@@ -286,7 +278,10 @@ const Dashboard = () => {
           </motion.div>
 
           <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
-            <Card className="p-4 cursor-pointer hover:border-green-300 dark:hover:border-green-500 transition-colors">
+            <Card 
+              className="p-4 cursor-pointer hover:border-green-300 dark:hover:border-green-500 transition-colors"
+              onClick={() => navigate('/my-tasks')}
+            >
               <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center mb-3">
                 <IoCheckmarkCircle size={24} />
               </div>
@@ -296,7 +291,10 @@ const Dashboard = () => {
           </motion.div>
 
           <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
-            <Card className="p-4 cursor-pointer hover:border-orange-300 dark:hover:border-orange-500 transition-colors">
+            <Card 
+              className="p-4 cursor-pointer hover:border-orange-300 dark:hover:border-orange-500 transition-colors"
+              onClick={() => navigate('/withdrawal')}
+            >
               <div className="w-12 h-12 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-xl flex items-center justify-center mb-3">
                 <IoTrendingDown size={24} />
               </div>
@@ -306,7 +304,10 @@ const Dashboard = () => {
           </motion.div>
 
           <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
-            <Card className="p-4 cursor-pointer hover:border-purple-300 dark:hover:border-purple-500 transition-colors">
+            <Card 
+              className="p-4 cursor-pointer hover:border-purple-300 dark:hover:border-purple-500 transition-colors"
+              onClick={() => navigate('/transactions')}
+            >
               <div className="w-12 h-12 bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center mb-3">
                 <IoTrendingUp size={24} />
               </div>

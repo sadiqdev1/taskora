@@ -17,6 +17,7 @@ import Tasks from './pages/user/Tasks';
 import TaskDetails from './pages/user/TaskDetails';
 import MyTasks from './pages/user/MyTasks';
 import Wallet from './pages/user/Wallet';
+import Withdrawal from './pages/user/Withdrawal';
 import Transactions from './pages/user/Transactions';
 import Notifications from './pages/user/Notifications';
 import Settings from './pages/user/Settings';
@@ -44,6 +45,7 @@ function App() {
                   <Route path="/tasks/:id" element={<TaskDetails />} />
                   <Route path="/my-tasks" element={<MyTasks />} />
                   <Route path="/wallet" element={<Wallet />} />
+                  <Route path="/withdrawal" element={<Withdrawal />} />
                   <Route path="/transactions" element={<Transactions />} />
                   <Route path="/notifications" element={<Notifications />} />
                   <Route path="/settings" element={<Settings />} />
