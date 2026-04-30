@@ -161,46 +161,46 @@ const Tasks = () => {
           </motion.div>
 
           {/* Task Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {paginatedTasks.map((task, index) => (
               <motion.div
                 key={task.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.05 }}
-                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
               >
                 <Card
                   hover
                   onClick={() => navigate(`/tasks/${task.id}`)}
-                  className="p-4 cursor-pointer h-full"
+                  className="p-6 cursor-pointer h-full"
                 >
-                  <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-start justify-between mb-3">
                     <Badge variant={getTaskTypeColor(task.type)} size="sm">
                       {task.type.toUpperCase()}
                     </Badge>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                      <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
                         {formatCurrency(task.reward)}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-zinc-500">Reward</p>
                     </div>
                   </div>
 
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1.5">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                     {task.title}
                   </h3>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
                     {task.description}
                   </p>
 
-                  <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-zinc-400">
+                  <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-zinc-400">
                     <div className="flex items-center gap-1">
-                      <IoTime size={13} />
+                      <IoTime />
                       <span>{task.estimatedTime} min</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <IoPeople size={13} />
+                      <IoPeople />
                       <span>{task.remainingSlots} left</span>
                     </div>
                   </div>
@@ -235,42 +235,42 @@ const Tasks = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
           >
-            <Card className="p-4">
+            <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-600 dark:text-zinc-400">Total Earnings</p>
-                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Total Earnings</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">
                     {formatCurrency(1250.50)}
                   </p>
                 </div>
-                <div className="w-9 h-9 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-lg flex items-center justify-center">
-                  <IoCheckmarkCircle size={18} />
+                <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center">
+                  <IoCheckmarkCircle size={24} />
                 </div>
               </div>
             </Card>
-            <Card className="p-4">
+            <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-600 dark:text-zinc-400">Completed Tasks</p>
-                  <p className="text-base font-bold text-gray-900 dark:text-white">45</p>
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Completed Tasks</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">45</p>
                 </div>
-                <div className="w-9 h-9 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center">
-                  <IoList size={18} />
+                <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
+                  <IoList size={24} />
                 </div>
               </div>
             </Card>
-            <Card className="p-4">
+            <Card className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-600 dark:text-zinc-400">Pending Review</p>
-                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                  <p className="text-sm text-gray-600 dark:text-zinc-400">Pending Review</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">
                     {mockSubmissions.filter(s => s.status === 'pending').length}
                   </p>
                 </div>
-                <div className="w-9 h-9 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg flex items-center justify-center">
-                  <IoTime size={18} />
+                <div className="w-12 h-12 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-xl flex items-center justify-center">
+                  <IoTime size={24} />
                 </div>
               </div>
             </Card>
@@ -309,7 +309,7 @@ const Tasks = () => {
               transition={{ delay: 0.4 }}
             >
               <EmptyState
-                icon={<IoList size={32} />}
+                icon={<IoList size={48} />}
                 title={`No ${myTasksFilter} tasks`}
                 description="Start completing tasks to see them here"
                 action={{
@@ -332,28 +332,28 @@ const Tasks = () => {
                     <Card
                       hover
                       onClick={() => navigate(`/tasks/${submission.taskId}`)}
-                      className="p-4 cursor-pointer"
+                      className="p-6 cursor-pointer"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                               {task?.title}
                             </h3>
                             {getStatusBadge(submission.status)}
                           </div>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                             {task?.description}
                           </p>
-                          <div className="flex items-center gap-3 text-xs text-gray-500">
+                          <div className="flex items-center gap-4 text-sm text-gray-500">
                             <span>Submitted: {formatDate(submission.submittedAt)}</span>
                             {submission.reviewedAt && (
                               <span>Reviewed: {formatDate(submission.reviewedAt)}</span>
                             )}
                           </div>
                         </div>
-                        <div className="text-right ml-3">
-                          <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                        <div className="text-right ml-4">
+                          <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
                             {formatCurrency(task?.reward || 0)}
                           </p>
                           {submission.status === 'approved' && (
