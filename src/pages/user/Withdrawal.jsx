@@ -287,8 +287,8 @@ const Withdrawal = () => {
                   <div className="flex gap-3">
                     <IoInformationCircle className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" size={20} />
                     <div className="text-sm text-gray-600 dark:text-zinc-400">
-                      <p className="font-medium text-gray-900 dark:text-white mb-1">Manage Bank Accounts</p>
-                      <p>To add, edit, or remove bank accounts, please visit your Wallet page.</p>
+                      <p className="font-medium text-gray-900 dark:text-white mb-1">Withdrawal Information</p>
+                      <p>Withdrawals will be sent to your default bank account. To add, edit, or change your default account, please visit your Wallet page.</p>
                     </div>
                   </div>
                 </div>
