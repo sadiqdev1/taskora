@@ -84,7 +84,7 @@ const Dropdown = ({
             transition={{ duration: 0.15 }}
             className="absolute z-50 w-full mt-2 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-xl shadow-lg overflow-hidden"
           >
-            <div className="max-h-60 overflow-y-auto py-1">
+            <div className="py-1">
               {options.map((option, index) => (
                 <motion.button
                   key={option.value}

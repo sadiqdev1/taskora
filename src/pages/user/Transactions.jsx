@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Card from '../../components/common/Card';
 import Badge from '../../components/common/Badge';
-import Select from '../../components/common/Select';
+import Dropdown from '../../components/common/Dropdown';
 import Pagination from '../../components/common/Pagination';
 import { mockTransactions } from '../../data/mockData';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 import { IoTrendingUp, IoTrendingDown, IoSwapHorizontal } from 'react-icons/io5';
+import { motion } from 'framer-motion';
 
 const Transactions = () => {
   const [filter, setFilter] = useState('all');
@@ -46,106 +47,136 @@ const Transactions = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
           Transactions
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
           View all your transaction history
         </p>
-      </div>
+      </motion.div>
 
       {/* Filter */}
-      <Card className="p-6">
-        <div className="max-w-xs">
-          <Select
-            label="Filter by Type"
-            value={filter}
-            onChange={setFilter}
-            options={filterOptions}
-          />
-        </div>
-      </Card>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <Card className="p-4 sm:p-6">
+          <div className="max-w-xs">
+            <Dropdown
+              label="Filter by Type"
+              value={filter}
+              onChange={setFilter}
+              options={filterOptions}
+            />
+          </div>
+        </Card>
+      </motion.div>
 
       {/* Transactions Table */}
-      <Card className="p-6">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-100 dark:border-zinc-800">
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-zinc-300">
-                  Type
-                </th>
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-zinc-300">
-                  Description
-                </th>
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-zinc-300">
-                  Date
-                </th>
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-zinc-300">
-                  Status
-                </th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-700 dark:text-zinc-300">
-                  Amount
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedTransactions.map((transaction) => (
-                <tr
-                  key={transaction.id}
-                  className="border-b border-gray-50 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
-                >
-                  <td className="py-4 px-4">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getTransactionColor(transaction.type)}`}>
-                      {getTransactionIcon(transaction.type)}
-                    </div>
-                  </td>
-                  <td className="py-4 px-4">
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {transaction.description}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-zinc-400">
-                      ID: {transaction.id}
-                    </p>
-                  </td>
-                  <td className="py-4 px-4 text-gray-600 dark:text-zinc-400">
-                    {formatDate(transaction.createdAt)}
-                  </td>
-                  <td className="py-4 px-4">
-                    <Badge
-                      variant={transaction.status === 'completed' ? 'success' : transaction.status === 'pending' ? 'warning' : 'danger'}
-                    >
-                      {transaction.status}
-                    </Badge>
-                  </td>
-                  <td className="py-4 px-4 text-right">
-                    <p className={`font-bold text-lg ${
-                      transaction.amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-                    }`}>
-                      {transaction.amount > 0 ? '+' : ''}{formatCurrency(transaction.amount)}
-                    </p>
-                  </td>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <Card className="p-4 sm:p-6">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gray-100 dark:border-zinc-800">
+                  <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700 dark:text-zinc-300">
+                    Type
+                  </th>
+                  <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700 dark:text-zinc-300">
+                    Description
+                  </th>
+                  <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700 dark:text-zinc-300">
+                    Date
+                  </th>
+                  <th className="text-left py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700 dark:text-zinc-300">
+                    Status
+                  </th>
+                  <th className="text-right py-3 px-2 sm:px-4 text-xs sm:text-sm font-semibold text-gray-700 dark:text-zinc-300">
+                    Amount
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+              </thead>
+              <tbody>
+                {paginatedTransactions.map((transaction, index) => (
+                  <motion.tr
+                    key={transaction.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 + index * 0.05 }}
+                    className="border-b border-gray-50 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
+                  >
+                    <td className="py-4 px-2 sm:px-4">
+                      <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center ${getTransactionColor(transaction.type)}`}>
+                        {getTransactionIcon(transaction.type)}
+                      </div>
+                    </td>
+                    <td className="py-4 px-2 sm:px-4">
+                      <p className="font-medium text-sm sm:text-base text-gray-900 dark:text-white">
+                        {transaction.description}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-zinc-400">
+                        ID: {transaction.id}
+                      </p>
+                    </td>
+                    <td className="py-4 px-2 sm:px-4 text-xs sm:text-sm text-gray-600 dark:text-zinc-400">
+                      {formatDate(transaction.createdAt)}
+                    </td>
+                    <td className="py-4 px-2 sm:px-4">
+                      <Badge
+                        variant={transaction.status === 'completed' ? 'success' : transaction.status === 'pending' ? 'warning' : 'danger'}
+                        size="sm"
+                      >
+                        {transaction.status}
+                      </Badge>
+                    </td>
+                    <td className="py-4 px-2 sm:px-4 text-right">
+                      <p className={`font-bold text-base sm:text-lg ${
+                        transaction.amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+                      }`}>
+                        {transaction.amount > 0 ? '+' : ''}{formatCurrency(transaction.amount)}
+                      </p>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </motion.div>
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="flex justify-center"
+        >
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
           />
-        </div>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
