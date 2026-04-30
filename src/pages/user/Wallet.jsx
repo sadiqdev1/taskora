@@ -164,12 +164,12 @@ const Wallet = () => {
           transition={{ delay: 0.2 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-4 sm:p-5 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-            <div className="flex items-center justify-between mb-3">
+          <Card className="p-4 sm:p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+            <div className="flex items-center justify-between mb-4">
               <p className="text-xs sm:text-sm opacity-90">Current Balance</p>
-              <IoWallet size={18} className="sm:w-5 sm:h-5" />
+              <IoWallet size={20} className="sm:w-6 sm:h-6" />
             </div>
-            <p className="text-lg sm:text-xl font-bold mb-2">
+            <p className="text-2x22222l sm:3t3e3x3t3-3xl font-bold mb-2">
               {formatCurrency(mockWallet.balance)}
             </p>
             <Button
@@ -190,17 +190,17 @@ const Wallet = () => {
           whileHover={{ y: -4 }}
           className="hidden md:block"
         >
-          <Card className="p-4 sm:p-5">
-            <div className="flex items-center justify-between mb-3">
+          <Card className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
               <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Total Earnings</p>
-              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-lg flex items-center justify-center">
-                <IoTrendingUp size={14} className="sm:w-4 sm:h-4" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-lg flex items-center justify-center">
+                <IoTrendingUp size={16} className="sm:w-5 sm:h-5" />
               </div>
             </div>
-          <p className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+          <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             {formatCurrency(mockWallet.totalEarnings)}
           </p>
-          <p className="text-xs text-green-600 dark:text-green-400 mt-1">All time</p>
+          <p className="text-xs sm:text-sm text-green-600 dark:text-green-400 mt-2">All time</p>
         </Card>
         </motion.div>
 
@@ -211,17 +211,17 @@ const Wallet = () => {
           whileHover={{ y: -4 }}
           className="hidden md:block"
         >
-          <Card className="p-4 sm:p-5">
-            <div className="flex items-center justify-between mb-3">
+          <Card className="p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
               <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Total Withdrawals</p>
-              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-lg flex items-center justify-center">
-                <IoTrendingDown size={14} className="sm:w-4 sm:h-4" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-lg flex items-center justify-center">
+                <IoTrendingDown size={16} className="sm:w-5 sm:h-5" />
               </div>
             </div>
-            <p className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               {formatCurrency(mockWallet.totalWithdrawals)}
             </p>
-            <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">All time</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400 mt-2">All time</p>
           </Card>
         </motion.div>
       </div>
@@ -233,8 +233,8 @@ const Wallet = () => {
         transition={{ delay: 0.5 }}
       >
         <Card className="p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
               Bank Accounts
             </h2>
             <Button
@@ -321,8 +321,8 @@ const Wallet = () => {
         transition={{ delay: 0.6 }}
       >
         <Card className="p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
               Recent Transactions
             </h2>
             <Button
@@ -375,9 +375,9 @@ const Wallet = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="text-center py-6">
-                <IoSwapHorizontal size={32} className="mx-auto text-gray-300 dark:text-zinc-600 mb-2" />
-                <p className="text-gray-500 dark:text-zinc-400 text-xs">No transactions yet</p>
+              <div className="text-center py-8">
+                <IoSwapHorizontal size={48} className="mx-auto text-gray-300 dark:text-zinc-600 mb-3" />
+                <p className="text-gray-500 dark:text-zinc-400 text-sm">No transactions yet</p>
               </div>
             )}
           </div>

@@ -43,41 +43,41 @@ const MyTasks = () => {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-gray-600 dark:text-zinc-400">Total Earnings</p>
-              <p className="text-base font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Total Earnings</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">
                 {formatCurrency(1250.50)}
               </p>
             </div>
-            <div className="w-9 h-9 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-lg flex items-center justify-center">
-              <IoCheckmarkCircle size={18} />
+            <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center">
+              <IoCheckmarkCircle size={24} />
             </div>
           </div>
         </Card>
-        <Card className="p-4">
+        <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-gray-600 dark:text-zinc-400">Completed Tasks</p>
-              <p className="text-base font-bold text-gray-900 dark:text-white">45</p>
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Completed Tasks</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">45</p>
             </div>
-            <div className="w-9 h-9 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center">
-              <IoList size={18} />
+            <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
+              <IoList size={24} />
             </div>
           </div>
         </Card>
-        <Card className="p-4">
+        <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs text-gray-600 dark:text-zinc-400">Pending Review</p>
-              <p className="text-base font-bold text-gray-900 dark:text-white">
+              <p className="text-sm text-gray-600 dark:text-zinc-400">Pending Review</p>
+              <p className="text-xl font-bold text-gray-900 dark:text-white">
                 {mockSubmissions.filter(s => s.status === 'pending').length}
               </p>
             </div>
-            <div className="w-9 h-9 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-lg flex items-center justify-center">
-              <IoTime size={18} />
+            <div className="w-12 h-12 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-xl flex items-center justify-center">
+              <IoTime size={24} />
             </div>
           </div>
         </Card>
@@ -90,7 +90,7 @@ const MyTasks = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg font-medium text-xs transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium transition-colors ${
                 activeTab === tab.id
                   ? 'bg-blue-500 text-white shadow-sm'
                   : 'text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800'
@@ -106,7 +106,7 @@ const MyTasks = () => {
       {/* Task List */}
       {filteredSubmissions.length === 0 ? (
         <EmptyState
-          icon={<IoList size={32} />}
+          icon={<IoList size={48} />}
           title={`No ${activeTab} tasks`}
           description="Start completing tasks to see them here"
           action={{
@@ -123,28 +123,28 @@ const MyTasks = () => {
                 key={submission.id}
                 hover
                 onClick={() => navigate(`/tasks/${submission.taskId}`)}
-                className="p-4 cursor-pointer"
+                className="p-6 cursor-pointer"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                         {task?.title}
                       </h3>
                       {getStatusBadge(submission.status)}
                     </div>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                       {task?.description}
                     </p>
-                    <div className="flex items-center gap-3 text-xs text-gray-500">
+                    <div className="flex items-center gap-4 text-sm text-gray-500">
                       <span>Submitted: {formatDate(submission.submittedAt)}</span>
                       {submission.reviewedAt && (
                         <span>Reviewed: {formatDate(submission.reviewedAt)}</span>
                       )}
                     </div>
                   </div>
-                  <div className="text-right ml-3">
-                    <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                  <div className="text-right ml-4">
+                    <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
                       {formatCurrency(task?.reward || 0)}
                     </p>
                     {submission.status === 'approved' && (

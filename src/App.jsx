@@ -22,6 +22,7 @@ import Transactions from './pages/user/Transactions';
 import TransactionDetail from './pages/user/TransactionDetail';
 import Notifications from './pages/user/Notifications';
 import Settings from './pages/user/Settings';
+import Referral from './pages/user/Referral';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
                   <Route path="/transactions/:id" element={<TransactionDetail />} />
                   <Route path="/notifications" element={<Notifications />} />
                   <Route path="/settings" element={<Settings />} />
+                  <Route path="/referral" element={<Referral />} />
                   
                   {/* Creator Routes */}
                   <Route element={<RoleBasedRoute allowedRoles={['creator', 'admin']} />}>

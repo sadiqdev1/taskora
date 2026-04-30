@@ -51,53 +51,53 @@ const TaskDetails = () => {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="p-6">
-            <div className="flex items-start justify-between mb-3">
+            <div className="flex items-start justify-between mb-4">
               <Badge variant="info">{task.type.toUpperCase()}</Badge>
               <div className="text-right">
-                <p className="text-base font-bold text-primary">
+                <p className="text-2xl font-bold text-primary">
                   {formatCurrency(task.reward)}
                 </p>
-                <p className="text-xs text-gray-500">Reward</p>
+                <p className="text-sm text-gray-500">Reward</p>
               </div>
             </div>
 
-            <h1 className="text-base font-bold text-gray-900 dark:text-white mb-3">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
               {task.title}
             </h1>
 
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               {task.description}
             </p>
 
-            <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mb-4">
-              <div className="flex items-center gap-1.5">
-                <IoTime size={15} />
+            <div className="flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400 mb-6">
+              <div className="flex items-center gap-2">
+                <IoTime size={20} />
                 <span>{task.estimatedTime} minutes</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <IoPeople size={15} />
+              <div className="flex items-center gap-2">
+                <IoPeople size={20} />
                 <span>{task.remainingSlots} slots remaining</span>
               </div>
             </div>
 
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Instructions
               </h2>
-              <ol className="space-y-2">
+              <ol className="space-y-3">
                 {task.instructions.map((instruction, index) => (
-                  <li key={index} className="flex gap-2.5">
-                    <span className="flex-shrink-0 w-5 h-5 bg-primary text-white rounded-full flex items-center justify-center text-xs">
+                  <li key={index} className="flex gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm">
                       {index + 1}
                     </span>
-                    <span className="text-sm text-gray-700 dark:text-gray-300">{instruction}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{instruction}</span>
                   </li>
                 ))}
               </ol>
             </div>
 
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Requirements
               </h2>
               <ul className="space-y-2">

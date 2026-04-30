@@ -83,15 +83,15 @@ const Settings = () => {
         transition={{ delay: 0.2 }}
       >
         <Card className="p-4 sm:p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
-              <IoPersonCircle size={20} />
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center">
+              <IoPersonCircle size={24} />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 Profile Information
               </h2>
-              <p className="text-xs text-gray-500 dark:text-zinc-400">
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400">
                 Update your personal details
               </p>
             </div>
@@ -156,15 +156,15 @@ const Settings = () => {
         transition={{ delay: 0.3 }}
       >
         <Card className="p-4 sm:p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center">
-              <IoLockClosed size={20} />
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center">
+              <IoLockClosed size={24} />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 Change Password
               </h2>
-              <p className="text-xs text-gray-500 dark:text-zinc-400">
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400">
                 Update your password to keep your account secure
               </p>
             </div>
@@ -220,14 +220,14 @@ const Settings = () => {
       >
         <Card className="p-4 sm:p-6 border-red-200 dark:border-red-500/20">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-xl flex items-center justify-center">
-              <IoTrash size={20} />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-xl flex items-center justify-center">
+              <IoTrash size={24} />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
                 Danger Zone
               </h2>
-              <p className="text-xs text-gray-500 dark:text-zinc-400">
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-zinc-400">
                 Irreversible and destructive actions
               </p>
             </div>

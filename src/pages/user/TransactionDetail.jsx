@@ -188,9 +188,9 @@ const TransactionDetail = () => {
   if (!transaction) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Card className="p-4 text-center">
-          <IoAlertCircle size={40} className="mx-auto text-red-500 mb-3" />
-          <h2 className="text-base font-bold text-gray-900 dark:text-white mb-2">
+        <Card className="p-8 text-center">
+          <IoAlertCircle size={64} className="mx-auto text-red-500 mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Transaction Not Found
           </h2>
           <p className="text-gray-600 dark:text-zinc-400 mb-6">
@@ -226,11 +226,11 @@ const TransactionDetail = () => {
 
   const getTransactionIcon = (type) => {
     const icons = {
-      earning: <IoTrendingUp size={20} />,
-      withdrawal: <IoTrendingDown size={20} />,
-      refund: <IoSwapHorizontal size={20} />,
+      earning: <IoTrendingUp size={32} />,
+      withdrawal: <IoTrendingDown size={32} />,
+      refund: <IoSwapHorizontal size={32} />,
     };
-    return icons[type] || <IoSwapHorizontal size={20} />;
+    return icons[type] || <IoSwapHorizontal size={32} />;
   };
 
   const getTransactionColor = (type) => {
@@ -270,7 +270,7 @@ const TransactionDetail = () => {
             <IoArrowBack size={18} />
             <span className="hidden sm:inline">Back</span>
           </Button>
-          <h1 className="text-sm font-bold text-gray-900 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
             {getTransactionTitle(transaction.type)}
           </h1>
         </div>
@@ -282,11 +282,11 @@ const TransactionDetail = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <Card className="p-4 sm:p-6 text-center">
-          <p className="text-xs text-gray-600 dark:text-zinc-400 mb-1.5">
+        <Card className="p-6 sm:p-8 text-center">
+          <p className="text-sm text-gray-600 dark:text-zinc-400 mb-2">
             {transaction.type === 'withdrawal' ? 'Withdrawal Amount' : transaction.type === 'deposit' ? 'Deposit Amount' : 'Credit Amount'}
           </p>
-          <p className={`text-lg sm:text-xl font-bold mb-3 ${
+          <p className={`text-2xl sm:text-3xl font-bold mb-4 ${
             transaction.amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
           }`}>
             {transaction.amount > 0 ? '+' : ''}{formatCurrency(transaction.amount)}

@@ -63,11 +63,11 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 to-primary-light/10 px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card p-5 sm:p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-card p-8">
           {/* Logo */}
-          <div className="text-center mb-5">
-            <h1 className="text-xl font-bold text-primary mb-1">Taskora</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-primary mb-2">Taskora</h1>
+            <p className="text-gray-600 dark:text-gray-400">
               Welcome back! Please login to your account.
             </p>
           </div>

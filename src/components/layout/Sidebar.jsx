@@ -11,6 +11,7 @@ import {
   IoSettings,
   IoAdd,
   IoGrid,
+  IoPeople,
 } from 'react-icons/io5';
 import taskoraLogo from '../../assets/taskora-logo.svg';
 
@@ -19,12 +20,13 @@ const Sidebar = () => {
   const { user } = useAuth();
 
   const menuItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: <IoHome />, roles: ['user', 'creator', 'admin'] },
-    { path: '/tasks', label: 'Marketplace', icon: <IoStorefront />, roles: ['user', 'creator', 'admin'] },
-    { path: '/wallet', label: 'Wallet', icon: <IoWallet />, roles: ['user', 'creator', 'admin'] },
+    { path: '/dashboard',  label: 'Dashboard',     icon: <IoHome />,          roles: ['user', 'creator', 'admin'] },
+    { path: '/tasks',      label: 'Marketplace',   icon: <IoStorefront />,    roles: ['user', 'creator', 'admin'] },
+    { path: '/wallet',     label: 'Wallet',         icon: <IoWallet />,        roles: ['user', 'creator', 'admin'] },
     { path: '/transactions', label: 'Transactions', icon: <IoSwapHorizontal />, roles: ['user', 'creator', 'admin'] },
+    { path: '/referral',   label: 'Refer Friends',  icon: <IoPeople />,        roles: ['user', 'creator', 'admin'] },
     { path: '/notifications', label: 'Notifications', icon: <IoNotifications />, roles: ['user', 'creator', 'admin'] },
-    { path: '/settings', label: 'Settings', icon: <IoSettings />, roles: ['user', 'creator', 'admin'] },
+    { path: '/settings',   label: 'Settings',       icon: <IoSettings />,      roles: ['user', 'creator', 'admin'] },
   ];
 
   // Add creator items
