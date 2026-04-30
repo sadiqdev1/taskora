@@ -6,9 +6,9 @@ import Input from '../../components/common/Input';
 import Badge from '../../components/common/Badge';
 import Modal from '../../components/common/Modal';
 import { useToast } from '../../contexts/ToastContext';
-import { mockWallet } from '../../data/mockData';
+import { mockWallet, mockTransactions } from '../../data/mockData';
 import { formatCurrency } from '../../utils/formatters';
-import { IoWallet, IoTrendingUp, IoTrendingDown, IoCard, IoAdd, IoTrash, IoPencil } from 'react-icons/io5';
+import { IoWallet, IoTrendingUp, IoTrendingDown, IoCard, IoAdd, IoTrash, IoPencil, IoSwapHorizontal } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 
 const Wallet = () => {
