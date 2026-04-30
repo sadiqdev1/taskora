@@ -221,14 +221,18 @@ const Dashboard = () => {
             </div>
 
             {/* Stats Row */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
               <div>
-                <p className="text-sm opacity-75 mb-1">Total Earned</p>
-                <p className="text-2xl font-bold">{formatCurrency(3420.00)}</p>
+                <p className="text-xs sm:text-sm opacity-75 mb-1">Total Earned</p>
+                <p className="text-xl sm:text-2xl font-bold">{formatCurrency(3420.00)}</p>
               </div>
-              <div className="text-right">
-                <p className="text-sm opacity-75 mb-1">Total Withdrawn</p>
-                <p className="text-2xl font-bold">{formatCurrency(850.00)}</p>
+              <div className="text-right sm:text-left">
+                <p className="text-xs sm:text-sm opacity-75 mb-1">Total Withdrawn</p>
+                <p className="text-xl sm:text-2xl font-bold">{formatCurrency(850.00)}</p>
+              </div>
+              <div className="hidden sm:block">
+                <p className="text-sm opacity-75 mb-1">Tasks Completed</p>
+                <p className="text-2xl font-bold">45</p>
               </div>
             </div>
           </div>
