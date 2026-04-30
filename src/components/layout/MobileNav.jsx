@@ -57,8 +57,9 @@ const MobileNav = () => {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-100 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md md:hidden">
-        <div className="flex h-16 items-center">
+      {/* Mobile Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 md:hidden safe-area-bottom">
+        <div className="flex h-16 items-center px-2">
           {mainItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -66,20 +67,25 @@ const MobileNav = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className="group flex flex-col items-center justify-center flex-1 h-full text-xs font-medium transition-all active:scale-95"
+                className="group flex flex-col items-center justify-center flex-1 h-full gap-1 transition-all active:scale-95"
               >
-                <div className={`p-1.5 rounded-xl transition-all ${
-                  active ? 'bg-blue-50 dark:bg-blue-500/10' : ''
+                <div className={`relative p-2 rounded-xl transition-all duration-200 ${
+                  active 
+                    ? 'bg-blue-500 shadow-lg shadow-blue-500/30' 
+                    : 'hover:bg-gray-100 dark:hover:bg-zinc-800'
                 }`}>
                   <Icon
-                    size={19}
-                    className={`transition-colors ${
-                      active ? 'text-blue-500' : 'text-gray-400 dark:text-zinc-500'
+                    size={22}
+                    className={`transition-colors duration-200 ${
+                      active ? 'text-white' : 'text-gray-500 dark:text-zinc-400'
                     }`}
                   />
+                  {active && (
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full" />
+                  )}
                 </div>
-                <span className={`mt-0.5 text-[10px] ${
-                  active ? 'text-blue-500' : 'text-gray-400 dark:text-zinc-500'
+                <span className={`text-[10px] font-medium transition-colors duration-200 ${
+                  active ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-zinc-400'
                 }`}>
                   {item.label}
                 </span>
@@ -90,18 +96,25 @@ const MobileNav = () => {
           {/* More Button */}
           <button
             onClick={() => setMoreOpen(true)}
-            className="group flex flex-col items-center justify-center flex-1 h-full text-xs font-medium transition-all active:scale-95"
+            className="group flex flex-col items-center justify-center flex-1 h-full gap-1 transition-all active:scale-95"
           >
-            <div className={`p-1.5 rounded-xl transition-all ${
-              hasActiveMore ? 'bg-blue-50 dark:bg-blue-500/10' : ''
+            <div className={`relative p-2 rounded-xl transition-all duration-200 ${
+              hasActiveMore 
+                ? 'bg-blue-500 shadow-lg shadow-blue-500/30' 
+                : 'hover:bg-gray-100 dark:hover:bg-zinc-800'
             }`}>
               <IoEllipsisHorizontal
-                size={19}
-                className={hasActiveMore ? 'text-blue-500' : 'text-gray-400 dark:text-zinc-500'}
+                size={22}
+                className={`transition-colors duration-200 ${
+                  hasActiveMore ? 'text-white' : 'text-gray-500 dark:text-zinc-400'
+                }`}
               />
+              {hasActiveMore && (
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full" />
+              )}
             </div>
-            <span className={`mt-0.5 text-[10px] ${
-              hasActiveMore ? 'text-blue-500' : 'text-gray-400 dark:text-zinc-500'
+            <span className={`text-[10px] font-medium transition-colors duration-200 ${
+              hasActiveMore ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-zinc-400'
             }`}>
               More
             </span>
@@ -111,17 +124,29 @@ const MobileNav = () => {
 
       {/* More Menu Modal */}
       {moreOpen && (
-        <div className="fixed inset-0 z-50 flex items-end md:hidden" onClick={() => setMoreOpen(false)}>
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+        <div 
+          className="fixed inset-0 z-50 flex items-end md:hidden" 
+          onClick={() => setMoreOpen(false)}
+          style={{ animation: 'fadeIn .2s ease' }}
+        >
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
           <div
-            className="relative w-full bg-white dark:bg-zinc-900 rounded-t-2xl shadow-2xl border-t border-gray-100 dark:border-zinc-800 pb-[env(safe-area-inset-bottom)]"
-            style={{ animation: 'slideUp .25s cubic-bezier(.22,.61,.36,1)' }}
+            className="relative w-full bg-white dark:bg-zinc-900 rounded-t-3xl shadow-2xl border-t border-gray-200 dark:border-zinc-800"
+            style={{ animation: 'slideUp .3s cubic-bezier(.22,.61,.36,1)' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-center pt-3 pb-1">
-              <div className="w-10 h-1 rounded-full bg-gray-200 dark:bg-zinc-700" />
+            {/* Handle Bar */}
+            <div className="flex justify-center pt-4 pb-2">
+              <div className="w-12 h-1.5 rounded-full bg-gray-300 dark:bg-zinc-700" />
             </div>
-            <div className="px-4 py-3 space-y-1">
+
+            {/* Menu Title */}
+            <div className="px-6 py-3 border-b border-gray-100 dark:border-zinc-800">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white">More Options</h3>
+            </div>
+
+            {/* Menu Items */}
+            <div className="px-4 py-4 space-y-1 max-h-[60vh] overflow-y-auto">
               {moreItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.path);
@@ -130,29 +155,67 @@ const MobileNav = () => {
                     key={item.path}
                     to={item.path}
                     onClick={() => setMoreOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    className={`flex items-center gap-4 px-4 py-3.5 rounded-xl text-sm font-medium transition-all active:scale-98 ${
                       active
                         ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400'
-                        : 'text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-800'
+                        : 'text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-800 active:bg-gray-100 dark:active:bg-zinc-700'
                     }`}
                   >
-                    <Icon size={18} className={active ? 'text-blue-500' : 'text-gray-400 dark:text-zinc-500'} />
-                    {item.label}
+                    <div className={`p-2 rounded-lg ${
+                      active 
+                        ? 'bg-blue-100 dark:bg-blue-500/20' 
+                        : 'bg-gray-100 dark:bg-zinc-800'
+                    }`}>
+                      <Icon 
+                        size={20} 
+                        className={active ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-zinc-400'} 
+                      />
+                    </div>
+                    <span className="flex-1">{item.label}</span>
+                    {active && (
+                      <div className="w-2 h-2 rounded-full bg-blue-500" />
+                    )}
                   </Link>
                 );
               })}
             </div>
-            <div className="px-4 pb-4">
+
+            {/* Close Button */}
+            <div className="px-4 py-4 border-t border-gray-100 dark:border-zinc-800 pb-safe">
               <button
                 onClick={() => setMoreOpen(false)}
-                className="w-full py-3 rounded-xl text-sm font-medium text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 transition flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-xl text-sm font-semibold text-gray-700 dark:text-zinc-300 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 transition-all active:scale-98 flex items-center justify-center gap-2"
               >
-                <IoClose size={15} /> Close
+                <IoClose size={18} />
+                Close
               </button>
             </div>
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { 
+            opacity: 0;
+            transform: translateY(100%); 
+          }
+          to { 
+            opacity: 1;
+            transform: translateY(0); 
+          }
+        }
+        .safe-area-bottom {
+          padding-bottom: env(safe-area-inset-bottom);
+        }
+        .pb-safe {
+          padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+        }
+      `}</style>
     </>
   );
 };
