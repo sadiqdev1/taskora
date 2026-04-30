@@ -15,7 +15,7 @@ const Dashboard = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="space-y-6"
+      className="space-y-4 sm:space-y-6"
     >
       {/* Hero Wallet Summary Card */}
       <motion.div
@@ -24,7 +24,7 @@ const Dashboard = () => {
         transition={{ delay: 0.1 }}
         whileHover={{ y: -4 }}
       >
-        <Card className="p-4 sm:p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
+        <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
           {/* Decorative circles */}
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full"></div>
           <div className="absolute -right-5 top-20 w-32 h-32 bg-white/10 rounded-full"></div>
@@ -71,7 +71,7 @@ const Dashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card className="p-4 sm:p-6">
+        <Card className="p-5">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
@@ -101,14 +101,14 @@ const Dashboard = () => {
       </motion.div>
 
       {/* Pending Earnings, Affiliate & Daily Tasks Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-4 sm:p-6">
+          <Card className="p-3 sm:p-5">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 rounded-xl flex items-center justify-center flex-shrink-0">
                 <IoTime size={20} className="sm:w-6 sm:h-6" />
@@ -129,7 +129,7 @@ const Dashboard = () => {
           transition={{ delay: 0.35 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-4 sm:p-6">
+          <Card className="p-3 sm:p-5">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 rounded-xl flex items-center justify-center flex-shrink-0">
                 <IoTrendingUp size={20} className="sm:w-6 sm:h-6" />
@@ -150,7 +150,7 @@ const Dashboard = () => {
           transition={{ delay: 0.4 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-4 sm:p-6">
+          <Card className="p-3 sm:p-5">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center flex-shrink-0">
                 <IoCheckmarkCircle size={20} className="sm:w-6 sm:h-6" />
@@ -174,7 +174,7 @@ const Dashboard = () => {
         whileHover={{ y: -4 }}
       >
         <Card 
-          className="p-4 sm:p-6 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-zinc-900 dark:to-zinc-800 text-white cursor-pointer"
+          className="p-6 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-zinc-900 dark:to-zinc-800 text-white cursor-pointer"
           onClick={() => navigate('/referral')}
         >
           <div className="flex items-center gap-4">
@@ -195,8 +195,8 @@ const Dashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        <Card className="p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-6">
+        <Card className="p-5">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Recent Activity
           </h2>
           <div className="space-y-3">
