@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   IoHome,
-  IoList,
+  IoStorefront,
   IoWallet,
   IoEllipsisHorizontal,
   IoClose,
@@ -23,7 +23,7 @@ const MobileNav = () => {
 
   const mainItems = [
     { path: '/dashboard', label: 'Home', icon: IoHome },
-    { path: '/tasks', label: 'Marketplace', icon: IoList },
+    { path: '/tasks', label: 'Marketplace', icon: IoStorefront },
     { path: '/wallet', label: 'Wallet', icon: IoWallet },
   ];
 
