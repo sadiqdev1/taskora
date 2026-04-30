@@ -185,7 +185,7 @@ const Dashboard = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="space-y-6"
+      className="space-y-4 sm:space-y-6"
     >
       {/* Hero Wallet Summary Card */}
       <motion.div
@@ -194,128 +194,148 @@ const Dashboard = () => {
         transition={{ delay: 0.1 }}
         whileHover={{ y: -4 }}
       >
-        <Card className="p-4 sm:p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-          {/* Wallet Balance & Withdraw Button */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-4 mb-6">
-            <div>
-              <p className="text-sm opacity-90 mb-1">Wallet Balance</p>
-              <p className="text-3xl sm:text-4xl font-bold mb-2 sm:mb-4">
-                {formatCurrency(1250.50)}
-              </p>
+        <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
+          {/* Decorative circles */}
+          <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full"></div>
+          <div className="absolute -right-5 top-20 w-32 h-32 bg-white/10 rounded-full"></div>
+          
+          <div className="relative z-10">
+            {/* Available Balance & Withdraw Button */}
+            <div className="flex items-start justify-between mb-8">
+              <div>
+                <p className="text-sm opacity-90 mb-2">Available Balance</p>
+                <p className="text-4xl sm:text-5xl font-bold">
+                  {formatCurrency(1250.50)}
+                </p>
+              </div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => navigate('/withdrawal')}
+                  className="bg-white text-blue-600 hover:bg-gray-100 font-semibold"
+                >
+                  Withdraw
+                </Button>
+              </motion.div>
             </div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => navigate('/withdrawal')}
-                className="bg-white text-blue-600 hover:bg-gray-100 w-full sm:w-auto"
-              >
-                <IoWallet className="mr-2" />
-                Withdraw
-              </Button>
-            </motion.div>
-          </div>
 
-          {/* Divider */}
-          <div className="border-t border-white/20 mb-6"></div>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6">
-            <div>
-              <p className="text-xs opacity-75 mb-1">Total Earned</p>
-              <p className="text-lg sm:text-2xl font-bold">{formatCurrency(3420.00)}</p>
+            {/* Stats Row */}
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <p className="text-sm opacity-75 mb-1">Total Earned</p>
+                <p className="text-2xl font-bold">{formatCurrency(3420.00)}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-sm opacity-75 mb-1">Total Withdrawn</p>
+                <p className="text-2xl font-bold">{formatCurrency(850.00)}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs opacity-75 mb-1">Withdrawn</p>
-              <p className="text-lg sm:text-2xl font-bold">{formatCurrency(850.00)}</p>
-            </div>
-            <div>
-              <p className="text-xs opacity-75 mb-1">Tasks Completed</p>
-              <p className="text-lg sm:text-2xl font-bold">45</p>
-            </div>
-          </div>
-
-          {/* Today's Progress */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 sm:p-4">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs sm:text-sm font-medium">Today's Progress</p>
-              <p className="text-xs sm:text-sm font-bold">80%</p>
-            </div>
-            <div className="w-full bg-white/20 rounded-full h-2 mb-2">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: '80%' }}
-                transition={{ delay: 0.5, duration: 1 }}
-                className="bg-white rounded-full h-2"
-              ></motion.div>
-            </div>
-            <p className="text-xs opacity-75">16 / 20 tasks completed</p>
           </div>
         </Card>
       </motion.div>
 
-      {/* Quick Actions */}
+      {/* Account Progress Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.2 }}
       >
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-          Quick Actions
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
-            <Card 
-              className="p-4 cursor-pointer hover:border-blue-300 dark:hover:border-blue-500 transition-colors"
-              onClick={() => navigate('/tasks')}
-            >
-              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-3">
-                <IoList size={24} />
+        <Card className="p-5">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
+                Incomplete Account
+              </h3>
+              <div className="mb-2">
+                <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: '25%' }}
+                    transition={{ delay: 0.5, duration: 1 }}
+                    className="bg-yellow-500 rounded-full h-2"
+                  ></motion.div>
+                </div>
               </div>
-              <p className="font-semibold text-gray-900 dark:text-white">Browse Tasks</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">Find new tasks</p>
-            </Card>
-          </motion.div>
-
-          <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
-            <Card 
-              className="p-4 cursor-pointer hover:border-green-300 dark:hover:border-green-500 transition-colors"
-              onClick={() => navigate('/my-tasks')}
+              <p className="text-sm text-gray-600 dark:text-zinc-400">25% Complete</p>
+            </div>
+            <Button
+              size="sm"
+              onClick={() => navigate('/settings')}
+              className="ml-4"
             >
-              <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center mb-3">
-                <IoCheckmarkCircle size={24} />
-              </div>
-              <p className="font-semibold text-gray-900 dark:text-white">My Tasks</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">View progress</p>
-            </Card>
-          </motion.div>
+              Activate Plan
+            </Button>
+          </div>
+        </Card>
+      </motion.div>
 
-          <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
-            <Card 
-              className="p-4 cursor-pointer hover:border-orange-300 dark:hover:border-orange-500 transition-colors"
-              onClick={() => navigate('/withdrawal')}
-            >
-              <div className="w-12 h-12 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-xl flex items-center justify-center mb-3">
-                <IoTrendingDown size={24} />
-              </div>
-              <p className="font-semibold text-gray-900 dark:text-white">Withdraw</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">Cash out now</p>
-            </Card>
-          </motion.div>
-
-          <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
-            <Card 
-              className="p-4 cursor-pointer hover:border-purple-300 dark:hover:border-purple-500 transition-colors"
-              onClick={() => navigate('/transactions')}
-            >
-              <div className="w-12 h-12 bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center mb-3">
+      {/* Affiliate & Daily Tasks Cards */}
+      <div className="grid grid-cols-2 gap-4">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          whileHover={{ y: -4 }}
+        >
+          <Card className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 rounded-xl flex items-center justify-center">
                 <IoTrendingUp size={24} />
               </div>
-              <p className="font-semibold text-gray-900 dark:text-white">Transactions</p>
-              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">View history</p>
-            </Card>
-          </motion.div>
-        </div>
+              <div>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Affiliate</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  {formatCurrency(0.00)}
+                </p>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          whileHover={{ y: -4 }}
+        >
+          <Card className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center">
+                <IoCheckmarkCircle size={24} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600 dark:text-zinc-400">Daily Tasks</p>
+                <p className="text-xl font-bold text-gray-900 dark:text-white">
+                  {formatCurrency(0.00)}
+                </p>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+      </div>
+
+      {/* Connect & Refer Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        whileHover={{ y: -4 }}
+      >
+        <Card 
+          className="p-6 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-zinc-900 dark:to-zinc-800 text-white cursor-pointer"
+          onClick={() => navigate('/settings')}
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center">
+              <IoTrendingUp size={28} />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold mb-1">Connect</h3>
+              <p className="text-base font-semibold">Refer Friends</p>
+            </div>
+          </div>
+        </Card>
       </motion.div>
 
       {/* Charts Section */}
