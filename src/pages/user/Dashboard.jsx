@@ -1,6 +1,6 @@
 import { useAuth } from '../../contexts/AuthContext';
 import Card from '../../components/common/Card';
-import { IoWallet, IoCheckmarkCircle, IoTrendingDown, IoNotifications, IoFlame, IoTrendingUp, IoTime } from 'react-icons/io5';
+import { IoWallet, IoCheckmarkCircle, IoTrendingDown, IoNotifications, IoFlame, IoTrendingUp, IoTime, IoList } from 'react-icons/io5';
 import { formatCurrency } from '../../utils/formatters';
 import {
   Chart as ChartJS,
@@ -34,41 +34,6 @@ const Dashboard = () => {
   const { user } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-
-  const stats = [
-    {
-      title: 'Wallet Balance',
-      value: formatCurrency(1250.50),
-      icon: <IoWallet className="w-6 h-6" />,
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10',
-      borderColor: 'border-blue-500/20',
-    },
-    {
-      title: 'Tasks Completed',
-      value: '45',
-      icon: <IoCheckmarkCircle className="w-6 h-6" />,
-      color: 'text-green-500',
-      bgColor: 'bg-green-500/10',
-      borderColor: 'border-green-500/20',
-    },
-    {
-      title: 'Total Earned',
-      value: formatCurrency(3420.00),
-      icon: <IoTrendingUp className="w-6 h-6" />,
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10',
-      borderColor: 'border-purple-500/20',
-    },
-    {
-      title: 'Total Withdrawals',
-      value: formatCurrency(850.00),
-      icon: <IoTrendingDown className="w-6 h-6" />,
-      color: 'text-orange-500',
-      bgColor: 'bg-orange-500/10',
-      borderColor: 'border-orange-500/20',
-    },
-  ];
 
   // Earnings Line Chart Data
   const earningsChartData = {
@@ -233,38 +198,123 @@ const Dashboard = () => {
         </p>
       </motion.div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + index * 0.1 }}
-            whileHover={{ y: -4 }}
-          >
-            <Card className={`p-5 border-l-4 ${stat.borderColor}`}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-zinc-400 mb-1 font-medium">
-                    {stat.title}
-                  </p>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {stat.value}
-                  </p>
-                </div>
-                <motion.div 
-                  className={`${stat.bgColor} ${stat.color} p-3 rounded-xl`}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ type: "spring", stiffness: 400 }}
-                >
-                  {stat.icon}
-                </motion.div>
+      {/* Hero Wallet Summary Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        whileHover={{ y: -4 }}
+      >
+        <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+          {/* Wallet Balance & Withdraw Button */}
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <p className="text-sm opacity-90 mb-1">Wallet Balance</p>
+              <p className="text-4xl font-bold mb-4">
+                {formatCurrency(1250.50)}
+              </p>
+            </div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="bg-white text-blue-600 hover:bg-gray-100"
+              >
+                <IoWallet className="mr-2" />
+                Withdraw
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-white/20 mb-6"></div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <div>
+              <p className="text-xs opacity-75 mb-1">Total Earned</p>
+              <p className="text-2xl font-bold">{formatCurrency(3420.00)}</p>
+            </div>
+            <div>
+              <p className="text-xs opacity-75 mb-1">Withdrawn</p>
+              <p className="text-2xl font-bold">{formatCurrency(850.00)}</p>
+            </div>
+            <div>
+              <p className="text-xs opacity-75 mb-1">Tasks Completed</p>
+              <p className="text-2xl font-bold">45</p>
+            </div>
+          </div>
+
+          {/* Today's Progress */}
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm font-medium">Today's Progress</p>
+              <p className="text-sm font-bold">80%</p>
+            </div>
+            <div className="w-full bg-white/20 rounded-full h-2 mb-2">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: '80%' }}
+                transition={{ delay: 0.5, duration: 1 }}
+                className="bg-white rounded-full h-2"
+              ></motion.div>
+            </div>
+            <p className="text-xs opacity-75">16 / 20 tasks completed</p>
+          </div>
+        </Card>
+      </motion.div>
+
+      {/* Quick Actions */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+      >
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+          Quick Actions
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
+            <Card className="p-4 cursor-pointer hover:border-blue-300 dark:hover:border-blue-500 transition-colors">
+              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center mb-3">
+                <IoList size={24} />
               </div>
+              <p className="font-semibold text-gray-900 dark:text-white">Browse Tasks</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">Find new tasks</p>
             </Card>
           </motion.div>
-        ))}
-      </div>
+
+          <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
+            <Card className="p-4 cursor-pointer hover:border-green-300 dark:hover:border-green-500 transition-colors">
+              <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center mb-3">
+                <IoCheckmarkCircle size={24} />
+              </div>
+              <p className="font-semibold text-gray-900 dark:text-white">My Tasks</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">View progress</p>
+            </Card>
+          </motion.div>
+
+          <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
+            <Card className="p-4 cursor-pointer hover:border-orange-300 dark:hover:border-orange-500 transition-colors">
+              <div className="w-12 h-12 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded-xl flex items-center justify-center mb-3">
+                <IoTrendingDown size={24} />
+              </div>
+              <p className="font-semibold text-gray-900 dark:text-white">Withdraw</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">Cash out now</p>
+            </Card>
+          </motion.div>
+
+          <motion.div whileHover={{ y: -4 }} whileTap={{ scale: 0.98 }}>
+            <Card className="p-4 cursor-pointer hover:border-purple-300 dark:hover:border-purple-500 transition-colors">
+              <div className="w-12 h-12 bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-xl flex items-center justify-center mb-3">
+                <IoTrendingUp size={24} />
+              </div>
+              <p className="font-semibold text-gray-900 dark:text-white">Transactions</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-400 mt-1">View history</p>
+            </Card>
+          </motion.div>
+        </div>
+      </motion.div>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
