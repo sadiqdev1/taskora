@@ -1,13 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useTheme } from '../../contexts/ThemeContext';
-import { IoNotifications, IoSunny, IoMoon, IoSettings, IoChevronUp, IoLogOut } from 'react-icons/io5';
+import { IoNotifications, IoSettings, IoChevronUp, IoLogOut } from 'react-icons/io5';
 import taskoraLogo from '../../assets/taskora-logo.svg';
 
 const Navbar = () => {
   const { user } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef(null);
 
@@ -48,14 +46,6 @@ const Navbar = () => {
                 2
               </span>
             </Link>
-
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="rounded-full p-2 text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-700 dark:hover:text-white transition"
-            >
-              {theme === 'light' ? <IoMoon size={19} /> : <IoSunny size={19} />}
-            </button>
 
             {/* User Menu - Desktop */}
             <div className="relative hidden md:block" ref={menuRef}>

@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { STORAGE_KEYS } from '../utils/constants';
 
 const ThemeContext = createContext();
 
@@ -12,39 +11,16 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    // Check localStorage first
-    const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
-    if (savedTheme) return savedTheme;
-
-    // Check system preference
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-
-    return 'light';
-  });
+  // Always use dark mode
+  const [theme] = useState('dark');
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-
-    localStorage.setItem(STORAGE_KEYS.THEME, theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
+    // Apply dark mode to document
+    document.documentElement.classList.add('dark');
+  }, []);
 
   const value = {
     theme,
-    setTheme,
-    toggleTheme,
   };
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
