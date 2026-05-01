@@ -169,7 +169,7 @@ const Wallet = () => {
               <p className="text-xs sm:text-sm opacity-90">Current Balance</p>
               <IoWallet size={20} className="sm:w-6 sm:h-6" />
             </div>
-            <p className="text-2x22222l sm:3t3e3x3t3-3xl font-bold mb-2">
+            <p className="text-2xl sm:text-2xl font-bold mb-2">
               {formatCurrency(mockWallet.balance)}
             </p>
             <Button

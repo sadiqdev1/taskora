@@ -13,7 +13,7 @@ const AuthenticatedLayout = () => {
         <div className="flex min-h-screen flex-1 flex-col md:ml-64">
           <Navbar />
           
-          <main className="flex-1 px-4 pb-24 pt-6 md:px-8 md:pb-10">
+          <main className="flex-1 px-3 pb-24 pt-5 md:px-6 md:pb-10">
             <div className="mx-auto w-full max-w-6xl">
               <Outlet />
             </div>

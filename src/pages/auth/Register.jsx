@@ -33,7 +33,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
+    // Process registration
     setTimeout(() => {
       setLoading(false);
       navigate('/dashboard');

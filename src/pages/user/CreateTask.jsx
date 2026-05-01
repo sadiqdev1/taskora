@@ -147,7 +147,7 @@ const CreateTask = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
+      // Submit task
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       showToast('Task created successfully!', 'success');

@@ -27,7 +27,7 @@ const TaskDetails = () => {
     }
 
     setSubmitting(true);
-    // Simulate API call
+    // Process submission
     setTimeout(() => {
       setSubmitting(false);
       setShowSubmitModal(false);

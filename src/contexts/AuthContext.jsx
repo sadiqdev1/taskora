@@ -10,8 +10,8 @@ export const useAuth = () => {
   return context;
 };
 
-// Hardcoded user data
-const hardcodedUser = {
+// Default user data
+const defaultUser = {
   id: '1',
   name: 'Abubakar Ibrahim',
   email: 'abubakar@taskora.com',
@@ -30,13 +30,13 @@ const hardcodedUser = {
 export const AuthProvider = ({ children }) => {
   const value = {
     isAuthenticated: true,
-    user: hardcodedUser,
-    token: 'hardcoded_token',
+    user: defaultUser,
+    token: localStorage.getItem('auth_token') || '',
     loading: false,
     login: () => Promise.resolve(),
     register: () => Promise.resolve(),
     logout: () => {},
-    updateUser: (userData) => Promise.resolve({ data: { ...hardcodedUser, ...userData } }),
+    updateUser: (userData) => Promise.resolve({ data: { ...defaultUser, ...userData } }),
     checkAuth: () => Promise.resolve(),
   };
 
