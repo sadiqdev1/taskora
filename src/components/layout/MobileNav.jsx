@@ -38,9 +38,6 @@ const MobileNav = () => {
                   to={item.path}
                   className="flex flex-col items-center justify-center gap-1 px-3 py-2 min-w-0 flex-1 relative"
                 >
-                  {active && (
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-blue-600 dark:bg-blue-400 rounded-full" />
-                  )}
                   <Icon
                     size={24}
                     className={`transition-colors ${
@@ -56,6 +53,9 @@ const MobileNav = () => {
                   }`}>
                     {item.label}
                   </span>
+                  {active && (
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-blue-600 dark:bg-blue-400 rounded-full" />
+                  )}
                 </Link>
               );
             })}
