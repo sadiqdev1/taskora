@@ -9,46 +9,46 @@ import { useToast } from '../../contexts/ToastContext';
 import { IoClose, IoInformationCircle } from 'react-icons/io5';
 
 const TASK_TYPES = [
-  { value: 'facebook_comment', label: 'Comment on a Facebook Post' },
-  { value: 'general_comment_post', label: 'Comment on a post' },
-  { value: 'comment_song', label: 'Comment on a song' },
-  { value: 'youtube_comment', label: 'Comment on a YouTube Video' },
-  { value: 'custom_task', label: 'Custom Task' },
-  { value: 'download_app', label: 'Download an app' },
-  { value: 'download_signup', label: 'Download and signup' },
-  { value: 'tiktok_favourite', label: 'Favourite a TikTok video' },
-  { value: 'fill_survey', label: 'Fill out a survey' },
-  { value: 'follow_boomplay', label: 'Follow a BoomPlay Profile' },
-  { value: 'follow_facebook_page', label: 'Follow a Facebook page' },
-  { value: 'follow_page', label: 'Follow a Page' },
-  { value: 'follow_artist', label: 'Follow your artist profile' },
-  { value: 'join_group_channel', label: 'Join Group/Channel' },
-  { value: 'instagram_engage', label: 'Like, comment and repost ( Instagram )' },
-  { value: 'twitter_engage', label: 'Like, comment and retweet ( Twitter )' },
-  { value: 'tiktok_engage', label: 'Like, comment and save/favourite ( TikTok )' },
-  { value: 'like_post', label: 'Like a Post' },
-  { value: 'like_song', label: 'Like a song' },
-  { value: 'youtube_like', label: 'Like a YouTube Video' },
-  { value: 'instagram_story_song', label: 'Post a song on your Instagram story' },
-  { value: 'tiktok_video_song', label: 'Post a video on TikTok with a song' },
-  { value: 'tweet_reply_hashtag', label: 'Reply to a tweet using a specified hashtag' },
-  { value: 'retweet', label: 'Retweet a post' },
-  { value: 'share_story', label: 'Share a post on your story' },
-  { value: 'share_to_story', label: 'Share to story' },
-  { value: 'website_signup', label: 'Signup on a website' },
-  { value: 'telegram_bot', label: 'Start a telegram bot' },
-  { value: 'stream_song', label: 'Stream your song' },
-  { value: 'youtube_subscribe', label: 'Subscribe to a channel' },
-  { value: 'tag_friend', label: 'Tag a friend' },
-  { value: 'tag_person', label: 'Tag a person' },
-  { value: 'tiktok_sound_use', label: 'TikTok Sound Use' },
-  { value: 'vote_post', label: 'Vote for someone on a post' },
-  { value: 'vote_website', label: 'Vote for someone via a website' },
-  { value: 'vote_sms', label: 'Vote for someone via sms' },
-  { value: 'watch_video', label: 'Watch a video' },
-  { value: 'whatsapp_contact_save', label: 'WhatsApp Contact Save' },
-  { value: 'whatsapp_group_join', label: 'WhatsApp Group Join' },
-  { value: 'birthday_wish', label: 'Wish you happy birthday' },
+  { id: 42, name: 'Comment on a Facebook Post', epc: 6, cost: 13, instructions: '- Go to the Facebook post \n- Comment on the post\n- Upload a screenshot', requiresVerification: false },
+  { id: 20, name: 'Comment on a post', epc: 5, cost: 12, instructions: '- Go to the post\n- Comment on it ( Ensure your comment relates to the post and not a random comment )', requiresVerification: false },
+  { id: 57, name: 'Comment on a song', epc: 6, cost: 18, instructions: '- Go to the song via the link attached\n- Comment on the song', requiresVerification: false },
+  { id: 40, name: 'Comment on a YouTube Video', epc: 7, cost: 13, instructions: '- Go to the video \n- Comment on the YouTube video\n- Upload a screenshot', requiresVerification: false },
+  { id: 48, name: 'Custom Task', epc: 15, cost: 50, instructions: 'Read the instructions below', requiresVerification: false },
+  { id: 24, name: 'Download an app', epc: 20, cost: 45, instructions: '- Download the app from the link provided\n- Upload a screenshot', requiresVerification: false },
+  { id: 25, name: 'Download and signup', epc: 30, cost: 70, instructions: '- Download the app\n- Sign up with your details\n- Upload a screenshot', requiresVerification: false },
+  { id: 44, name: 'Favourite a TikTok video', epc: 5, cost: 15, instructions: '- Click on the bookmark/save icon\n- Take a screenshot \n-Upload screenshot', requiresVerification: false },
+  { id: 31, name: 'Fill out a survey', epc: 40, cost: 150, instructions: '- Complete the survey form\n- Submit your responses\n- Upload a screenshot', requiresVerification: false },
+  { id: 43, name: 'Follow a BoomPlay Profile', epc: 10, cost: 25, instructions: '- Go the boomplay profile\n- Ensure you have a boomplay account\n- Follow the profile \n-Upload a screenshot', requiresVerification: false },
+  { id: 41, name: 'Follow a Facebook page', epc: 5, cost: 13, instructions: '- Go to the Facebook page \n- Follow the page \n- Upload a screenshot', requiresVerification: false },
+  { id: 19, name: 'Follow a Page', epc: 5, cost: 12, instructions: '- Go to the profile\n- Follow the profile\n- Upload a screenshot', requiresVerification: false },
+  { id: 27, name: 'Follow your artist profile', epc: 4, cost: 13, instructions: '- Go to the artist profile\n- Follow the profile\n- Upload a screenshot', requiresVerification: false },
+  { id: 34, name: 'Join Group/Channel', epc: 7, cost: 15, instructions: '- Join the telegram channel \n- Enable notifications', requiresVerification: false },
+  { id: 46, name: 'Like, comment and repost ( Instagram )', epc: 12, cost: 30, instructions: '- Like the post\n-Comment on the post\n-Repost the post', requiresVerification: false },
+  { id: 52, name: 'Like, comment and retweet ( Twitter )', epc: 10, cost: 25, instructions: '- Like the tweet\n-Retweet the tweet\n-Comment on the tweet', requiresVerification: false },
+  { id: 60, name: 'Like, comment and save/favourite ( TikTok )', epc: 10, cost: 25, instructions: '- Like the post\n- Comment on the post\n- Favourite the post', requiresVerification: false },
+  { id: 18, name: 'Like a Post', epc: 4, cost: 12, instructions: '- Go to the post\n- Like the post\n- Upload a screenshot', requiresVerification: false },
+  { id: 35, name: 'Like a song', epc: 7, cost: 21, instructions: '- Go to the song\n- Like the song\n- Upload a screenshot', requiresVerification: false },
+  { id: 39, name: 'Like a YouTube Video', epc: 5, cost: 13, instructions: '- Go to the video \n- Like the YouTube video\n- Upload a screenshot', requiresVerification: false },
+  { id: 49, name: 'Post a song on your Instagram story', epc: 1000, cost: 2500, instructions: '- Post a video on your Instagram story using the attached link\n\n- Submit the link to the story you posted in the username section', requiresVerification: true },
+  { id: 50, name: 'Post a video on TikTok with a song', epc: 1200, cost: 3000, instructions: '- Post a video on TikTok using the sound provided\n\n- Do not delete the video after it\'s posted ( your account will be banned )', requiresVerification: true },
+  { id: 58, name: 'Reply to a tweet using a specified hashtag', epc: 15, cost: 35, instructions: '- Reply to the tweet using the specified hashtag', requiresVerification: true },
+  { id: 47, name: 'Retweet a post', epc: 4, cost: 12, instructions: '- Retweet the post\n- Upload a screenshot', requiresVerification: false },
+  { id: 22, name: 'Share a post on your story', epc: 7, cost: 21, instructions: '- Share the post to your story\n- Upload a screenshot', requiresVerification: false },
+  { id: 56, name: 'Share to story', epc: 6, cost: 24, instructions: '- Share the post to story\n- Upload a screenshot of the post you shared to your story \n- Input the link to the story you shared', requiresVerification: false },
+  { id: 32, name: 'Signup on a website', epc: 10, cost: 33, instructions: '- Sign up on the website\n- Verify your account\n- Upload a screenshot', requiresVerification: false },
+  { id: 28, name: 'Start a telegram bot', epc: 7, cost: 21, instructions: '- Start the telegram bot\n- Complete the initial setup\n- Upload a screenshot', requiresVerification: false },
+  { id: 26, name: 'Stream your song', epc: 20, cost: 70, instructions: '- Stream the song for at least 30 seconds\n- Upload a screenshot', requiresVerification: false },
+  { id: 38, name: 'Subscribe to a channel', epc: 6, cost: 13, instructions: '- Go to the channel \n- Subscribe to the channel\n- Upload a screenshot', requiresVerification: false },
+  { id: 23, name: 'Tag a friend', epc: 8, cost: 24, instructions: '- Tag a friend in the post\n- Upload a screenshot', requiresVerification: false },
+  { id: 55, name: 'Tag a person', epc: 8, cost: 24, instructions: '- Tag the person \n- Upload a screenshot', requiresVerification: false },
+  { id: 59, name: 'TikTok Sound Use', epc: 100, cost: 250, instructions: '- Post a video on TikTok using the attached link\n- Upload a link to the video you posted into the username section\n- Failure to do task properly will lead to ban on your account', requiresVerification: false },
+  { id: 21, name: 'Vote for someone on a post', epc: 6, cost: 20, instructions: '- Vote for the specified person\n- Upload a screenshot', requiresVerification: false },
+  { id: 29, name: 'Vote for someone via a website', epc: 10, cost: 30, instructions: '- Go to the voting website\n- Vote for the specified person\n- Upload a screenshot', requiresVerification: false },
+  { id: 30, name: 'Vote for someone via sms', epc: 25, cost: 75, instructions: '- Send the SMS vote\n- Upload a screenshot of the sent message', requiresVerification: false },
+  { id: 33, name: 'Watch a video', epc: 10, cost: 33, instructions: '- Watch the video completely\n- Upload a screenshot', requiresVerification: false },
+  { id: 53, name: 'WhatsApp Contact Save', epc: 7, cost: 20, instructions: '- Message the number\n- Save the number', requiresVerification: false },
+  { id: 54, name: 'WhatsApp Group Join', epc: 7, cost: 18, instructions: '- Join the group/channel\n- Upload a screenshot', requiresVerification: false },
+  { id: 36, name: 'Wish you happy birthday', epc: 4, cost: 10, instructions: '- Wish the person happy birthday\n- Upload a screenshot', requiresVerification: false },
 ];
 
 const CreateTask = () => {
@@ -61,17 +61,32 @@ const CreateTask = () => {
     taskLink: '',
     instructions: '',
     workersNeeded: 50,
-    costPerWorker: 0.5,
+    costPerWorker: 0,
   });
+
+  const [selectedTaskType, setSelectedTaskType] = useState(null);
 
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    if (name === 'taskType') {
+      const taskType = TASK_TYPES.find(t => t.id === parseInt(value));
+      setSelectedTaskType(taskType);
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+        instructions: taskType?.instructions || '',
+        costPerWorker: (taskType?.cost || 0) / 100, // Convert cents to dollars
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+    
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -178,15 +193,33 @@ const CreateTask = () => {
               onChange={handleChange}
               error={errors.taskType}
             >
-              <option value="">Select task type</option>
+              <option value="">Type of task</option>
               {TASK_TYPES.map(type => (
-                <option key={type.value} value={type.value}>
-                  {type.label}
+                <option key={type.id} value={type.id}>
+                  {type.name}
                 </option>
               ))}
             </Select>
             {errors.taskType && (
               <p className="mt-1 text-sm text-red-500">{errors.taskType}</p>
+            )}
+            {selectedTaskType && (
+              <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-500/10 rounded-lg">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-700 dark:text-zinc-300">
+                    Suggested Cost per Worker:
+                  </span>
+                  <span className="font-semibold text-blue-600 dark:text-blue-400">
+                    ${(selectedTaskType.cost / 100).toFixed(2)}
+                  </span>
+                </div>
+                {selectedTaskType.requiresVerification && (
+                  <p className="mt-2 text-xs text-orange-600 dark:text-orange-400 flex items-center gap-1">
+                    <IoInformationCircle className="w-4 h-4" />
+                    This task requires verification
+                  </p>
+                )}
+              </div>
             )}
           </div>
 
@@ -220,7 +253,7 @@ const CreateTask = () => {
               name="instructions"
               value={formData.instructions}
               onChange={handleChange}
-              rows={5}
+              rows={6}
               placeholder="Provide clear instructions for workers on how to complete this task..."
               className={`w-full px-4 py-3 rounded-xl border ${
                 errors.instructions
@@ -233,6 +266,7 @@ const CreateTask = () => {
             )}
             <p className="mt-1 text-xs text-gray-500 dark:text-zinc-500">
               {formData.instructions.length} characters (minimum 10)
+              {selectedTaskType && ' • Pre-filled with default instructions, you can customize them'}
             </p>
           </div>
 
