@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import { IoWallet, IoCheckmarkCircle, IoTrendingUp, IoTime, IoAdd } from 'react-icons/io5';
-import { formatCurrency } from '../../utils/formatters';
+import { formatDualCurrency } from '../../utils/formatters';
 import { motion } from 'framer-motion';
 
 const Dashboard = () => {
@@ -35,7 +35,10 @@ const Dashboard = () => {
               <div>
                 <p className="text-sm opacity-90 mb-2">Available Balance</p>
                 <p className="text-3xl sm:text-4xl font-bold">
-                  {formatCurrency(1250.50)}
+                  {formatDualCurrency(1250.50).usd}
+                </p>
+                <p className="text-sm opacity-75 mt-1">
+                  {formatDualCurrency(1250.50).ngn}
                 </p>
               </div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -54,11 +57,13 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Earned</p>
-                <p className="text-lg sm:text-xl font-bold">{formatCurrency(3420.00)}</p>
+                <p className="text-lg sm:text-xl font-bold">{formatDualCurrency(3420.00).usd}</p>
+                <p className="text-xs opacity-60">{formatDualCurrency(3420.00).ngn}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Withdrawn</p>
-                <p className="text-lg sm:text-xl font-bold">{formatCurrency(850.00)}</p>
+                <p className="text-lg sm:text-xl font-bold">{formatDualCurrency(850.00).usd}</p>
+                <p className="text-xs opacity-60">{formatDualCurrency(850.00).ngn}</p>
               </div>
             </div>
           </div>
@@ -116,7 +121,10 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Pending</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatCurrency(320.50)}
+                  {formatDualCurrency(320.50).usd}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-zinc-500 truncate">
+                  {formatDualCurrency(320.50).ngn}
                 </p>
               </div>
             </div>
@@ -137,7 +145,7 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Affiliate</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatCurrency(0.00)}
+                  {formatDualCurrency(0.00).usd}
                 </p>
               </div>
             </div>
@@ -158,36 +166,13 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Daily Tasks</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatCurrency(0.00)}
+                  {formatDualCurrency(0.00).usd}
                 </p>
               </div>
             </div>
           </Card>
         </motion.div>
       </div>
-
-      {/* Connect & Refer Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        whileHover={{ y: -4 }}
-      >
-        <Card 
-          className="p-6 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-zinc-900 dark:to-zinc-800 text-white cursor-pointer"
-          onClick={() => navigate('/referral')}
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center">
-              <IoTrendingUp size={28} />
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-1">Connect</h3>
-              <p className="text-base font-semibold">Refer Friends</p>
-            </div>
-          </div>
-        </Card>
-      </motion.div>
 
       {/* Create Task CTA */}
       <motion.div

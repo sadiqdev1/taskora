@@ -26,7 +26,6 @@ const Sidebar = () => {
     { path: '/create-task', label: 'Create Task',   icon: <IoAdd />,           roles: ['user', 'creator', 'admin'] },
     { path: '/wallet',     label: 'Wallet',         icon: <IoWallet />,        roles: ['user', 'creator', 'admin'] },
     { path: '/transactions', label: 'Transactions', icon: <IoSwapHorizontal />, roles: ['user', 'creator', 'admin'] },
-    { path: '/referral',   label: 'Refer Friends',  icon: <IoPeople />,        roles: ['user', 'creator', 'admin'] },
     { path: '/notifications', label: 'Notifications', icon: <IoNotifications />, roles: ['user', 'creator', 'admin'] },
     { path: '/settings',   label: 'Settings',       icon: <IoSettings />,      roles: ['user', 'creator', 'admin'] },
   ];

@@ -92,6 +92,18 @@ const CreateTask = () => {
     }
   };
 
+  const handleInputChange = (name, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -235,7 +247,7 @@ const CreateTask = () => {
               type="url"
               name="taskLink"
               value={formData.taskLink}
-              onChange={handleChange}
+              onChange={(value) => handleInputChange('taskLink', value)}
               placeholder="https://example.com/post/12345"
               error={errors.taskLink}
             />
@@ -281,7 +293,7 @@ const CreateTask = () => {
               type="number"
               name="workersNeeded"
               value={formData.workersNeeded}
-              onChange={handleChange}
+              onChange={(value) => handleInputChange('workersNeeded', value)}
               min="50"
               step="1"
               error={errors.workersNeeded}
@@ -306,7 +318,7 @@ const CreateTask = () => {
               type="number"
               name="costPerWorker"
               value={formData.costPerWorker}
-              onChange={handleChange}
+              onChange={(value) => handleInputChange('costPerWorker', value)}
               min="0.01"
               step="0.01"
               error={errors.costPerWorker}

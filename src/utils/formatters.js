@@ -1,9 +1,41 @@
+// Exchange rate (1 USD = 1650 NGN)
+const USD_TO_NGN_RATE = 1650;
+
 // Format currency
 export const formatCurrency = (amount, currency = 'USD') => {
+  if (amount === null || amount === undefined) return currency === 'NGN' ? '₦0' : '$0.00';
+  
+  const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+  
+  if (currency === 'NGN') {
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(numAmount);
+  }
+  
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency,
-  }).format(amount);
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(numAmount);
+};
+
+// Format dual currency (USD / NGN)
+export const formatDualCurrency = (amountUSD) => {
+  if (amountUSD === null || amountUSD === undefined) return { usd: '$0.00', ngn: '₦0', display: '$0.00 / ₦0' };
+  
+  const numAmount = typeof amountUSD === 'string' ? parseFloat(amountUSD) : amountUSD;
+  const amountNGN = numAmount * USD_TO_NGN_RATE;
+  
+  return {
+    usd: formatCurrency(numAmount, 'USD'),
+    ngn: formatCurrency(amountNGN, 'NGN'),
+    display: `${formatCurrency(numAmount, 'USD')} / ${formatCurrency(amountNGN, 'NGN')}`
+  };
 };
 
 // Format date
