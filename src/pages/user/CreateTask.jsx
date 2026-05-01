@@ -268,8 +268,7 @@ const CreateTask = () => {
               <p className="mt-1 text-sm text-red-500">{errors.instructions}</p>
             )}
             <p className="mt-1 text-xs text-gray-500 dark:text-zinc-500">
-              {formData.instructions.length} characters (minimum 10)
-              {selectedTaskType && ' • Pre-filled with default instructions, you can customize them'}
+              {formData.instructions.length} characters
             </p>
           </div>
 
