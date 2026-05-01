@@ -22,7 +22,7 @@ const Withdrawal = () => {
   // Bank Accounts from Wallet page (using localStorage for demo)
   const [bankAccounts, setBankAccounts] = useState([]);
 
-  const mockWalletBalance = 1250.50;
+  const mockWalletBalance = 2063325;
 
   // Load bank accounts from localStorage
   useEffect(() => {
@@ -40,18 +40,18 @@ const Withdrawal = () => {
 
   const handleWithdraw = () => {
     if (!withdrawAmount || !withdrawMethod) {
-      showToast('error', 'Please fill all fields');
+      showToast('Please fill all fields', 'error');
       return;
     }
 
     const amount = parseFloat(withdrawAmount);
-    if (amount < 10) {
-      showToast('error', 'Minimum withdrawal amount is $10');
+    if (amount < 16500) {
+      showToast('Minimum withdrawal amount is ₦16,500', 'error');
       return;
     }
 
     if (amount > mockWalletBalance) {
-      showToast('error', 'Insufficient balance');
+      showToast('Insufficient balance', 'error');
       return;
     }
 
@@ -60,7 +60,7 @@ const Withdrawal = () => {
       setProcessing(false);
       setWithdrawAmount('');
       setWithdrawMethod('');
-      showToast('success', 'Withdrawal request submitted successfully!');
+      showToast('Withdrawal request submitted successfully!', 'success');
       setTimeout(() => navigate('/wallet'), 1500);
     }, 1500);
   };
@@ -163,7 +163,7 @@ const Withdrawal = () => {
                   <div className="text-sm text-gray-600 dark:text-zinc-400">
                     <p className="font-medium text-gray-900 dark:text-white mb-2">Withdrawal Information</p>
                     <ul className="space-y-1">
-                      <li>• Minimum withdrawal: $10</li>
+                      <li>• Minimum withdrawal: ₦16,500</li>
                       <li>• Processing time: 1-3 business days</li>
                       <li>• No withdrawal fees</li>
                       <li>• Withdrawals are processed Monday-Friday</li>
@@ -178,16 +178,23 @@ const Withdrawal = () => {
                   Quick Amount
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {[50, 100, 250, 500].map((amount) => (
-                    <Button
+                  {[82500, 165000, 412500, 825000].map((amount) => (
+                    <button
                       key={amount}
-                      variant="outline"
-                      size="sm"
                       onClick={() => setWithdrawAmount(amount.toString())}
                       disabled={amount > mockWalletBalance}
+                      className={`px-4 py-2.5 rounded-xl font-medium transition-all ${
+                        withdrawAmount === amount.toString()
+                          ? 'bg-blue-500 text-white shadow-md'
+                          : 'bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-zinc-300 hover:bg-gray-200 dark:hover:bg-zinc-700'
+                      } ${
+                        amount > mockWalletBalance
+                          ? 'opacity-50 cursor-not-allowed'
+                          : 'cursor-pointer'
+                      }`}
                     >
-                      ${amount}
-                    </Button>
+                      {formatCurrency(amount)}
+                    </button>
                   ))}
                 </div>
               </div>

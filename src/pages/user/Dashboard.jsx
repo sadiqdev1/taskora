@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import { IoWallet, IoCheckmarkCircle, IoTrendingUp, IoTime, IoAdd } from 'react-icons/io5';
-import { formatDualCurrency } from '../../utils/formatters';
+import { formatCurrency } from '../../utils/formatters';
 import { motion } from 'framer-motion';
 
 const Dashboard = () => {
@@ -35,10 +35,7 @@ const Dashboard = () => {
               <div>
                 <p className="text-sm opacity-90 mb-2">Available Balance</p>
                 <p className="text-3xl sm:text-4xl font-bold">
-                  {formatDualCurrency(1250.50).usd}
-                </p>
-                <p className="text-sm opacity-75 mt-1">
-                  {formatDualCurrency(1250.50).ngn}
+                  {formatCurrency(2063325)}
                 </p>
               </div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -57,13 +54,11 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Earned</p>
-                <p className="text-lg sm:text-xl font-bold">{formatDualCurrency(3420.00).usd}</p>
-                <p className="text-xs opacity-60">{formatDualCurrency(3420.00).ngn}</p>
+                <p className="text-lg sm:text-xl font-bold">{formatCurrency(5643000)}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Withdrawn</p>
-                <p className="text-lg sm:text-xl font-bold">{formatDualCurrency(850.00).usd}</p>
-                <p className="text-xs opacity-60">{formatDualCurrency(850.00).ngn}</p>
+                <p className="text-lg sm:text-xl font-bold">{formatCurrency(1402500)}</p>
               </div>
             </div>
           </div>
@@ -121,10 +116,7 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Pending</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatDualCurrency(320.50).usd}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-zinc-500 truncate">
-                  {formatDualCurrency(320.50).ngn}
+                  {formatCurrency(528825)}
                 </p>
               </div>
             </div>
@@ -145,7 +137,7 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Affiliate</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatDualCurrency(0.00).usd}
+                  {formatCurrency(0)}
                 </p>
               </div>
             </div>
@@ -166,7 +158,7 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Daily Tasks</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatDualCurrency(0.00).usd}
+                  {formatCurrency(0)}
                 </p>
               </div>
             </div>
@@ -227,7 +219,7 @@ const Dashboard = () => {
                   Task Approved
                 </p>
                 <p className="text-xs text-gray-600 dark:text-zinc-400 truncate">
-                  Download and rate our app - Earned $12.00
+                  Download and rate our app - Earned ₦19,800
                 </p>
               </div>
               <span className="text-xs text-gray-400 dark:text-zinc-500 flex-shrink-0">2h ago</span>
@@ -267,7 +259,7 @@ const Dashboard = () => {
                   Payment Received
                 </p>
                 <p className="text-xs text-gray-600 dark:text-zinc-400 truncate">
-                  Withdrawal processed - $50.00 sent to your account
+                  Withdrawal processed - ₦82,500 sent to your account
                 </p>
               </div>
               <span className="text-xs text-gray-400 dark:text-zinc-500 flex-shrink-0">1d ago</span>

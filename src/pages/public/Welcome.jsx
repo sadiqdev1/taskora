@@ -16,7 +16,7 @@ const Welcome = () => {
     {
       icon: <IoTrophy className="w-6 h-6" />,
       title: 'Earn More',
-      description: 'Refer friends and earn bonus rewards on their activities'
+      description: 'Complete more tasks and increase your earnings daily'
     },
     {
       icon: <IoShield className="w-6 h-6" />,
@@ -37,7 +37,7 @@ const Welcome = () => {
 
   const stats = [
     { value: '10K+', label: 'Active Users' },
-    { value: '$50K+', label: 'Paid Out' },
+    { value: '₦82M+', label: 'Paid Out' },
     { value: '5K+', label: 'Tasks Completed' },
     { value: '4.8/5', label: 'User Rating' }
   ];
@@ -245,7 +245,7 @@ const Welcome = () => {
               <ul className="space-y-2 text-sm text-gray-600 dark:text-zinc-400">
                 <li><Link to="/tasks" className="hover:text-primary transition-colors">Browse Tasks</Link></li>
                 <li><Link to="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link></li>
-                <li><Link to="/referral" className="hover:text-primary transition-colors">Referral Program</Link></li>
+                <li><Link to="/wallet" className="hover:text-primary transition-colors">Wallet</Link></li>
               </ul>
             </div>
             

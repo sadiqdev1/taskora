@@ -4,7 +4,6 @@ import {
   IoHome,
   IoStorefront,
   IoWallet,
-  IoPeople,
   IoSettings,
 } from 'react-icons/io5';
 
@@ -15,9 +14,8 @@ const MobileNav = () => {
   const navItems = [
     { path: '/dashboard', label: 'Home',        icon: IoHome       },
     { path: '/tasks',     label: 'Marketplace', icon: IoStorefront },
-    { path: '/wallet',    label: 'Wallet',       icon: IoWallet     },
-    { path: '/referral',  label: 'Refer',        icon: IoPeople     },
-    { path: '/settings',  label: 'Settings',     icon: IoSettings   },
+    { path: '/wallet',    label: 'Wallet',      icon: IoWallet     },
+    { path: '/settings',  label: 'Settings',    icon: IoSettings   },
   ];
 
   const isActive = (path) => {
