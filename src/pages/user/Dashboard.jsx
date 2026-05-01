@@ -2,7 +2,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
-import { IoWallet, IoCheckmarkCircle, IoTrendingUp, IoTime } from 'react-icons/io5';
+import { IoWallet, IoCheckmarkCircle, IoTrendingUp, IoTime, IoAdd } from 'react-icons/io5';
 import { formatCurrency } from '../../utils/formatters';
 import { motion } from 'framer-motion';
 
@@ -184,6 +184,33 @@ const Dashboard = () => {
             <div>
               <h3 className="text-lg font-bold mb-1">Connect</h3>
               <p className="text-base font-semibold">Refer Friends</p>
+            </div>
+          </div>
+        </Card>
+      </motion.div>
+
+      {/* Create Task CTA */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45 }}
+        whileHover={{ y: -4 }}
+      >
+        <Card 
+          className="p-6 bg-gradient-to-br from-green-500 to-emerald-600 text-white cursor-pointer overflow-hidden relative"
+          onClick={() => navigate('/create-task')}
+        >
+          {/* Decorative circles */}
+          <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full"></div>
+          <div className="absolute -right-2 top-16 w-24 h-24 bg-white/10 rounded-full"></div>
+          
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+              <IoAdd size={32} />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold mb-1">Create Your Own Task</h3>
+              <p className="text-sm opacity-90">Get workers to complete your tasks</p>
             </div>
           </div>
         </Card>

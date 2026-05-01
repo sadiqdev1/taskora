@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import {
   IoHome,
   IoStorefront,
-  IoCheckmarkDone,
+  IoClipboard,
   IoBriefcase,
   IoWallet,
   IoSwapHorizontal,
@@ -22,6 +22,8 @@ const Sidebar = () => {
   const menuItems = [
     { path: '/dashboard',  label: 'Dashboard',     icon: <IoHome />,          roles: ['user', 'creator', 'admin'] },
     { path: '/tasks',      label: 'Marketplace',   icon: <IoStorefront />,    roles: ['user', 'creator', 'admin'] },
+    { path: '/my-tasks',   label: 'My Submissions', icon: <IoClipboard />,     roles: ['user', 'creator', 'admin'] },
+    { path: '/create-task', label: 'Create Task',   icon: <IoAdd />,           roles: ['user', 'creator', 'admin'] },
     { path: '/wallet',     label: 'Wallet',         icon: <IoWallet />,        roles: ['user', 'creator', 'admin'] },
     { path: '/transactions', label: 'Transactions', icon: <IoSwapHorizontal />, roles: ['user', 'creator', 'admin'] },
     { path: '/referral',   label: 'Refer Friends',  icon: <IoPeople />,        roles: ['user', 'creator', 'admin'] },
@@ -31,7 +33,7 @@ const Sidebar = () => {
 
   // Add creator items
   if (user?.role === 'creator' || user?.role === 'admin') {
-    menuItems.splice(3, 0, 
+    menuItems.splice(4, 0, 
       { path: '/campaigns/create', label: 'Create Campaign', icon: <IoAdd />, roles: ['creator', 'admin'] },
       { path: '/campaigns', label: 'My Campaigns', icon: <IoBriefcase />, roles: ['creator', 'admin'] }
     );
