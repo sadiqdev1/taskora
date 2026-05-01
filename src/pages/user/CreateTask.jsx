@@ -4,9 +4,8 @@ import { motion } from 'framer-motion';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
-import Select from '../../components/common/Select';
 import { useToast } from '../../contexts/ToastContext';
-import { IoClose, IoInformationCircle } from 'react-icons/io5';
+import { IoInformationCircle } from 'react-icons/io5';
 
 const TASK_TYPES = [
   { id: 42, name: 'Comment on a Facebook Post', epc: 6, cost: 13, instructions: '- Go to the Facebook post \n- Comment on the post\n- Upload a screenshot', requiresVerification: false },
@@ -71,7 +70,7 @@ const CreateTask = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     
-    if (name === 'taskType') {
+    if (name === 'taskType' && value) {
       const taskType = TASK_TYPES.find(t => t.id === parseInt(value));
       setSelectedTaskType(taskType);
       setFormData(prev => ({
@@ -187,11 +186,15 @@ const CreateTask = () => {
             <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-2">
               Task Type <span className="text-red-500">*</span>
             </label>
-            <Select
+            <select
               name="taskType"
               value={formData.taskType}
               onChange={handleChange}
-              error={errors.taskType}
+              className={`w-full px-4 py-3 rounded-xl border ${
+                errors.taskType
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-gray-200 dark:border-zinc-700 focus:ring-blue-500'
+              } bg-white dark:bg-zinc-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-colors`}
             >
               <option value="">Type of task</option>
               {TASK_TYPES.map(type => (
@@ -199,7 +202,7 @@ const CreateTask = () => {
                   {type.name}
                 </option>
               ))}
-            </Select>
+            </select>
             {errors.taskType && (
               <p className="mt-1 text-sm text-red-500">{errors.taskType}</p>
             )}
