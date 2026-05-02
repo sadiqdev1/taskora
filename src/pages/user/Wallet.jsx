@@ -186,14 +186,24 @@ const Wallet = () => {
             <p className="text-2xl sm:text-2xl font-bold mb-2">
               {formatCurrency(mockWallet.balance)}
             </p>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => navigate('/withdrawal')}
-              className="mt-4 w-full sm:w-auto"
-            >
-              Withdraw Funds
-            </Button>
+            <div className="flex gap-2 mt-4">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate('/deposit')}
+                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30 font-semibold"
+              >
+                + Deposit
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate('/withdrawal')}
+                className="flex-1 bg-white text-blue-600 hover:bg-gray-100 font-semibold"
+              >
+                Withdraw
+              </Button>
+            </div>
           </Card>
         </motion.div>
 
