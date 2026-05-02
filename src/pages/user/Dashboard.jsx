@@ -2,7 +2,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
-import { IoWallet, IoCheckmarkCircle, IoTrendingUp, IoTime } from 'react-icons/io5';
+import { IoWallet, IoCheckmarkCircle, IoTrendingUp, IoTime, IoAdd } from 'react-icons/io5';
 import { formatCurrency } from '../../utils/formatters';
 import { motion } from 'framer-motion';
 
@@ -15,7 +15,7 @@ const Dashboard = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="space-y-6"
+      className="space-y-4 sm:space-y-6"
     >
       {/* Hero Wallet Summary Card */}
       <motion.div
@@ -24,7 +24,7 @@ const Dashboard = () => {
         transition={{ delay: 0.1 }}
         whileHover={{ y: -4 }}
       >
-        <Card className="p-4 sm:p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
+        <Card className="p-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white overflow-hidden relative">
           {/* Decorative circles */}
           <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full"></div>
           <div className="absolute -right-5 top-20 w-32 h-32 bg-white/10 rounded-full"></div>
@@ -35,7 +35,7 @@ const Dashboard = () => {
               <div>
                 <p className="text-sm opacity-90 mb-2">Available Balance</p>
                 <p className="text-3xl sm:text-4xl font-bold">
-                  {formatCurrency(1250.50)}
+                  {formatCurrency(2063325)}
                 </p>
               </div>
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -54,61 +54,70 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Earned</p>
-                <p className="text-lg sm:text-xl font-bold">{formatCurrency(3420.00)}</p>
+                <p className="text-lg sm:text-xl font-bold">{formatCurrency(5643000)}</p>
               </div>
               <div className="text-right">
                 <p className="text-xs sm:text-sm opacity-75 mb-1">Total Withdrawn</p>
-                <p className="text-lg sm:text-xl font-bold">{formatCurrency(850.00)}</p>
+                <p className="text-lg sm:text-xl font-bold">{formatCurrency(1402500)}</p>
               </div>
             </div>
           </div>
         </Card>
       </motion.div>
 
-      {/* Account Progress Card */}
+      {/* Account Progress Banner - Full Width */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
+        className="w-full"
       >
-        <Card className="p-4 sm:p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
-                Incomplete Account
+        <div className="relative p-4 sm:p-6 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-500/10 dark:to-orange-500/10 rounded-2xl border border-yellow-200 dark:border-yellow-500/20">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-yellow-500 text-white rounded-xl flex items-center justify-center flex-shrink-0">
+              <IoTime size={24} className="sm:w-7 sm:h-7" />
+            </div>
+            <div className="flex-1 w-full min-w-0">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-1">
+                Complete Your Account Setup
               </h3>
-              <div className="mb-2">
-                <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: '25%' }}
-                    transition={{ delay: 0.5, duration: 1 }}
-                    className="bg-yellow-500 rounded-full h-2"
-                  ></motion.div>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 mb-2">
+                Activate your plan to unlock all features and start earning more
+              </p>
+              <div className="w-full space-y-2">
+                <div className="w-full">
+                  <div className="w-full bg-yellow-200 dark:bg-yellow-900/30 rounded-full h-2.5">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: '25%' }}
+                      transition={{ delay: 0.5, duration: 1 }}
+                      className="bg-yellow-600 dark:bg-yellow-500 rounded-full h-2.5"
+                    ></motion.div>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1.5">25% Complete</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-zinc-400">25% Complete</p>
             </div>
             <Button
               size="sm"
               onClick={() => navigate('/settings')}
-              className="ml-4"
+              className="flex-shrink-0"
             >
               Activate Plan
             </Button>
           </div>
-        </Card>
+        </div>
       </motion.div>
 
       {/* Pending Earnings, Affiliate & Daily Tasks Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-4 sm:p-6">
+          <Card className="p-3 sm:p-5">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-50 dark:bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 rounded-xl flex items-center justify-center flex-shrink-0">
                 <IoTime size={20} className="sm:w-6 sm:h-6" />
@@ -116,7 +125,7 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Pending</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatCurrency(320.50)}
+                  {formatCurrency(528825)}
                 </p>
               </div>
             </div>
@@ -129,7 +138,7 @@ const Dashboard = () => {
           transition={{ delay: 0.35 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-4 sm:p-6">
+          <Card className="p-3 sm:p-5">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 rounded-xl flex items-center justify-center flex-shrink-0">
                 <IoTrendingUp size={20} className="sm:w-6 sm:h-6" />
@@ -137,7 +146,7 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Affiliate</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatCurrency(0.00)}
+                  {formatCurrency(0)}
                 </p>
               </div>
             </div>
@@ -150,7 +159,7 @@ const Dashboard = () => {
           transition={{ delay: 0.4 }}
           whileHover={{ y: -4 }}
         >
-          <Card className="p-4 sm:p-6">
+          <Card className="p-3 sm:p-5">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 rounded-xl flex items-center justify-center flex-shrink-0">
                 <IoCheckmarkCircle size={20} className="sm:w-6 sm:h-6" />
@@ -158,7 +167,7 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400">Daily Tasks</p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">
-                  {formatCurrency(0.00)}
+                  {formatCurrency(0)}
                 </p>
               </div>
             </div>
@@ -166,24 +175,28 @@ const Dashboard = () => {
         </motion.div>
       </div>
 
-      {/* Connect & Refer Card */}
+      {/* Create Task CTA */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        transition={{ delay: 0.45 }}
         whileHover={{ y: -4 }}
       >
         <Card 
-          className="p-4 sm:p-6 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-zinc-900 dark:to-zinc-800 text-white cursor-pointer"
-          onClick={() => navigate('/referral')}
+          className="p-6 bg-gradient-to-br from-green-500 to-emerald-600 text-white cursor-pointer overflow-hidden relative"
+          onClick={() => navigate('/create-task')}
         >
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center">
-              <IoTrendingUp size={28} />
+          {/* Decorative circles */}
+          <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full"></div>
+          <div className="absolute -right-2 top-16 w-24 h-24 bg-white/10 rounded-full"></div>
+          
+          <div className="relative z-10 flex items-center gap-4">
+            <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+              <IoAdd size={32} />
             </div>
             <div>
-              <h3 className="text-lg font-bold mb-1">Connect</h3>
-              <p className="text-base font-semibold">Refer Friends</p>
+              <h3 className="text-lg font-bold mb-1">Create Your Own Task</h3>
+              <p className="text-sm opacity-90">Get workers to complete your tasks</p>
             </div>
           </div>
         </Card>
@@ -195,8 +208,8 @@ const Dashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        <Card className="p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-6">
+        <Card className="p-5">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Recent Activity
           </h2>
           <div className="space-y-3">
@@ -215,7 +228,7 @@ const Dashboard = () => {
                   Task Approved
                 </p>
                 <p className="text-xs text-gray-600 dark:text-zinc-400 truncate">
-                  Download and rate our app - Earned $12.00
+                  Download and rate our app - Earned ₦19,800
                 </p>
               </div>
               <span className="text-xs text-gray-400 dark:text-zinc-500 flex-shrink-0">2h ago</span>
@@ -255,7 +268,7 @@ const Dashboard = () => {
                   Payment Received
                 </p>
                 <p className="text-xs text-gray-600 dark:text-zinc-400 truncate">
-                  Withdrawal processed - $50.00 sent to your account
+                  Withdrawal processed - ₦82,500 sent to your account
                 </p>
               </div>
               <span className="text-xs text-gray-400 dark:text-zinc-500 flex-shrink-0">1d ago</span>

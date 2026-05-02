@@ -3,8 +3,13 @@
 
 @layer base {
   body {
-    @apply bg-gray-50/50 dark:bg-zinc-950 text-gray-900 dark:text-white;
+    @apply bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  /* Main app container */
+  #root {
+    @apply bg-gray-50 dark:bg-zinc-950 min-h-screen;
   }
 }
 
@@ -15,6 +20,24 @@
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  
+  /* Custom scrollbar for dark mode */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-zinc-900;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-zinc-700 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-zinc-600;
   }
 }
 

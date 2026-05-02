@@ -16,7 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
+    // Process login
     setTimeout(() => {
       setLoading(false);
       navigate('/dashboard');

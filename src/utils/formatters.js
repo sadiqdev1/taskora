@@ -1,9 +1,15 @@
-// Format currency
-export const formatCurrency = (amount, currency = 'USD') => {
-  return new Intl.NumberFormat('en-US', {
+// Format currency in NGN only
+export const formatCurrency = (amount) => {
+  if (amount === null || amount === undefined) return '₦0';
+  
+  const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+  
+  return new Intl.NumberFormat('en-NG', {
     style: 'currency',
-    currency,
-  }).format(amount);
+    currency: 'NGN',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(numAmount);
 };
 
 // Format date

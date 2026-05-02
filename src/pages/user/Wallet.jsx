@@ -154,8 +154,22 @@ const Wallet = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="space-y-4 sm:space-y-6"
+      className="space-y-4 sm:space-y-6 pb-24 md:pb-6"
     >
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Wallet
+        </h1>
+        <p className="text-gray-600 dark:text-zinc-400">
+          Manage your earnings and bank accounts
+        </p>
+      </motion.div>
+
       {/* Balance Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <motion.div
@@ -169,17 +183,27 @@ const Wallet = () => {
               <p className="text-xs sm:text-sm opacity-90">Current Balance</p>
               <IoWallet size={20} className="sm:w-6 sm:h-6" />
             </div>
-            <p className="text-2x22222l sm:3t3e3x3t3-3xl font-bold mb-2">
+            <p className="text-2xl sm:text-2xl font-bold mb-2">
               {formatCurrency(mockWallet.balance)}
             </p>
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => navigate('/withdrawal')}
-              className="mt-4 w-full sm:w-auto"
-            >
-              Withdraw Funds
-            </Button>
+            <div className="flex gap-2 mt-4">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate('/deposit')}
+                className="flex-1 bg-white/20 hover:bg-white/30 text-white border-white/30 font-semibold"
+              >
+                + Deposit
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => navigate('/withdrawal')}
+                className="flex-1 bg-white text-blue-600 hover:bg-gray-100 font-semibold"
+              >
+                Withdraw
+              </Button>
+            </div>
           </Card>
         </motion.div>
 
