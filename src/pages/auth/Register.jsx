@@ -36,7 +36,7 @@ const Register = () => {
     // Process registration
     setTimeout(() => {
       setLoading(false);
-      navigate('/dashboard');
+      navigate('/onboarding');
     }, 1000);
   };
 

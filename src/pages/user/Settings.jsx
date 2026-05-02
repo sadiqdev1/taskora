@@ -4,13 +4,14 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
-import { IoPersonCircle, IoLockClosed, IoTrash, IoSave, IoBell, IoShieldCheckmark } from 'react-icons/io5';
+import { useNotifications } from '../../hooks/useNotifications';
+import { IoPersonCircle, IoLockClosed, IoTrash, IoSave, IoNotifications, IoShieldCheckmark } from 'react-icons/io5';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const TABS = [
   { id: 'profile',   label: 'Profile',   icon: <IoPersonCircle size={18} /> },
   { id: 'security',  label: 'Security',  icon: <IoLockClosed size={18} /> },
-  { id: 'notifications', label: 'Alerts', icon: <IoBell size={18} /> },
+  { id: 'notifications', label: 'Alerts', icon: <IoNotifications size={18} /> },
   { id: 'danger',    label: 'Danger',    icon: <IoTrash size={18} /> },
 ];
 
@@ -31,6 +32,9 @@ const Settings = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
+
+  // Push notifications
+  const { permission, requestPermission, notify } = useNotifications();
 
   // Notification prefs
   const [notifPrefs, setNotifPrefs] = useState({
@@ -240,13 +244,52 @@ const Settings = () => {
                 <Card className="p-5 sm:p-6">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-10 h-10 bg-amber-50 dark:bg-amber-500/10 text-amber-500 rounded-xl flex items-center justify-center">
-                      <IoBell size={20} />
+                      <IoNotifications size={20} />
                     </div>
                     <div>
                       <h2 className="text-base font-semibold text-gray-900 dark:text-white">Notification Preferences</h2>
                       <p className="text-xs text-gray-500 dark:text-zinc-500">Choose what you want to be notified about</p>
                     </div>
                   </div>
+                  {/* Push Notifications Banner */}
+                  <div className={`flex items-center justify-between p-4 rounded-xl border mb-5 ${
+                    permission === 'granted'
+                      ? 'bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/20'
+                      : 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20'
+                  }`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                        permission === 'granted'
+                          ? 'bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400'
+                          : 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                      }`}>
+                        <IoNotifications size={18} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                          {permission === 'granted' ? 'Push notifications enabled' : 'Enable push notifications'}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-zinc-500">
+                          {permission === 'granted'
+                            ? 'You will receive real-time alerts'
+                            : 'Get notified about tasks and payments'}
+                        </p>
+                      </div>
+                    </div>
+                    {permission === 'granted' ? (
+                      <button
+                        onClick={() => notify('Test notification', { body: 'Push notifications are working!' })}
+                        className="text-xs font-semibold text-green-600 dark:text-green-400 hover:underline"
+                      >
+                        Test
+                      </button>
+                    ) : permission === 'denied' ? (
+                      <span className="text-xs text-red-500 font-medium">Blocked</span>
+                    ) : (
+                      <Button size="sm" onClick={requestPermission}>Enable</Button>
+                    )}
+                  </div>
+
                   <div className="space-y-1">
                     {[
                       { key: 'taskApproved', label: 'Task Approved', desc: 'When your submission gets approved' },
