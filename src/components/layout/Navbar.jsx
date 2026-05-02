@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { IoNotifications, IoSettings, IoChevronUp, IoLogOut } from 'react-icons/io5';
+import { useTheme } from '../../contexts/ThemeContext';
+import { IoNotifications, IoSettings, IoChevronUp, IoLogOut, IoMoon, IoSunny } from 'react-icons/io5';
 import taskoraLogo from '../../assets/taskora-logo.svg';
 
 const Navbar = () => {
   const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const menuRef = useRef(null);
 
@@ -36,10 +38,19 @@ const Navbar = () => {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-1.5">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="relative rounded-full p-2 text-gray-600 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white transition"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <IoSunny size={19} /> : <IoMoon size={19} />}
+            </button>
+
             {/* Notifications */}
             <Link
               to="/notifications"
-              className="relative rounded-full p-2 text-gray-500 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800 hover:text-gray-700 dark:hover:text-white transition"
+              className="relative rounded-full p-2 text-gray-600 dark:text-zinc-400 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-gray-900 dark:hover:text-white transition"
             >
               <IoNotifications size={19} />
               <span className="absolute top-1 right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white leading-none">
@@ -51,7 +62,7 @@ const Navbar = () => {
             <div className="relative hidden md:block" ref={menuRef}>
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center gap-2 rounded-full pl-1 pr-2.5 py-1 hover:bg-gray-50 dark:hover:bg-zinc-800 transition"
+                className="flex items-center gap-2 rounded-full pl-1 pr-2.5 py-1 hover:bg-gray-100 dark:hover:bg-zinc-800 transition"
               >
                 <img
                   src={user?.avatar || 'https://ui-avatars.com/api/?name=User&background=3b82f6&color=fff'}
@@ -71,30 +82,30 @@ const Navbar = () => {
 
               {/* Dropdown Menu */}
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-52 rounded-xl border border-gray-100 dark:border-zinc-700 bg-white dark:bg-zinc-800 py-1.5 shadow-xl z-50">
-                  <div className="px-4 py-2.5 border-b border-gray-100 dark:border-zinc-700">
-                    <p className="text-sm font-semibold text-gray-800 dark:text-white truncate">
+                <div className="absolute right-0 mt-2 w-52 rounded-xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 py-1.5 shadow-xl z-50">
+                  <div className="px-4 py-2.5 border-b border-gray-200 dark:border-zinc-700">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
                       {user?.name}
                     </p>
-                    <p className="text-xs text-gray-400 dark:text-zinc-500 truncate">
+                    <p className="text-xs text-gray-500 dark:text-zinc-500 truncate">
                       {user?.email}
                     </p>
                   </div>
                   <Link
                     to="/settings"
                     onClick={() => setShowUserMenu(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-50 dark:hover:bg-zinc-700 transition"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-700 transition"
                   >
-                    <IoSettings size={15} className="text-gray-400 dark:text-zinc-500" />
+                    <IoSettings size={15} className="text-gray-500 dark:text-zinc-500" />
                     <span>Settings</span>
                   </Link>
-                  <div className="my-1 border-t border-gray-100 dark:border-zinc-700" />
+                  <div className="my-1 border-t border-gray-200 dark:border-zinc-700" />
                   <button
                     onClick={() => {
                       // Add logout logic here
                       setShowUserMenu(false);
                     }}
-                    className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 transition"
+                    className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition"
                   >
                     <IoLogOut size={15} />
                     <span>Sign out</span>

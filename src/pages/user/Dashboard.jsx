@@ -65,39 +65,48 @@ const Dashboard = () => {
         </Card>
       </motion.div>
 
-      {/* Account Progress Card */}
+      {/* Account Progress Banner - Full Width */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
+        className="w-full"
       >
-        <Card className="p-5">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
-                Incomplete Account
+        <div className="relative p-4 sm:p-6 bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-500/10 dark:to-orange-500/10 rounded-2xl border border-yellow-200 dark:border-yellow-500/20">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-yellow-500 text-white rounded-xl flex items-center justify-center flex-shrink-0">
+              <IoTime size={24} className="sm:w-7 sm:h-7" />
+            </div>
+            <div className="flex-1 w-full min-w-0">
+              <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white mb-1">
+                Complete Your Account Setup
               </h3>
-              <div className="mb-2">
-                <div className="w-full bg-gray-200 dark:bg-zinc-700 rounded-full h-2">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: '25%' }}
-                    transition={{ delay: 0.5, duration: 1 }}
-                    className="bg-yellow-500 rounded-full h-2"
-                  ></motion.div>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-zinc-400 mb-2">
+                Activate your plan to unlock all features and start earning more
+              </p>
+              <div className="w-full space-y-2">
+                <div className="w-full">
+                  <div className="w-full bg-yellow-200 dark:bg-yellow-900/30 rounded-full h-2.5">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: '25%' }}
+                      transition={{ delay: 0.5, duration: 1 }}
+                      className="bg-yellow-600 dark:bg-yellow-500 rounded-full h-2.5"
+                    ></motion.div>
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-zinc-400 mt-1.5">25% Complete</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-zinc-400">25% Complete</p>
             </div>
             <Button
               size="sm"
               onClick={() => navigate('/settings')}
-              className="ml-4"
+              className="flex-shrink-0"
             >
               Activate Plan
             </Button>
           </div>
-        </Card>
+        </div>
       </motion.div>
 
       {/* Pending Earnings, Affiliate & Daily Tasks Cards */}

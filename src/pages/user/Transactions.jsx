@@ -42,11 +42,23 @@ const Transactions = () => {
 
   const getTransactionColor = (type) => {
     const colors = {
-      earning: 'bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400',
-      withdrawal: 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400',
-      refund: 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400',
+      earning: {
+        bg: 'bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400',
+        border: 'border-l-green-500'
+      },
+      withdrawal: {
+        bg: 'bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400',
+        border: 'border-l-red-500'
+      },
+      refund: {
+        bg: 'bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400',
+        border: 'border-l-orange-500'
+      },
     };
-    return colors[type] || 'bg-gray-50 dark:bg-zinc-800 text-gray-600 dark:text-zinc-400';
+    return colors[type] || {
+      bg: 'bg-gray-50 dark:bg-zinc-800 text-gray-600 dark:text-zinc-400',
+      border: 'border-l-gray-500'
+    };
   };
 
   return (
@@ -54,8 +66,22 @@ const Transactions = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="space-y-6"
+      className="space-y-6 pb-24 md:pb-6"
     >
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Transactions
+        </h1>
+        <p className="text-gray-600 dark:text-zinc-400">
+          View your complete transaction history
+        </p>
+      </motion.div>
+
       {/* Filter */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -111,10 +137,10 @@ const Transactions = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 + index * 0.05 }}
                     onClick={() => navigate(`/transactions/${transaction.id}`)}
-                    className="border-b border-gray-50 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
+                    className={`border-b border-gray-50 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer border-l-4 ${getTransactionColor(transaction.type).border}`}
                   >
                     <td className="py-4 px-4">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getTransactionColor(transaction.type)}`}>
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getTransactionColor(transaction.type).bg}`}>
                         {getTransactionIcon(transaction.type)}
                       </div>
                     </td>
@@ -162,10 +188,10 @@ const Transactions = () => {
             transition={{ delay: 0.3 + index * 0.05 }}
             onClick={() => navigate(`/transactions/${transaction.id}`)}
           >
-            <Card className="p-4 cursor-pointer hover:shadow-lg transition-shadow">
+            <Card className="p-4 cursor-pointer hover:shadow-lg transition-shadow border-l-4 ${getTransactionColor(transaction.type).border}">
               <div className="flex items-start gap-3">
                 {/* Icon */}
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${getTransactionColor(transaction.type)}`}>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${getTransactionColor(transaction.type).bg}`}>
                   {getTransactionIcon(transaction.type)}
                 </div>
 

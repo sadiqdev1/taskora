@@ -154,8 +154,22 @@ const Wallet = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="space-y-4 sm:space-y-6"
+      className="space-y-4 sm:space-y-6 pb-24 md:pb-6"
     >
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Wallet
+        </h1>
+        <p className="text-gray-600 dark:text-zinc-400">
+          Manage your earnings and bank accounts
+        </p>
+      </motion.div>
+
       {/* Balance Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <motion.div

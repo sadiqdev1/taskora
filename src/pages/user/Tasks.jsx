@@ -7,7 +7,27 @@ import Pagination from '../../components/common/Pagination';
 import EmptyState from '../../components/common/EmptyState';
 import { mockTasks, mockSubmissions } from '../../data/mockData';
 import { formatCurrency, formatDate } from '../../utils/formatters';
-import { IoTime, IoPeople, IoStorefront, IoCheckmarkDone, IoCheckmarkCircle, IoCloseCircle, IoList } from 'react-icons/io5';
+import { 
+  IoTime, 
+  IoPeople, 
+  IoStorefront, 
+  IoCheckmarkDone, 
+  IoCheckmarkCircle, 
+  IoCloseCircle, 
+  IoList,
+  IoLogoFacebook,
+  IoLogoInstagram,
+  IoLogoTwitter,
+  IoLogoYoutube,
+  IoLogoTiktok,
+  IoShareSocial,
+  IoChatbubble,
+  IoPersonAdd,
+  IoDownload,
+  IoGlobe,
+  IoCreate,
+  IoDocumentText
+} from 'react-icons/io5';
 import { motion } from 'framer-motion';
 
 const Tasks = () => {
@@ -21,13 +41,13 @@ const Tasks = () => {
 
   const mainTabs = [
     { id: 'marketplace', label: 'Marketplace', icon: <IoStorefront /> },
-    { id: 'my-tasks', label: 'My Tasks', icon: <IoCheckmarkDone /> },
+    { id: 'my-tasks', label: 'My Submissions', icon: <IoDocumentText /> },
   ];
 
   const myTasksTabs = [
-    { id: 'pending', label: 'Pending' },
-    { id: 'approved', label: 'Completed' },
-    { id: 'rejected', label: 'Rejected' },
+    { id: 'pending', label: 'Pending', color: 'orange', count: mockSubmissions.filter(s => s.status === 'pending').length },
+    { id: 'approved', label: 'Completed', color: 'green', count: mockSubmissions.filter(s => s.status === 'approved').length },
+    { id: 'rejected', label: 'Rejected', color: 'red', count: mockSubmissions.filter(s => s.status === 'rejected').length },
   ];
 
   const taskTypeOptions = [
@@ -64,14 +84,58 @@ const Tasks = () => {
 
   const getTaskTypeColor = (type) => {
     const colors = {
-      post: 'info',
-      follow: 'success',
-      comment: 'warning',
-      share: 'info',
-      download: 'success',
-      visit: 'default',
+      post: { badge: 'info', border: 'border-blue-500' },
+      follow: { badge: 'success', border: 'border-green-500' },
+      comment: { badge: 'warning', border: 'border-amber-500' },
+      share: { badge: 'info', border: 'border-cyan-500' },
+      download: { badge: 'success', border: 'border-emerald-500' },
+      visit: { badge: 'default', border: 'border-gray-500' },
     };
-    return colors[type] || 'default';
+    return colors[type] || { badge: 'default', border: 'border-gray-500' };
+  };
+
+  const getTaskIcon = (type, platform = 'general') => {
+    // Return proper icon components based on task type and platform
+    const iconMap = {
+      post: {
+        facebook: <IoLogoFacebook className="text-blue-600" />,
+        instagram: <IoLogoInstagram className="text-pink-600" />,
+        twitter: <IoLogoTwitter className="text-sky-500" />,
+        youtube: <IoLogoYoutube className="text-red-600" />,
+        tiktok: <IoLogoTiktok className="text-gray-900 dark:text-white" />,
+        general: <IoCreate className="text-blue-500" />
+      },
+      follow: {
+        facebook: <IoLogoFacebook className="text-blue-600" />,
+        instagram: <IoLogoInstagram className="text-pink-600" />,
+        twitter: <IoLogoTwitter className="text-sky-500" />,
+        youtube: <IoLogoYoutube className="text-red-600" />,
+        tiktok: <IoLogoTiktok className="text-gray-900 dark:text-white" />,
+        general: <IoPersonAdd className="text-green-500" />
+      },
+      comment: {
+        facebook: <IoLogoFacebook className="text-blue-600" />,
+        instagram: <IoLogoInstagram className="text-pink-600" />,
+        twitter: <IoLogoTwitter className="text-sky-500" />,
+        youtube: <IoLogoYoutube className="text-red-600" />,
+        general: <IoChatbubble className="text-amber-500" />
+      },
+      share: {
+        facebook: <IoLogoFacebook className="text-blue-600" />,
+        instagram: <IoLogoInstagram className="text-pink-600" />,
+        twitter: <IoLogoTwitter className="text-sky-500" />,
+        general: <IoShareSocial className="text-cyan-500" />
+      },
+      download: <IoDownload className="text-emerald-500" />,
+      visit: <IoGlobe className="text-gray-600 dark:text-zinc-400" />,
+    };
+
+    // If type has platform-specific icons, return based on platform
+    if (typeof iconMap[type] === 'object' && !iconMap[type].props) {
+      return iconMap[type][platform] || iconMap[type].general;
+    }
+    
+    return iconMap[type] || <IoList className="text-gray-500" />;
   };
 
   const getTaskById = (taskId) => mockTasks.find(t => t.id === taskId);
@@ -102,8 +166,22 @@ const Tasks = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className="space-y-6"
+      className="space-y-6 pb-24 md:pb-6"
     >
+      {/* Page Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Tasks
+        </h1>
+        <p className="text-gray-600 dark:text-zinc-400">
+          Browse available tasks or check your submissions
+        </p>
+      </motion.div>
+
       {/* Main Tabs */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -173,17 +251,24 @@ const Tasks = () => {
                 <Card
                   hover
                   onClick={() => navigate(`/tasks/${task.id}`)}
-                  className="p-6 cursor-pointer h-full"
+                  className={`p-6 cursor-pointer h-full border-l-4 ${getTaskTypeColor(task.type).border}`}
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <Badge variant={getTaskTypeColor(task.type)} size="sm">
-                      {task.type.toUpperCase()}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 bg-gray-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center text-2xl">
+                        {getTaskIcon(task.type, task.platform)}
+                      </div>
+                      <Badge variant={getTaskTypeColor(task.type).badge} size="sm">
+                        {task.type.toUpperCase()}
+                      </Badge>
+                    </div>
                     <div className="text-right">
-                      <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                        {formatCurrency(task.reward)}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-zinc-500">Reward</p>
+                      <div className="px-3 py-1.5 bg-blue-500 text-white rounded-full">
+                        <p className="text-lg font-bold">
+                          {formatCurrency(task.reward)}
+                        </p>
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-zinc-500 mt-1">Reward</p>
                     </div>
                   </div>
 
@@ -193,6 +278,26 @@ const Tasks = () => {
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
                     {task.description}
                   </p>
+
+                  {/* Slots Progress Bar */}
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between text-xs text-gray-500 dark:text-zinc-500 mb-1.5">
+                      <span>{task.remainingSlots} slots left</span>
+                      <span>{task.totalSlots - task.remainingSlots}/{task.totalSlots} taken</span>
+                    </div>
+                    <div className="w-full bg-gray-100 dark:bg-zinc-800 rounded-full h-1.5">
+                      <div
+                        className={`h-1.5 rounded-full transition-all ${
+                          task.remainingSlots / task.totalSlots < 0.2
+                            ? 'bg-red-500'
+                            : task.remainingSlots / task.totalSlots < 0.5
+                            ? 'bg-amber-500'
+                            : 'bg-green-500'
+                        }`}
+                        style={{ width: `${((task.totalSlots - task.remainingSlots) / task.totalSlots) * 100}%` }}
+                      />
+                    </div>
+                  </div>
 
                   <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-zinc-400">
                     <div className="flex items-center gap-1">
@@ -284,19 +389,32 @@ const Tasks = () => {
           >
             <Card className="p-2">
               <div className="flex gap-2">
-                {myTasksTabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setMyTasksFilter(tab.id)}
-                    className={`flex-1 px-4 py-2.5 rounded-lg font-medium text-sm transition-colors ${
-                      myTasksFilter === tab.id
-                        ? 'bg-blue-500 text-white shadow-sm'
-                        : 'text-gray-600 dark:text-zinc-400 hover:bg-gray-50 dark:hover:bg-zinc-800'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
+                {myTasksTabs.map((tab) => {
+                  const colorClasses = {
+                    orange: myTasksFilter === tab.id ? 'bg-orange-500 text-white' : 'text-gray-600 dark:text-zinc-400 hover:bg-orange-50 dark:hover:bg-orange-500/10',
+                    green: myTasksFilter === tab.id ? 'bg-green-500 text-white' : 'text-gray-600 dark:text-zinc-400 hover:bg-green-50 dark:hover:bg-green-500/10',
+                    red: myTasksFilter === tab.id ? 'bg-red-500 text-white' : 'text-gray-600 dark:text-zinc-400 hover:bg-red-50 dark:hover:bg-red-500/10',
+                  };
+                  
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setMyTasksFilter(tab.id)}
+                      className={`flex-1 px-4 py-2.5 rounded-lg font-medium text-sm transition-colors ${colorClasses[tab.color]}`}
+                    >
+                      <span>{tab.label}</span>
+                      {tab.count > 0 && (
+                        <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-bold ${
+                          myTasksFilter === tab.id 
+                            ? 'bg-white/20' 
+                            : 'bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-300'
+                        }`}>
+                          {tab.count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </Card>
           </motion.div>
@@ -332,35 +450,49 @@ const Tasks = () => {
                     <Card
                       hover
                       onClick={() => navigate(`/tasks/${submission.taskId}`)}
-                      className="p-6 cursor-pointer"
+                      className={`p-4 sm:p-6 cursor-pointer border-l-4 ${getTaskTypeColor(task?.type).border}`}
                     >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      <div className="flex items-start gap-3 sm:gap-4">
+                        {/* Task Icon */}
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center text-xl sm:text-2xl flex-shrink-0">
+                          {getTaskIcon(task?.type, task?.platform)}
+                        </div>
+
+                        {/* Task Content */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
                               {task?.title}
                             </h3>
                             {getStatusBadge(submission.status)}
+                            <Badge variant={getTaskTypeColor(task?.type).badge} size="sm">
+                              {task?.type?.toUpperCase()}
+                            </Badge>
                           </div>
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
                             {task?.description}
                           </p>
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500 dark:text-zinc-500">
                             <span>Submitted: {formatDate(submission.submittedAt)}</span>
                             {submission.reviewedAt && (
                               <span>Reviewed: {formatDate(submission.reviewedAt)}</span>
                             )}
                           </div>
                         </div>
-                        <div className="text-right ml-4">
-                          <p className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                            {formatCurrency(task?.reward || 0)}
-                          </p>
+
+                        {/* Reward */}
+                        <div className="text-right flex-shrink-0">
+                          <div className="px-3 py-1.5 bg-blue-500 text-white rounded-full">
+                            <p className="text-base sm:text-lg font-bold whitespace-nowrap">
+                              {formatCurrency(task?.reward || 0)}
+                            </p>
+                          </div>
                           {submission.status === 'approved' && (
-                            <p className="text-xs text-green-600 dark:text-green-400">Earned</p>
+                            <p className="text-xs text-green-600 dark:text-green-400 mt-1">Earned</p>
                           )}
                         </div>
                       </div>
+
                       {submission.rejectionReason && (
                         <div className="mt-4 p-3 bg-red-50 dark:bg-red-500/10 rounded-lg border border-red-100 dark:border-red-500/20">
                           <p className="text-sm text-red-600 dark:text-red-400">

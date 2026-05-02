@@ -5,7 +5,7 @@ import MobileNav from '../components/layout/MobileNav';
 
 const AuthenticatedLayout = () => {
   return (
-    <div className="min-h-screen bg-gray-50/50 dark:bg-zinc-950 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100">
       <div className="flex min-h-screen flex-col md:flex-row">
         {/* Desktop Sidebar Only */}
         <Sidebar />
