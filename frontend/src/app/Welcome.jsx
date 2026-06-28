@@ -76,12 +76,20 @@ export default function Welcome() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <Link href={dashHref ?? '/login'} className="px-3.5 py-1.5 rounded-xl text-sm font-semibold no-underline transition-all hover:opacity-80" style={{ color: 'var(--text-secondary)' }}>
-              {dashHref ? 'Dashboard' : 'Log in'}
-            </Link>
-            <Link href={dashHref ?? '/register'} className="gradient-brand flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-bold no-underline transition-opacity hover:opacity-90" style={{ boxShadow: '0 2px 12px rgba(108,92,231,0.3)' }}>
-              {dashHref ? 'Go to Dashboard' : <> Start Earning <ArrowRight size={14} strokeWidth={2.5} /></>}
-            </Link>
+            {dashHref ? (
+              <Link href={dashHref} className="gradient-brand flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-bold no-underline transition-opacity hover:opacity-90" style={{ boxShadow: '0 2px 12px rgba(108,92,231,0.3)' }}>
+                Go to Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" className="px-3.5 py-1.5 rounded-xl text-sm font-semibold no-underline transition-all hover:opacity-80" style={{ color: 'var(--text-secondary)' }}>
+                  Log in
+                </Link>
+                <Link href="/register" className="gradient-brand flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-bold no-underline transition-opacity hover:opacity-90" style={{ boxShadow: '0 2px 12px rgba(108,92,231,0.3)' }}>
+                  Start Earning <ArrowRight size={14} strokeWidth={2.5} />
+                </Link>
+              </>
+            )}
           </div>
         </nav>
       </div>
