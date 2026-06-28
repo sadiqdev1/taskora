@@ -188,8 +188,9 @@ export default function LoginPage() {
             />
 
             <button type="submit" disabled={loading}
-              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] w-full py-3.5 rounded-xl text-white text-sm font-black mt-1 disabled:opacity-50 transition-colors"
+              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] w-full py-3.5 rounded-xl text-white text-sm font-black mt-1 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
               style={{ boxShadow:'0 4px 18px rgba(108,92,231,0.38)', letterSpacing:'-0.01em' }}>
+              {loading && <span className="btn-spinner" />}
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
           </form>

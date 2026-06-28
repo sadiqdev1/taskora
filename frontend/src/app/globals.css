@@ -173,6 +173,21 @@ body {
 .btn-primary:active { background: #4A3BC1; }
 .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
 
+/* ── Button spinner (used inside submit buttons) ─────── */
+.btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: btn-spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ── Sidebar mobile slide animation ─────────────────── */
 /* On mobile (< lg), sidebar is fixed and slides in from left.
    On desktop (lg+), it's static — transform is reset. */

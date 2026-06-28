@@ -176,7 +176,8 @@ export default function CampaignDetailPage() {
                   onBlur={e => (e.target.style.borderColor = 'var(--border)')} />
               </div>
               <button type="submit" disabled={submitting}
-                className="bg-[#6C5CE7] hover:bg-[#5A4BD1] w-full py-3 rounded-xl text-white font-bold text-sm disabled:opacity-60 transition-colors">
+                className="bg-[#6C5CE7] hover:bg-[#5A4BD1] w-full py-3 rounded-xl text-white font-bold text-sm disabled:opacity-60 transition-colors flex items-center justify-center gap-2">
+                {submitting && <span className="btn-spinner" />}
                 {submitting ? 'Submitting…' : 'Submit for Review'}
               </button>
               <p className="text-xs text-center flex items-center justify-center gap-1" style={{ color: 'var(--text-muted)' }}>

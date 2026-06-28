@@ -162,7 +162,8 @@ export default function AdminCampaignsPage() {
             </div>
             <div className="sm:col-span-2 flex gap-3">
               <button type="submit" disabled={saving}
-                className="bg-[#6C5CE7] hover:bg-[#5A4BD1] px-6 py-2.5 rounded-xl text-white text-sm font-bold disabled:opacity-60 transition-colors">
+                className="bg-[#6C5CE7] hover:bg-[#5A4BD1] px-6 py-2.5 rounded-xl text-white text-sm font-bold disabled:opacity-60 transition-colors flex items-center gap-2">
+                {saving && <span className="btn-spinner" />}
                 {saving ? 'Saving…' : editing ? 'Update Campaign' : 'Create Campaign'}
               </button>
               <button type="button" onClick={() => setShowForm(false)}

@@ -201,7 +201,8 @@ export default function SettingsPage() {
               <StyledInput value={user?.role === 'admin' ? 'Administrator' : 'Earner'} disabled />
             </Field>
             <button type="submit" disabled={saving}
-              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] px-6 py-2.5 rounded-xl text-white text-sm font-bold disabled:opacity-60 transition-colors">
+              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] px-6 py-2.5 rounded-xl text-white text-sm font-bold disabled:opacity-60 transition-colors flex items-center gap-2">
+              {saving && <span className="btn-spinner" />}
               {saving ? 'Saving…' : 'Save Changes'}
             </button>
           </form>
@@ -221,7 +222,8 @@ export default function SettingsPage() {
               <StyledInput type="password" value={password.confirm} onChange={e => setPassword(p => ({ ...p, confirm: e.target.value }))} placeholder="••••••••" />
             </Field>
             <button type="submit" disabled={pwSaving}
-              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] px-6 py-2.5 rounded-xl text-white text-sm font-bold disabled:opacity-60 transition-colors">
+              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] px-6 py-2.5 rounded-xl text-white text-sm font-bold disabled:opacity-60 transition-colors flex items-center gap-2">
+              {pwSaving && <span className="btn-spinner" />}
               {pwSaving ? 'Updating…' : 'Update Password'}
             </button>
           </form>

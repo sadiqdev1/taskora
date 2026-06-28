@@ -322,8 +322,9 @@ export default function CreateCampaignPage() {
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 sm:flex-none px-8 py-3 rounded-xl text-white font-bold text-sm bg-[#6C5CE7] hover:bg-[#5A4BD1] disabled:opacity-60 transition-colors"
+              className="flex-1 sm:flex-none px-8 py-3 rounded-xl text-white font-bold text-sm bg-[#6C5CE7] hover:bg-[#5A4BD1] disabled:opacity-60 transition-colors flex items-center justify-center gap-2"
             >
+              {saving && <span className="btn-spinner" />}
               {saving ? 'Submitting…' : 'Submit Campaign for Review'}
             </button>
             <Link href="/campaigns"

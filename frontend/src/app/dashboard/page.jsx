@@ -103,7 +103,7 @@ export default function DashboardPage() {
   const data          = campaigns.length ? campaigns : MOCK_CAMPAIGNS;
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Dashboard" subtitle="Welcome back — here's your earnings overview">
       <div className="flex flex-col gap-5">
 
         {/* ── Page header ── */}
@@ -302,7 +302,7 @@ export default function DashboardPage() {
 
             <div className="grid grid-cols-6 gap-1 mt-2 pt-3 border-t border-[var(--border-subtle)]">
               {['J','F','M','A','M','J','J','A','S','O','N','D'].map((m, i) => (
-                <div key={m} className="text-center">
+                <div key={i} className="text-center">
                   <div className="h-1 rounded-full mb-1" style={{
                     background: i === 11 ? '#6C5CE7' : 'var(--border)',
                     opacity: i > 5 ? 1 : 0.4,

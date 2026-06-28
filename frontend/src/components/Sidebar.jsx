@@ -37,7 +37,8 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
 
   const isAdmin = user?.role === 'admin';
   const nav     = isAdmin ? ADMIN_NAV : USER_NAV;
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed,    setDismissed]    = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const isActive = href => {
     if (href === '/dashboard' || href === '/admin') return pathname === href;
@@ -174,25 +175,58 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
           </div>
         )}
 
-        {/* ── User footer — shadcn style ── */}
+        {/* ── User footer — click to open popover ── */}
         <div
           className="shrink-0 p-2"
           style={{ borderTop: '1px solid var(--border-subtle)' }}
         >
           {!collapsed ? (
-            /* Expanded: single clickable row → goes to /settings; logout on far right */
-            <div className="relative group">
-              <Link
-                href="/settings"
-                onClick={() => onMobileClose?.()}
-                className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg transition-colors duration-150 hover:bg-[var(--bg)] cursor-pointer"
+            <div className="relative">
+              {/* Popover — appears above the row on click */}
+              {userMenuOpen && (
+                <>
+                  {/* backdrop */}
+                  <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
+                  <div
+                    className="absolute bottom-full left-0 right-0 mb-1.5 z-50 rounded-xl overflow-hidden py-1"
+                    style={{ background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}
+                  >
+                    <Link
+                      href="/settings"
+                      onClick={() => { setUserMenuOpen(false); onMobileClose?.(); }}
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors"
+                      style={{ color: 'var(--text)' }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#F4F3FF')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <Settings size={15} strokeWidth={1.8} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+                      Settings
+                    </Link>
+                    <div style={{ height: 1, background: 'var(--border-subtle)', margin: '2px 0' }} />
+                    <button
+                      onClick={() => { setUserMenuOpen(false); handleLogout(); }}
+                      className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors"
+                      style={{ color: 'var(--text-secondary)' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#FFF0F0'; e.currentTarget.style.color = '#C0392B'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                    >
+                      <LogOut size={15} strokeWidth={1.8} className="shrink-0" />
+                      Log out
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* Clickable user row */}
+              <button
+                onClick={() => setUserMenuOpen(o => !o)}
+                className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg transition-colors duration-150 hover:bg-[var(--bg)]"
+                style={{ background: userMenuOpen ? 'var(--bg)' : undefined }}
               >
-                {/* Avatar */}
                 <div className="w-8 h-8 rounded-full bg-[#6C5CE7] flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
                   {user?.name?.[0]?.toUpperCase()}
                 </div>
-                {/* Info */}
-                  <div className="flex-1 min-w-0 text-left">
+                <div className="flex-1 min-w-0 text-left">
                   <p className="text-[0.875rem] font-semibold leading-snug truncate" style={{ color: 'var(--text)' }}>
                     {user?.name}
                   </p>
@@ -200,30 +234,15 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
                     {user?.email}
                   </p>
                 </div>
-                {/* Chevron — subtle expand indicator */}
-                <ChevronsUpDown size={13} strokeWidth={1.8} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
-              </Link>
-
-              {/* Logout — floats above on hover */}
-              <button
-                onClick={handleLogout}
-                className="
-                  absolute -top-10 right-2 z-50
-                  flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold
-                  bg-white border border-[var(--border)] shadow-md
-                  text-[var(--text-secondary)] hover:text-red-600 hover:border-red-200 hover:bg-red-50
-                  transition-all duration-150
-                  opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto
-                  -translate-y-1 group-hover:translate-y-0
-                "
-                title="Log out"
-              >
-                <LogOut size={12} strokeWidth={2} />
-                Log out
+                <ChevronsUpDown
+                  size={13} strokeWidth={1.8}
+                  className={`transition-transform duration-150 ${userMenuOpen ? 'rotate-180' : ''}`}
+                  style={{ color: 'var(--text-muted)', flexShrink: 0 }}
+                />
               </button>
             </div>
           ) : (
-            /* Collapsed: avatar → settings, logout below */
+            /* Collapsed: avatar + logout stacked */
             <div className="flex flex-col items-center gap-1">
               <Link
                 href="/settings"

@@ -283,7 +283,8 @@ export default function WalletPage() {
             </div>
 
             <button type="submit" disabled={submitting}
-              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] py-3 rounded-xl text-white font-bold text-sm disabled:opacity-60 transition-colors mt-1">
+              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] py-3 rounded-xl text-white font-bold text-sm disabled:opacity-60 transition-colors mt-1 flex items-center justify-center gap-2">
+              {submitting && <span className="btn-spinner" />}
               {submitting ? 'Submitting…' : 'Submit Withdrawal Request'}
             </button>
           </form>

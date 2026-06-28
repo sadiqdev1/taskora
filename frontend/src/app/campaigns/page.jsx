@@ -117,7 +117,7 @@ export default function TasksPage() {
 
         <Link href="/campaigns/create"
           className="ml-auto shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#6C5CE7] hover:bg-[#5A4BD1] transition-colors whitespace-nowrap">
-          + Create Task
+           Create Task
         </Link>
       </div>
 
