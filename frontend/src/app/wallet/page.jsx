@@ -19,7 +19,7 @@ const BANKS = [...banksData]
   // dedupe by bank code — keep first occurrence after sort
   .filter((b, i, arr) => arr.findIndex(x => x.code === b.code) === i);
 
-const LOOKUP_URL = 'https://x4ip-qrwd-3f8t.n7c.xano.io/api:1qFY1vwo/withdrawal/get/details';
+const LOOKUP_URL = 'https://api.paystack.co/bank/resolve';
 
 export default function WalletPage() {
   const [wallet,        setWallet]        = useState(null);
@@ -52,15 +52,13 @@ export default function WalletPage() {
     lookupTimer.current = setTimeout(async () => {
       setLookingUp(true);
       try {
-        const res = await fetch(`${LOOKUP_URL}?bank_code=${encodeURIComponent(bank)}&nuban=${encodeURIComponent(accountNo)}`);
+        // Route through backend to keep Paystack secret key server-side
+        const res = await fetch(
+          `/api/bank/resolve?account_number=${encodeURIComponent(accountNo)}&bank_code=${encodeURIComponent(bank)}`,
+          { headers: { Authorization: `Bearer ${getToken()}` } }
+        );
         const json = await res.json();
-        // API returns { account_name: "..." } or similar — handle common shapes
-        const name =
-          json?.account_name ||
-          json?.data?.account_name ||
-          json?.name ||
-          json?.data?.name ||
-          null;
+        const name = json?.data?.account_name || json?.account_name || null;
         if (name) {
           setAccountName(name);
         } else {

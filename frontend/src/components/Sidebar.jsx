@@ -45,9 +45,7 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
     return pathname.startsWith(href);
   };
 
-  async function handleLogout(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  async function handleLogout() {
     await logout();
     router.replace('/login');
   }

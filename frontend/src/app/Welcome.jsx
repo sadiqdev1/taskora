@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import Loader from '@/components/Loader';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import {
   Megaphone, Zap, Banknote, Target, Users, ShieldCheck,
   ArrowRight, Check, Star, TrendingUp,
@@ -54,13 +52,10 @@ const TESTIMONIALS = [
 
 export default function Welcome() {
   const { user, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!loading && user) router.replace(user.role === 'admin' ? '/admin' : '/dashboard');
-  }, [user, loading, router]);
 
   if (loading) return <Loader fullscreen />;
+
+  const dashHref = user ? (user.role === 'admin' ? '/admin' : '/dashboard') : null;
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#FAFBFF', color: 'var(--text)', fontFamily: 'var(--font-jakarta)' }}>
@@ -81,9 +76,11 @@ export default function Welcome() {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/login" className="px-3.5 py-1.5 rounded-xl text-sm font-semibold no-underline transition-all hover:opacity-80" style={{ color: 'var(--text-secondary)' }}>Log in</Link>
-            <Link href="/register" className="gradient-brand flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-bold no-underline transition-opacity hover:opacity-90" style={{ boxShadow: '0 2px 12px rgba(108,92,231,0.3)' }}>
-              Start Earning <ArrowRight size={14} strokeWidth={2.5} />
+            <Link href={dashHref ?? '/login'} className="px-3.5 py-1.5 rounded-xl text-sm font-semibold no-underline transition-all hover:opacity-80" style={{ color: 'var(--text-secondary)' }}>
+              {dashHref ? 'Dashboard' : 'Log in'}
+            </Link>
+            <Link href={dashHref ?? '/register'} className="gradient-brand flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-bold no-underline transition-opacity hover:opacity-90" style={{ boxShadow: '0 2px 12px rgba(108,92,231,0.3)' }}>
+              {dashHref ? 'Go to Dashboard' : <> Start Earning <ArrowRight size={14} strokeWidth={2.5} /></>}
             </Link>
           </div>
         </nav>
@@ -112,13 +109,13 @@ export default function Welcome() {
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-1">
-            <Link href="/register" className="gradient-brand flex items-center gap-2 px-7 py-3.5 rounded-2xl text-white font-bold no-underline transition-all hover:opacity-90 hover:-translate-y-0.5"
+            <Link href={dashHref ?? '/register'} className="gradient-brand flex items-center gap-2 px-7 py-3.5 rounded-2xl text-white font-bold no-underline transition-all hover:opacity-90 hover:-translate-y-0.5"
               style={{ fontSize: '1rem', boxShadow: '0 8px 28px rgba(108,92,231,0.38)' }}>
-              Start Earning — It&apos;s Free <ArrowRight size={16} strokeWidth={2.5} />
+              {dashHref ? 'Go to Dashboard' : <>Start Earning — It&apos;s Free <ArrowRight size={16} strokeWidth={2.5} /></>}
             </Link>
-            <Link href="/login" className="flex items-center px-7 py-3.5 rounded-2xl border-2 bg-white font-semibold no-underline transition-all hover:opacity-80"
+            <Link href={dashHref ?? '/login'} className="flex items-center px-7 py-3.5 rounded-2xl border-2 bg-white font-semibold no-underline transition-all hover:opacity-80"
               style={{ fontSize: '1rem', borderColor: 'var(--border)', color: 'var(--text)' }}>
-              Sign In
+              {dashHref ? 'Dashboard' : 'Sign In'}
             </Link>
           </div>
 
@@ -311,13 +308,13 @@ export default function Welcome() {
             Free to join. No experience needed. Hundreds of campaigns waiting for you right now.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mt-1">
-            <Link href="/register" className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white font-black no-underline transition-all hover:opacity-90 hover:-translate-y-0.5"
+            <Link href={dashHref ?? '/register'} className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white font-black no-underline transition-all hover:opacity-90 hover:-translate-y-0.5"
               style={{ color: 'var(--primary)', fontSize: '0.95rem', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }}>
-              Create Free Account <ArrowRight size={16} strokeWidth={2.5} />
+              {dashHref ? 'Go to Dashboard' : <>Create Free Account <ArrowRight size={16} strokeWidth={2.5} /></>}
             </Link>
-            <Link href="/login" className="flex items-center px-7 py-3.5 rounded-2xl border-2 font-semibold no-underline transition-all hover:opacity-80"
+            <Link href={dashHref ?? '/login'} className="flex items-center px-7 py-3.5 rounded-2xl border-2 font-semibold no-underline transition-all hover:opacity-80"
               style={{ borderColor: 'rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.75)', fontSize: '0.95rem' }}>
-              Sign In
+              {dashHref ? 'Dashboard' : 'Sign In'}
             </Link>
           </div>
           <p className="text-xs tracking-wide" style={{ color: 'rgba(255,255,255,0.3)' }}>No credit card · Withdraw from $10 · Cancel anytime</p>

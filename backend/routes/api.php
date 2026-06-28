@@ -40,6 +40,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/transactions',   [WalletController::class, 'transactions']);
     Route::post('/withdraw',      [WalletController::class, 'withdraw']);
 
+    // Paystack — resolve bank account (keeps secret key server-side)
+    Route::get('/bank/resolve', function (\Illuminate\Http\Request $request) {
+        $accountNumber = $request->query('account_number');
+        $bankCode      = $request->query('bank_code');
+
+        $response = \Illuminate\Support\Facades\Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('services.paystack.secret_key'),
+        ])->get('https://api.paystack.co/bank/resolve', [
+            'account_number' => $accountNumber,
+            'bank_code'      => $bankCode,
+        ]);
+
+        return response()->json($response->json(), $response->status());
+    });
+
     // ── Admin only ─────────────────────────────────────────────────────
     Route::middleware('admin')->prefix('admin')->group(function () {
 
