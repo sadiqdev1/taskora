@@ -227,22 +227,6 @@ aside.fixed[data-open] {
 .scroll-tabs { scrollbar-width: none; -ms-overflow-style: none; }
 .scroll-tabs::-webkit-scrollbar { display: none; }
 
-/* ── Focus ring consistency ──────────────────────────── */
-:focus-visible {
-  outline: 2px solid #6C5CE7;
-  outline-offset: 2px;
-  
-}
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid #6C5CE7;
-  outline-offset: 2px;
-  border-radius: 8px;
-}
-
 /* ── Hover shadow micro-animation ────────────────────── */
 .hover-lift {
   transition: transform 150ms ease, box-shadow 150ms ease;

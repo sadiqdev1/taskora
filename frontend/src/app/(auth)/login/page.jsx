@@ -109,6 +109,18 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:sticky lg:top-0 lg:h-screen lg:w-[46%] shrink-0 relative overflow-hidden flex-col justify-between p-10 gap-8"
         style={{ background: 'linear-gradient(135deg, #1a1040 0%, #2d1b6e 50%, #1a1040 100%)' }}>
 
+        {/* Background photo */}
+        <img
+          src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=900&q=80&fit=crop&crop=faces,center"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ opacity: 0.18, mixBlendMode: 'luminosity' }}
+          draggable={false}
+        />
+
+        {/* Dark overlay to blend photo with gradient */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(26,16,64,0.85) 0%, rgba(45,27,110,0.75) 50%, rgba(26,16,64,0.9) 100%)' }} />
+
         {/* Animated floating circles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {[
