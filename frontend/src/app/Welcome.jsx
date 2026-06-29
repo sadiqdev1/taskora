@@ -79,7 +79,7 @@ export default function Welcome() {
             <Link href={dashHref ?? '/login'} className="px-3.5 py-1.5 rounded-xl text-sm font-semibold no-underline transition-all hover:opacity-80" style={{ color: 'var(--text-secondary)' }}>
               {dashHref ? 'Dashboard' : 'Log in'}
             </Link>
-            <Link href={dashHref ?? '/register'} className="gradient-brand flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-bold no-underline transition-opacity hover:opacity-90" style={{ boxShadow: '0 2px 12px rgba(108,92,231,0.3)' }}>
+            <Link href={dashHref ?? '/register'} className="bg-[#6C5CE7] hover:bg-[#5A4BD1] flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-bold no-underline transition-colors active:scale-[.98]" style={{ boxShadow: '0 2px 12px rgba(108,92,231,0.28)' }}>
               Start Earning <ArrowRight size={14} strokeWidth={2.5} />
             </Link>
           </div>
@@ -109,8 +109,8 @@ export default function Welcome() {
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-1">
-            <Link href={dashHref ?? '/register'} className="gradient-brand flex items-center gap-2 px-7 py-3.5 rounded-2xl text-white font-bold no-underline transition-all hover:opacity-90 hover:-translate-y-0.5"
-              style={{ fontSize: '1rem', boxShadow: '0 8px 28px rgba(108,92,231,0.38)' }}>
+            <Link href={dashHref ?? '/register'} className="bg-[#6C5CE7] hover:bg-[#5A4BD1] flex items-center gap-2 px-7 py-3.5 rounded-2xl text-white font-bold no-underline transition-all hover:-translate-y-0.5 active:scale-[.98]"
+              style={{ fontSize: '1rem', boxShadow: '0 8px 28px rgba(108,92,231,0.32)' }}>
               {dashHref ? 'Go to Dashboard' : <>Start Earning — It&apos;s Free <ArrowRight size={16} strokeWidth={2.5} /></>}
             </Link>
             <Link href={dashHref ?? '/login'} className="flex items-center px-7 py-3.5 rounded-2xl border-2 bg-white font-semibold no-underline transition-all hover:opacity-80"
@@ -147,7 +147,7 @@ export default function Welcome() {
                 <div className="w-6 h-6 rounded-lg gradient-brand shrink-0" />
                 <div className="h-2 w-12 rounded bg-[var(--border)]" />
               </div>
-              {['Dashboard', 'Tasks', 'Campaigns', 'Wallet', 'Transactions'].map((l, i) => (
+              {['Dashboard', 'Tasks', 'My Tasks', 'Wallet', 'Transactions'].map((l, i) => (
                 <div key={l} className={`flex items-center gap-2 px-2.5 py-2 rounded-xl ${i === 0 ? 'bg-[var(--primary-muted)]' : ''}`}>
                   <div className={`w-3 h-3 rounded-sm shrink-0 ${i === 0 ? 'bg-[var(--primary)]' : 'bg-[var(--border)]'}`} />
                   <div className={`h-1.5 flex-1 rounded ${i === 0 ? 'bg-[#C7C0F7]' : 'bg-[var(--border-subtle)]'}`} />
@@ -215,26 +215,62 @@ export default function Welcome() {
         </div>
       </section>
 
-      {/* ── How it works ── */}
-      <section id="how-it-works" className="py-20 px-5 relative overflow-hidden" style={{ background: 'var(--dark)' }}>
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: 'linear-gradient(rgba(108,92,231,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(108,92,231,0.05) 1px,transparent 1px)', backgroundSize: '48px 48px' }} />
-        <div className="relative max-w-4xl mx-auto flex flex-col gap-12">
-          <div className="flex flex-col gap-2.5">
-            <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary-light)' }}>How it works</span>
-            <h2 className="font-black leading-tight tracking-tighter text-white" style={{ fontSize: 'clamp(1.75rem,4vw,2.75rem)' }}>
-              Earning is simpler<br />than you think.
+      {/* ── How it works — card style ── */}
+      <section id="how-it-works" className="py-20 px-5" style={{ background: '#F8F9FE' }}>
+        <div className="max-w-4xl mx-auto flex flex-col gap-12">
+          <div className="flex flex-col items-center text-center gap-3">
+            <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>How it works</span>
+            <h2 className="font-black leading-tight tracking-tighter" style={{ fontSize: 'clamp(1.75rem,4vw,2.75rem)', color: 'var(--text)' }}>
+              Three simple steps
             </h2>
+            <p className="text-sm max-w-sm" style={{ color: 'var(--text-secondary)' }}>
+              Start earning from social media tasks in minutes. No complex setup, no experience needed.
+            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {HOW_IT_WORKS.map((s, i) => (
-              <div key={i} className="flex flex-col gap-3.5">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'rgba(108,92,231,0.2)', color: 'var(--primary-light)' }}>
-                  <s.Icon size={20} strokeWidth={1.8} />
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {[
+              {
+                step: 1,
+                Icon: Users,
+                title: 'Create your account',
+                desc: 'Sign up free in 30 seconds. No credit card needed.',
+                img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&q=80&fit=crop',
+              },
+              {
+                step: 2,
+                Icon: Target,
+                title: 'Browse & pick tasks',
+                desc: 'Choose from hundreds of active tasks across all major platforms.',
+                img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80&fit=crop',
+              },
+              {
+                step: 3,
+                Icon: Banknote,
+                title: 'Complete & get paid',
+                desc: 'Submit proof, get approved, and withdraw from $10 anytime.',
+                img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80&fit=crop',
+              },
+            ].map((s) => (
+              <div key={s.step} className="bg-white rounded-2xl overflow-hidden border flex flex-col" style={{ borderColor: 'var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
+                {/* Top row: step badge + icon */}
+                <div className="flex items-center justify-between px-5 pt-5 pb-3">
+                  <span className="w-8 h-8 rounded-full bg-[#6C5CE7] text-white text-sm font-black flex items-center justify-center">
+                    {s.step}
+                  </span>
+                  <span className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'var(--primary-muted)', color: '#6C5CE7' }}>
+                    <s.Icon size={18} strokeWidth={1.8} />
+                  </span>
                 </div>
-                <div className="font-black text-[4.5rem] leading-none tracking-tighter" style={{ color: 'rgba(255,255,255,0.05)' }}>{String(i + 1).padStart(2, '0')}</div>
-                <h3 className="text-white font-black text-[1.05rem] tracking-tight">{s.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{s.desc}</p>
+                {/* Screenshot */}
+                <div className="mx-4 rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border-subtle)' }}>
+                  <img src={s.img} alt={s.title} className="w-full object-cover" style={{ height: 150 }} />
+                </div>
+                {/* Text */}
+                <div className="px-5 py-4 flex flex-col gap-1">
+                  <h3 className="font-black text-[0.95rem] tracking-tight" style={{ color: 'var(--text)' }}>{s.title}</h3>
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{s.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -264,30 +300,108 @@ export default function Welcome() {
         </div>
       </section>
 
-      {/* ── Testimonials ── */}
-      <section id="reviews" className="py-20 px-5 bg-white">
+      {/* ── Who it's for — Earners vs Advertisers ── */}
+      <section className="py-20 px-5 bg-white">
         <div className="max-w-4xl mx-auto flex flex-col gap-12">
           <div className="flex flex-col items-center text-center gap-2.5">
-            <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Real Earners, Real Money</span>
+            <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Built for everyone</span>
             <h2 className="font-black leading-tight tracking-tighter" style={{ fontSize: 'clamp(1.75rem,4vw,2.75rem)', color: 'var(--text)' }}>
-              Join thousands already earning.
+              Whether you earn or grow
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {/* Earners */}
+            <div className="rounded-2xl p-7 flex flex-col gap-5 border border-[#DDD6FE]" style={{ background: 'linear-gradient(135deg, #F5F3FF 0%, #EEF2FF 100%)' }}>
+              <div className="flex items-center gap-3">
+                <span className="w-12 h-12 rounded-2xl bg-[#6C5CE7] flex items-center justify-center text-white shrink-0">
+                  <Users size={22} strokeWidth={1.8} />
+                </span>
+                <div>
+                  <h3 className="font-black text-lg tracking-tight" style={{ color: 'var(--text)' }}>For Earners</h3>
+                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Make money completing tasks</p>
+                </div>
+              </div>
+              <ul className="flex flex-col gap-2.5">
+                {[
+                  'Browse 500+ active tasks daily',
+                  'Earn $2–$10 per completed task',
+                  'Get paid via bank transfer',
+                  'Work from anywhere, anytime',
+                  'No experience or skills required',
+                ].map(t => (
+                  <li key={t} className="flex items-center gap-2.5 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    <Check size={14} strokeWidth={2.5} style={{ color: '#6C5CE7', flexShrink: 0 }} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <Link href={dashHref ?? '/register'}
+                className="bg-[#6C5CE7] hover:bg-[#5A4BD1] flex items-center justify-center gap-2 py-3 rounded-xl text-white text-sm font-bold no-underline transition-colors mt-auto">
+                Start Earning <ArrowRight size={14} strokeWidth={2.5} />
+              </Link>
+            </div>
+
+            {/* Advertisers */}
+            <div className="rounded-2xl p-7 flex flex-col gap-5 border" style={{ background: '#FAFBFF', borderColor: 'var(--border-subtle)' }}>
+              <div className="flex items-center gap-3">
+                <span className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ background: 'var(--primary-muted)', color: '#6C5CE7' }}>
+                  <Megaphone size={22} strokeWidth={1.8} />
+                </span>
+                <div>
+                  <h3 className="font-black text-lg tracking-tight" style={{ color: 'var(--text)' }}>For Advertisers</h3>
+                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Grow your social presence</p>
+                </div>
+              </div>
+              <ul className="flex flex-col gap-2.5">
+                {[
+                  'Real engagement from real people',
+                  'Set your own reward per task',
+                  'Full control over task requirements',
+                  'Pay only for verified completions',
+                  'Scale from 10 to 10,000 tasks',
+                ].map(t => (
+                  <li key={t} className="flex items-center gap-2.5 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    <Check size={14} strokeWidth={2.5} style={{ color: '#6C5CE7', flexShrink: 0 }} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+              <Link href={dashHref ?? '/register'}
+                className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold no-underline transition-colors border-2 mt-auto"
+                style={{ borderColor: '#6C5CE7', color: '#6C5CE7' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#EEF2FF'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}>
+                Create a Campaign <ArrowRight size={14} strokeWidth={2.5} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials — user quotes ── */}
+      <section id="reviews" className="py-20 px-5" style={{ background: '#F8F9FE' }}>
+        <div className="max-w-4xl mx-auto flex flex-col gap-12">
+          <div className="flex flex-col items-center text-center gap-2.5">
+            <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Real Earners</span>
+            <h2 className="font-black leading-tight tracking-tighter" style={{ fontSize: 'clamp(1.75rem,4vw,2.75rem)', color: 'var(--text)' }}>
+              What our earners say
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {TESTIMONIALS.map(t => (
-              <div key={t.name} className="p-7 rounded-[20px] border flex flex-col gap-3.5 transition-all hover:shadow-xl hover:-translate-y-1" style={{ background: '#FAFBFF', borderColor: 'var(--border-subtle)' }}>
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#FDCB6E" stroke="none" />)}
-                  </div>
-                  <span className="text-[0.7rem] font-bold px-2.5 py-1 rounded-full" style={{ background: 'var(--primary-muted)', color: 'var(--primary)' }}>Earned {t.earnings}</span>
+              <div key={t.name} className="p-6 rounded-2xl border bg-white flex flex-col gap-4" style={{ borderColor: 'var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#FDCB6E" stroke="none" />)}
                 </div>
                 <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--text-secondary)' }}>&ldquo;{t.quote}&rdquo;</p>
-                <div className="flex items-center gap-2.5 pt-3.5 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
-                  <span className="gradient-brand w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-black shrink-0">{t.name[0]}</span>
+                <div className="flex items-center gap-3 pt-3 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+                  <span className="w-9 h-9 rounded-full bg-[#6C5CE7] flex items-center justify-center text-white text-sm font-black shrink-0">{t.name[0]}</span>
                   <div>
-                    <p className="text-sm font-bold" style={{ color: 'var(--text)' }}>{t.name}</p>
-                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
+                    <p className="text-sm font-bold leading-tight" style={{ color: 'var(--text)' }}>{t.name}</p>
+                    <p className="text-xs flex items-center gap-1.5 mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                      {t.role}
+                      <span className="font-bold" style={{ color: '#00875A' }}>· Earned {t.earnings}</span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -308,14 +422,18 @@ export default function Welcome() {
             Free to join. No experience needed. Hundreds of campaigns waiting for you right now.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mt-1">
-            <Link href={dashHref ?? '/register'} className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white font-black no-underline transition-all hover:opacity-90 hover:-translate-y-0.5"
-              style={{ color: 'var(--primary)', fontSize: '0.95rem', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }}>
+            <Link href={dashHref ?? '/register'}
+              className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-white font-black no-underline transition-all hover:opacity-95 hover:-translate-y-0.5 active:scale-[.98]"
+              style={{ color: '#6C5CE7', fontSize: '0.95rem', boxShadow: '0 8px 32px rgba(0,0,0,0.25)' }}>
               {dashHref ? 'Go to Dashboard' : <>Create Free Account <ArrowRight size={16} strokeWidth={2.5} /></>}
             </Link>
-            <Link href={dashHref ?? '/login'} className="flex items-center px-7 py-3.5 rounded-2xl border-2 font-semibold no-underline transition-all hover:opacity-80"
-              style={{ borderColor: 'rgba(255,255,255,0.18)', color: 'rgba(255,255,255,0.75)', fontSize: '0.95rem' }}>
-              {dashHref ? 'Dashboard' : 'Sign In'}
-            </Link>
+            {!dashHref && (
+              <Link href="/login"
+                className="flex items-center gap-2 px-8 py-3.5 rounded-2xl font-semibold no-underline transition-all hover:bg-white/10"
+                style={{ borderColor: 'rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.65)', fontSize: '0.95rem', border: '1.5px solid rgba(255,255,255,0.18)' }}>
+                Sign In
+              </Link>
+            )}
           </div>
           <p className="text-xs tracking-wide" style={{ color: 'rgba(255,255,255,0.3)' }}>No credit card · Withdraw from $10 · Cancel anytime</p>
         </div>
