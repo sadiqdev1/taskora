@@ -225,9 +225,15 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
                   {user?.name?.[0]?.toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0 text-left">
-                  <p className="text-[0.875rem] font-semibold leading-snug truncate" style={{ color: 'var(--text)' }}>
-                    {user?.name}
-                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-[0.875rem] font-semibold leading-snug truncate" style={{ color: 'var(--text)' }}>
+                      {user?.name}
+                    </p>
+                    <span className="text-[0.55rem] font-bold px-1.5 py-0.5 rounded-full shrink-0"
+                      style={{ background: isAdmin ? '#FFF3D6' : '#EEF2FF', color: isAdmin ? '#B45309' : '#6C5CE7' }}>
+                      {isAdmin ? 'ADMIN' : 'EARNER'}
+                    </span>
+                  </div>
                   <p className="text-[0.73rem] truncate" style={{ color: 'var(--text-muted)' }}>
                     {user?.email}
                   </p>

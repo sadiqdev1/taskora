@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { register } from '@/lib/auth';
 import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/context/ToastContext';
 import { Eye, EyeOff, Gift, Banknote, Zap, Users, AlertCircle } from 'lucide-react';
 
 /* ── Google OAuth icon ── */
@@ -80,6 +81,7 @@ const GOOGLE_AUTH_URL = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:
 export default function RegisterPage() {
   const router      = useRouter();
   const { setUser } = useAuth();
+  const toast       = useToast();
   const [form, setForm]       = useState({ name: '', email: '', password: '', password_confirmation: '', referral_code: '' });
   const [errors, setErrors]   = useState({});
   const [loading, setLoading] = useState(false);
@@ -109,6 +111,7 @@ export default function RegisterPage() {
     try {
       const user = await register(form);
       setUser(user);
+      toast.success('Account created! Welcome to Taskora.');
       router.replace('/dashboard');
     } catch (err) {
       setServerError(err.message || 'Something went wrong. Please try again.');
@@ -119,55 +122,66 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row" style={{ background: 'var(--bg)' }}>
 
-      {/* ── Left panel — desktop only ── */}
-      <div className="hidden lg:block lg:sticky lg:top-0 lg:h-screen lg:w-[46%] shrink-0 relative overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&q=80&fit=crop&crop=faces,top"
-          alt="Professional working online"
-          className="absolute inset-0 w-full h-full object-cover object-top"
-          draggable={false}
-        />
-        <div className="auth-overlay" />
-        <div className="relative z-10 h-full flex flex-col justify-between p-10 gap-8">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 no-underline">
-            <span className="gradient-brand w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-black shrink-0"
-              style={{ boxShadow: '0 4px 14px rgba(108,92,231,0.5)' }}>T</span>
-            <span className="text-white font-black text-[1.05rem] tracking-tight">Taskora</span>
-          </Link>
+      {/* ── Left panel — animated illustration ── */}
+      <div className="hidden lg:flex lg:sticky lg:top-0 lg:h-screen lg:w-[46%] shrink-0 relative overflow-hidden flex-col justify-between p-10 gap-8"
+        style={{ background: 'linear-gradient(135deg, #1a1040 0%, #2d1b6e 50%, #1a1040 100%)' }}>
 
-          {/* Copy */}
-          <div className="flex flex-col gap-4">
-            <h2 className="text-white font-black leading-tight tracking-tight" style={{ fontSize: 'clamp(1.9rem,3vw,2.8rem)' }}>
-              Start earning today.<br />
-              <span className="gradient-text-light">It&apos;s free.</span>
-            </h2>
-            <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'rgba(255,255,255,0.55)' }}>
-              Join 50,000+ earners making real money from social media tasks — from home, on your schedule.
-            </p>
-            <ul className="flex flex-col gap-2.5 mt-1">
-              {PERKS.map(p => (
-                <li key={p.text} className="flex items-center gap-3">
-                  <span className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ background: 'rgba(108,92,231,0.3)', color: '#A29BFE', border: '1px solid rgba(108,92,231,0.35)' }}>
-                    <p.Icon size={14} strokeWidth={2} />
-                  </span>
-                  <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.82)' }}>{p.text}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[
+            { w: 300, h: 300, top: '-60px',  left: '-40px', delay: '0s',   dur: '9s',  opacity: 0.11 },
+            { w: 200, h: 200, top: '25%',    left: '65%',  delay: '2s',   dur: '10s', opacity: 0.09 },
+            { w: 160, h: 160, top: '60%',    left: '-20px',delay: '1s',   dur: '8s',  opacity: 0.12 },
+            { w: 130, h: 130, top: '5%',     left: '78%',  delay: '0.8s', dur: '7s',  opacity: 0.14 },
+            { w: 240, h: 240, top: '70%',    left: '50%',  delay: '3s',   dur: '11s', opacity: 0.07 },
+          ].map((c, i) => (
+            <div key={i} className="absolute rounded-full"
+              style={{
+                width: c.w, height: c.h, top: c.top, left: c.left,
+                background: 'radial-gradient(circle, rgba(162,155,254,1) 0%, rgba(108,92,231,0.3) 60%, transparent 100%)',
+                opacity: c.opacity,
+                animation: `float-circle ${c.dur} ease-in-out ${c.delay} infinite alternate`,
+              }}
+            />
+          ))}
+        </div>
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ backgroundImage: 'linear-gradient(rgba(162,155,254,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(162,155,254,0.04) 1px,transparent 1px)', backgroundSize: '40px 40px' }} />
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-2">
-            {[['50K+', 'Earners'], ['$2.1M', 'Paid Out'], ['98.5%', 'Success']].map(([v, l]) => (
-              <div key={l} className="flex flex-col items-center gap-0.5 py-3 px-2 rounded-xl text-center"
-                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
-                <span className="text-white font-black text-[1.05rem] tracking-tight">{v}</span>
-                <span className="text-[0.62rem] font-semibold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.4)' }}>{l}</span>
-              </div>
+        <Link href="/" className="flex items-center gap-2.5 no-underline relative z-10">
+          <span className="gradient-brand w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-black shrink-0"
+            style={{ boxShadow: '0 4px 14px rgba(108,92,231,0.5)' }}>T</span>
+          <span className="text-white font-black text-[1.05rem] tracking-tight">Taskora</span>
+        </Link>
+
+        <div className="relative z-10 flex flex-col gap-4">
+          <h2 className="text-white font-black leading-tight tracking-tight" style={{ fontSize: 'clamp(1.9rem,3vw,2.8rem)' }}>
+            Start earning today.<br />
+            <span className="gradient-text-light">It&apos;s free.</span>
+          </h2>
+          <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'rgba(255,255,255,0.55)' }}>
+            Join 50,000+ earners making real money from social media tasks — from home, on your schedule.
+          </p>
+          <ul className="flex flex-col gap-2.5 mt-1">
+            {PERKS.map(p => (
+              <li key={p.text} className="flex items-center gap-3">
+                <span className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: 'rgba(108,92,231,0.3)', color: '#A29BFE', border: '1px solid rgba(108,92,231,0.35)' }}>
+                  <p.Icon size={14} strokeWidth={2} />
+                </span>
+                <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.82)' }}>{p.text}</span>
+              </li>
             ))}
-          </div>
+          </ul>
+        </div>
+
+        <div className="relative z-10 grid grid-cols-3 gap-2">
+          {[['50K+', 'Earners'], ['$2.1M', 'Paid Out'], ['98.5%', 'Success']].map(([v, l]) => (
+            <div key={l} className="flex flex-col items-center gap-0.5 py-3 px-2 rounded-xl text-center"
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
+              <span className="text-white font-black text-[1.05rem] tracking-tight">{v}</span>
+              <span className="text-[0.62rem] font-semibold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.4)' }}>{l}</span>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -252,6 +266,21 @@ export default function RegisterPage() {
             {' '}&amp;{' '}
             <span className="underline cursor-pointer" style={{ color: 'var(--text-secondary)' }}>Privacy Policy</span>.
           </p>
+
+          {/* Social proof */}
+          <div className="flex items-center justify-center gap-3 pt-1">
+            <div className="flex -space-x-2">
+              {['A','M','S','J','P'].map((l, i) => (
+                <div key={i} className="w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-white text-[0.6rem] font-black shrink-0"
+                  style={{ background: ['#6C5CE7','#00B894','#E17055','#0984E3','#A29BFE'][i] }}>
+                  {l}
+                </div>
+              ))}
+            </div>
+            <p className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+              Join <span className="font-bold" style={{ color: 'var(--text)' }}>50,000+</span> earners already on the platform
+            </p>
+          </div>
         </div>
       </div>
     </div>

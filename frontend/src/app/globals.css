@@ -60,10 +60,9 @@ body {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+@keyframes float-circle {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(12px, -18px) scale(1.06); }
 }
 
 /* ── Animation helpers ───────────────────────────────── */
@@ -227,6 +226,72 @@ aside.fixed[data-open] {
 /* ── Horizontal scroll tabs (hide scrollbar) ─────────── */
 .scroll-tabs { scrollbar-width: none; -ms-overflow-style: none; }
 .scroll-tabs::-webkit-scrollbar { display: none; }
+
+/* ── Focus ring consistency ──────────────────────────── */
+:focus-visible {
+  outline: 2px solid #6C5CE7;
+  outline-offset: 2px;
+  
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #6C5CE7;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ── Hover shadow micro-animation ────────────────────── */
+.hover-lift {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108,92,231,0.13), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ── Toast notification system ───────────────────────── */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(calc(100% + 24px)); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(calc(100% + 24px)); }
+}
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: white;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+  min-width: 280px;
+  max-width: 360px;
+  animation: toast-in 300ms cubic-bezier(0.16,1,0.3,1) both;
+}
+.toast.exiting { animation: toast-out 250ms ease-in both; }
+.toast-success { border-left: 3px solid #00875A; }
+.toast-error   { border-left: 3px solid #C0392B; }
+.toast-info    { border-left: 3px solid #6C5CE7; }
 
 /* ── Table row hover (CSS-only, works on touch too) ──── */
 .table-row-hover:hover { background: var(--bg); }

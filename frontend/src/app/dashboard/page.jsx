@@ -209,7 +209,8 @@ export default function DashboardPage() {
               View all <ArrowUpRight size={12} />
             </Link>
           </div>
-          <div className="overflow-x-auto">
+          {/* Desktop table / Mobile cards */}
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-[var(--border-subtle)]" style={{ background: 'var(--bg)' }}>
@@ -266,6 +267,37 @@ export default function DashboardPage() {
                 })}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile card list */}
+          <div className="sm:hidden flex flex-col divide-y" style={{ borderColor: 'var(--border-subtle)' }}>
+            {data.map(c => {
+              const pm     = PLATFORM[c.platform] || PLATFORM.other;
+              const filled = c.filled_slots || 0;
+              const total  = c.total_slots  || 100;
+              const prog   = c.progress_percentage ?? Math.round((filled / total) * 100);
+              const earned = (filled * parseFloat(c.reward_per_task || 0)).toFixed(2);
+              return (
+                <div key={c.id} className="flex items-start gap-3 px-4 py-4" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                  <span className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5" style={{ background: pm.bg, color: pm.color }}>
+                    <pm.Icon size={18} />
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold truncate" style={{ color: 'var(--text)' }}>{c.title}</p>
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <div className="progress-track flex-1" style={{ height: 4 }}>
+                        <div className="progress-fill" style={{ width: `${prog}%` }} />
+                      </div>
+                      <span className="text-xs tabular-nums shrink-0" style={{ color: 'var(--text-muted)' }}>{filled}/{total}</span>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-sm font-bold" style={{ color: 'var(--text)' }}>{fmt(earned)}</p>
+                    <span className="badge badge-progress mt-1">In Progress</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -327,26 +359,34 @@ export default function DashboardPage() {
                 View all <ArrowUpRight size={11} />
               </Link>
             </div>
-            <ul>
-              {MOCK_NOTIFS.map((n, i) => {
-                const m = NOTIF_META[n.type] || NOTIF_META.default;
-                return (
-                  <li key={i}
-                    className="table-row-hover flex items-center gap-3 px-5 py-3 cursor-pointer transition-colors"
-                    style={{ borderBottom: i < MOCK_NOTIFS.length - 1 ? '1px solid var(--border-subtle)' : undefined }}>
-                    <span className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                      style={{ background: m.bg, color: m.color }}>
-                      <m.Icon size={13} strokeWidth={2} />
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold leading-tight truncate" style={{ color: 'var(--text)' }}>{n.text}</p>
-                      <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-muted)' }}>{n.sub}</p>
-                    </div>
-                    <span className="text-xs shrink-0 tabular-nums" style={{ color: 'var(--text-muted)' }}>{n.time}</span>
-                  </li>
-                );
-              })}
-            </ul>
+            {MOCK_NOTIFS.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-10 gap-2">
+                <Bell size={28} strokeWidth={1.5} style={{ color: 'var(--text-muted)', opacity: 0.35 }} />
+                <p className="text-sm font-semibold" style={{ color: 'var(--text-muted)' }}>You&apos;re all caught up</p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)', opacity: 0.7 }}>No new notifications</p>
+              </div>
+            ) : (
+              <ul>
+                {MOCK_NOTIFS.map((n, i) => {
+                  const m = NOTIF_META[n.type] || NOTIF_META.default;
+                  return (
+                    <li key={i}
+                      className="table-row-hover flex items-center gap-3 px-5 py-3 cursor-pointer transition-colors"
+                      style={{ borderBottom: i < MOCK_NOTIFS.length - 1 ? '1px solid var(--border-subtle)' : undefined }}>
+                      <span className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                        style={{ background: m.bg, color: m.color }}>
+                        <m.Icon size={13} strokeWidth={2} />
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold leading-tight truncate" style={{ color: 'var(--text)' }}>{n.text}</p>
+                        <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-muted)' }}>{n.sub}</p>
+                      </div>
+                      <span className="text-xs shrink-0 tabular-nums" style={{ color: 'var(--text-muted)' }}>{n.time}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
         </div>
 

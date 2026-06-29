@@ -1,6 +1,7 @@
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
+import { ToastProvider } from '@/context/ToastContext';
 import NavigationProgress from '@/components/NavigationProgress';
 
 const jakarta = Plus_Jakarta_Sans({
@@ -73,7 +74,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className={jakarta.variable} data-scroll-behavior="smooth">
       <body className="min-h-screen flex flex-col antialiased">
         <NavigationProgress />
-        <AuthProvider>{children}</AuthProvider>
+        <ToastProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ToastProvider>
       </body>
     </html>
   );
