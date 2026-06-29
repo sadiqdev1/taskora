@@ -107,19 +107,19 @@ export default function LoginPage() {
 
       {/* ── Left panel — animated illustration ── */}
       <div className="hidden lg:flex lg:sticky lg:top-0 lg:h-screen lg:w-[46%] shrink-0 relative overflow-hidden flex-col justify-between p-10 gap-8"
-        style={{ background: 'linear-gradient(135deg, #1a1040 0%, #2d1b6e 50%, #1a1040 100%)' }}>
+        style={{ background: 'linear-gradient(135deg, #2d1b6e 0%, #4a2fa0 50%, #2d1b6e 100%)' }}>
 
         {/* Background photo */}
         <img
           src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=900&q=80&fit=crop&crop=faces,center"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ opacity: 0.18, mixBlendMode: 'luminosity' }}
+          style={{ opacity: 0.35, mixBlendMode: 'luminosity' }}
           draggable={false}
         />
 
         {/* Dark overlay to blend photo with gradient */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(26,16,64,0.85) 0%, rgba(45,27,110,0.75) 50%, rgba(26,16,64,0.9) 100%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(45,27,110,0.6) 0%, rgba(74,47,160,0.5) 50%, rgba(45,27,110,0.65) 100%)' }} />
 
         {/* Animated floating circles */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -216,7 +216,7 @@ export default function LoginPage() {
 
           {/* Google OAuth */}
           <a href={GOOGLE_AUTH_URL}
-            className="flex items-center justify-center gap-3 w-full py-3 rounded-xl border-2 text-sm font-semibold transition-all hover:shadow-md hover:border-gray-300 active:scale-[.98]"
+            className="flex items-center justify-center gap-3 w-full py-3 rounded-xl border-2 text-sm font-semibold transition-colors hover:border-gray-300 active:scale-[.98]"
             style={{ background: 'white', borderColor: 'var(--border)', color: 'var(--text)' }}>
             <GoogleIcon />
             Continue with Google

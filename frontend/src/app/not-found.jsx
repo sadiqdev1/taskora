@@ -17,7 +17,7 @@ export default function NotFound() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: 'url(https://www.socaislands.com/wp-content/uploads/2016/08/cropped-404-bg.png)',
+          backgroundImage: 'url(/404-bg.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center top',
           backgroundRepeat: 'no-repeat',
