@@ -143,24 +143,19 @@ export default function DashboardPage() {
                 Pending: <span className="text-white/80 font-bold">{fmt(walletData?.pending_balance ?? 125.00)}</span>
               </p>
             </div>
-            {walletBal > 0 ? (
-              <div className="flex items-center gap-2 mt-4">
-                <Link href="/wallet"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-80"
-                  style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.25)' }}>
-                  Withdraw <ArrowUpRight size={11} />
-                </Link>
-                <Link href="/wallet/deposit"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-80"
-                  style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.20)' }}>
-                  Deposit
-                </Link>
-              </div>
-            ) : (
-              <p className="text-xs mt-4 font-semibold flex items-center gap-1.5 text-white/50">
-                <Zap size={11} strokeWidth={2.5} /> Complete tasks to start earning
-              </p>
-            )}
+            {/* Always show withdraw + deposit — disable withdraw if $0 */}
+            <div className="flex items-center gap-2 mt-4">
+              <Link href="/wallet"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-80"
+                style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.25)', opacity: walletBal > 0 ? 1 : 0.45, pointerEvents: walletBal > 0 ? 'auto' : 'none' }}>
+                Withdraw 
+              </Link>
+              <Link href="/wallet/deposit"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-80"
+                style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.20)' }}>
+                Deposit
+              </Link>
+            </div>
           </div>
 
           {/* Total Earnings */}
@@ -306,28 +301,16 @@ export default function DashboardPage() {
               <MiniChart data={CHART_DATA} color="#6C5CE7" />
             </div>
 
-            {/* Bar chart month indicators */}
-            <div className="grid grid-cols-12 gap-0.5 mt-2 pt-3 border-t border-[var(--border-subtle)]">
-              {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m, i) => {
-                const height = Math.round(12 + (CHART_DATA[i] / Math.max(...CHART_DATA)) * 28);
-                const isCurrentMonth = i === new Date().getMonth();
-                return (
-                  <div key={i} className="flex flex-col items-center gap-1">
-                    <div
-                      className="w-full rounded-sm transition-all"
-                      title={`${m}: ${fmt(CHART_DATA[i])}`}
-                      style={{
-                        height,
-                        background: isCurrentMonth ? '#6C5CE7' : '#E0DCFF',
-                        opacity: i <= new Date().getMonth() ? 1 : 0.3,
-                      }}
-                    />
-                    <span className="text-[0.52rem] font-medium" style={{ color: isCurrentMonth ? '#6C5CE7' : 'var(--text-muted)' }}>
-                      {m.slice(0, 1)}
-                    </span>
-                  </div>
-                );
-              })}
+            <div className="grid grid-cols-6 gap-1 mt-2 pt-3 border-t border-[var(--border-subtle)]">
+              {['J','F','M','A','M','J','J','A','S','O','N','D'].map((m, i) => (
+                <div key={i} className="text-center">
+                  <div className="h-1 rounded-full mb-1" style={{
+                    background: i === 11 ? '#6C5CE7' : 'var(--border)',
+                    opacity: i > 5 ? 1 : 0.4,
+                  }} />
+                  <span className="text-[0.6rem]" style={{ color: 'var(--text-muted)' }}>{m}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -416,7 +399,7 @@ export default function DashboardPage() {
                       <div className="progress-fill" style={{ width: `${t.progress_percentage ?? 0}%` }} />
                     </div>
                   </div>
-                  <Link href={`/campaigns/${t.id}`}
+                  <Link href={`/tasks/${t.id}`}
                     className="w-full py-1.5 rounded-lg text-center text-xs font-semibold bg-[#6C5CE7] text-white hover:bg-[#5A4BD1] transition-colors mt-auto">
                     Start Task
                   </Link>

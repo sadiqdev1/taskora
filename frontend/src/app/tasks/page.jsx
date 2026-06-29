@@ -132,7 +132,7 @@ export default function TasksPage() {
                   <td className="px-5 py-3.5 text-xs" style={{ color: 'var(--text-muted)' }}>{date}</td>
                   <td className="px-5 py-3.5">
                     {s.status === 'rejected' && (
-                      <Link href={`/campaigns/${s.campaign_id || s.campaign?.id}`} className="text-xs font-semibold" style={{ color: 'var(--primary)' }}>
+                      <Link href={`/tasks/${s.campaign_id || s.campaign?.id}`} className="text-xs font-semibold" style={{ color: 'var(--primary)' }}>
                         Retry
                       </Link>
                     )}

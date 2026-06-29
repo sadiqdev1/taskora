@@ -35,6 +35,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/campaigns/{campaign}/submit',[CampaignController::class, 'submit']);
     Route::get('/my-submissions',              [CampaignController::class, 'mySubmissions']);
 
+    // Tasks — same as campaigns but under /tasks URL for frontend consistency
+    Route::get('/tasks',                       [CampaignController::class, 'index']);
+    Route::get('/tasks/{campaign}',            [CampaignController::class, 'show']);
+    Route::post('/tasks/{campaign}/submit',    [CampaignController::class, 'submit']);
+
     // Wallet
     Route::get('/wallet',         [WalletController::class, 'summary']);
     Route::get('/transactions',   [WalletController::class, 'transactions']);

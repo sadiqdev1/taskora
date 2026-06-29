@@ -18,7 +18,7 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      { source: '/tasks/:id', destination: '/campaigns/:id', permanent: false },
+      { source: '/campaigns/:id(\\d+)', destination: '/tasks/:id', permanent: true },
     ];
   },
 };

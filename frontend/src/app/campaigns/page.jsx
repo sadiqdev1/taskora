@@ -166,7 +166,7 @@ export default function TasksPage() {
                       ${parseFloat(c.reward_per_task).toFixed(2)}
                     </p>
                   </div>
-                  <Link href={`/campaigns/${c.id}`}
+                  <Link href={`/tasks/${c.id}`}
                     className="bg-[#6C5CE7] hover:bg-[#5A4BD1] px-4 py-2 rounded-xl text-white text-xs font-bold flex items-center gap-1.5 transition-colors">
                     Start Task <ArrowRight size={12} />
                   </Link>
