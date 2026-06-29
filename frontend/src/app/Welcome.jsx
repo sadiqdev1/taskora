@@ -99,8 +99,8 @@ export default function Welcome() {
           </div>
 
           <h1 className="font-black leading-[1.06] tracking-tighter" style={{ fontSize: 'clamp(2.6rem,7vw,4.8rem)', color: 'var(--text)' }}>
-            Complete tasks,<br />
-            <span className="gradient-text">earn real money.</span>
+            Get paid for what you<br />
+            <span className="gradient-text">already do online.</span>
           </h1>
 
           <p className="leading-relaxed max-w-lg" style={{ fontSize: 'clamp(1rem,2.2vw,1.15rem)', color: 'var(--text-secondary)' }}>
@@ -287,7 +287,21 @@ export default function Welcome() {
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-            {FEATURES.map((f, i) => (
+            {/* Hero feature — spans 2 cols on lg */}
+            {(() => { const HeroIcon = FEATURES[0].Icon; return (
+            <div className="lg:col-span-2 p-6 rounded-[18px] border flex flex-col sm:flex-row gap-5 transition-all hover:shadow-lg hover:-translate-y-0.5"
+              style={{ background: 'linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%)', borderColor: '#DDD6FE' }}>
+              <span className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ background: '#6C5CE7', color: 'white' }}>
+                <HeroIcon size={22} strokeWidth={1.8} />
+              </span>
+              <div>
+                <h3 className="font-black text-[1.05rem] tracking-tight mb-1" style={{ color: 'var(--text)' }}>{FEATURES[0].title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{FEATURES[0].desc}</p>
+              </div>
+            </div>
+            ); })()}
+            {/* Remaining 5 features */}
+            {FEATURES.slice(1).map((f, i) => (
               <div key={i} className="p-6 rounded-[18px] border bg-white flex flex-col gap-2.5 transition-all hover:shadow-lg hover:-translate-y-0.5" style={{ borderColor: 'var(--border-subtle)' }}>
                 <span className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: 'var(--primary-muted)', color: 'var(--primary)' }}>
                   <f.Icon size={19} strokeWidth={1.8} />
@@ -440,17 +454,40 @@ export default function Welcome() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-7 px-5 border-t" style={{ background: 'var(--dark-2)', borderColor: 'rgba(255,255,255,0.07)' }}>
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3.5">
-          <Link href="/" className="flex items-center gap-2.5 no-underline">
-            <span className="gradient-brand w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-black">T</span>
-            <span className="font-black text-sm tracking-tight" style={{ color: 'rgba(255,255,255,0.9)', letterSpacing: '-0.025em' }}>Taskora</span>
-          </Link>
-          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>© {new Date().getFullYear()} Taskora. All rights reserved.</p>
-          <div className="flex items-center gap-5">
-            {['Privacy', 'Terms', 'Contact', 'FAQ'].map(l => (
-              <span key={l} className="text-xs cursor-pointer transition-colors hover:opacity-70" style={{ color: 'rgba(255,255,255,0.3)' }}>{l}</span>
-            ))}
+      <footer className="py-10 px-5 border-t" style={{ background: 'var(--dark-2)', borderColor: 'rgba(255,255,255,0.07)' }}>
+        <div className="max-w-4xl mx-auto flex flex-col gap-8">
+          {/* Top row */}
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
+            <div className="flex flex-col gap-3">
+              <Link href="/" className="flex items-center gap-2.5 no-underline">
+                <span className="gradient-brand w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-black">T</span>
+                <span className="font-black text-sm tracking-tight" style={{ color: 'rgba(255,255,255,0.9)', letterSpacing: '-0.025em' }}>Taskora</span>
+              </Link>
+              <p className="text-xs max-w-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                The #1 platform for earning real cash by completing social media tasks. Free to join, fast to withdraw.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-3 text-xs">
+              {[
+                { label: 'Product', links: [['How it Works', '#how-it-works'], ['Platforms', '#platforms'], ['Earnings', '#earnings']] },
+                { label: 'Company', links: [['About', '/about'], ['Contact', '/contact'], ['Careers', '/careers']] },
+                { label: 'Legal', links: [['Privacy', '/privacy'], ['Terms', '/terms'], ['FAQ', '/help']] },
+              ].map(col => (
+                <div key={col.label} className="flex flex-col gap-2">
+                  <p className="font-bold uppercase tracking-widest text-[0.6rem]" style={{ color: 'rgba(255,255,255,0.35)' }}>{col.label}</p>
+                  {col.links.map(([label, href]) => (
+                    <Link key={label} href={href} className="no-underline transition-opacity hover:opacity-80" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Bottom row */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>© {new Date().getFullYear()} Taskora. All rights reserved.</p>
+            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>Made with ♥ for earners worldwide</p>
           </div>
         </div>
       </footer>

@@ -164,21 +164,64 @@ export default function CampaignDetailPage() {
                   {error}
                 </div>
               )}
+
+              {/* Image upload drop zone */}
               <div>
-                <label className="text-xs font-semibold block mb-2" style={{ color: 'var(--text)' }}>
-                  Proof of completion (URL, screenshot link, or description)
+                <label className="text-sm font-semibold block mb-2" style={{ color: 'var(--text)' }}>
+                  Screenshot proof <span className="font-normal text-xs" style={{ color: 'var(--text-muted)' }}>(JPG, PNG, WEBP · max 5MB)</span>
                 </label>
-                <textarea value={proof} onChange={e => setProof(e.target.value)} rows={4}
-                  placeholder="Paste a link to your screenshot or describe what you did…"
-                  className="w-full px-4 py-3 rounded-xl text-sm outline-none resize-none"
-                  style={{ background: 'var(--bg)', border: '1.5px solid var(--border)', color: 'var(--text)' }}
-                  onFocus={e => (e.target.style.borderColor = 'var(--primary)')}
-                  onBlur={e => (e.target.style.borderColor = 'var(--border)')} />
+                <label
+                  htmlFor="proof-upload"
+                  className="flex flex-col items-center justify-center gap-3 w-full rounded-2xl border-2 border-dashed cursor-pointer transition-colors"
+                  style={{
+                    minHeight: 160,
+                    borderColor: proof ? '#86EFAC' : 'var(--border)',
+                    background: proof ? '#F0FDF4' : 'var(--bg)',
+                  }}
+                  onDragOver={e => e.preventDefault()}
+                  onDrop={e => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) setProof(file);
+                  }}
+                >
+                  {proof ? (
+                    <div className="flex flex-col items-center gap-2 p-4">
+                      <img
+                        src={URL.createObjectURL(proof)}
+                        alt="Proof preview"
+                        className="max-h-36 rounded-xl object-contain"
+                      />
+                      <p className="text-xs font-semibold" style={{ color: '#00875A' }}>
+                        ✓ {proof.name} ({(proof.size / 1024).toFixed(0)} KB)
+                      </p>
+                      <button type="button" onClick={() => setProof(null)} className="text-xs underline" style={{ color: 'var(--text-muted)' }}>
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 p-6 text-center">
+                      <span className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'var(--primary-muted)', color: '#6C5CE7' }}>
+                        <CheckCircle2 size={22} strokeWidth={1.8} />
+                      </span>
+                      <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Drop your screenshot here</p>
+                      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>or click to browse files</p>
+                    </div>
+                  )}
+                  <input
+                    id="proof-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={e => setProof(e.target.files?.[0] || null)}
+                  />
+                </label>
               </div>
-              <button type="submit" disabled={submitting}
+
+              <button type="submit" disabled={submitting || !proof}
                 className="bg-[#6C5CE7] hover:bg-[#5A4BD1] w-full py-3 rounded-xl text-white font-bold text-sm disabled:opacity-60 transition-colors flex items-center justify-center gap-2">
                 {submitting && <span className="btn-spinner" />}
-                {submitting ? 'Submitting…' : 'Submit for Review'}
+                {submitting ? 'Submitting…' : 'Submit Screenshot for Review'}
               </button>
               <p className="text-xs text-center flex items-center justify-center gap-1" style={{ color: 'var(--text-muted)' }}>
                 <Clock size={11} strokeWidth={2} /> Reviews are processed within 24 hours

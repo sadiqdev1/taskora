@@ -217,6 +217,8 @@ aside.fixed[data-open] {
   background: #EEF2FF;
   color: #6C5CE7;
   font-weight: 600;
+  border-left: 2px solid #6C5CE7;
+  padding-left: calc(12px - 2px); /* compensate so icon doesn't shift */
 }
 .sidebar-link[data-active]:hover {
   background: #e4deff;

@@ -48,6 +48,26 @@ function Field({ id, name, type = 'text', label, placeholder, autoComplete, valu
   );
 }
 
+function PasswordStrength({ password }) {
+  if (!password) return null;
+  const score = [/.{8,}/, /[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/].filter(r => r.test(password)).length;
+  const labels = ['Too weak', 'Weak', 'Fair', 'Strong'];
+  const colors = ['#C0392B', '#E67E22', '#F39C12', '#00875A'];
+  return (
+    <div className="flex flex-col gap-1 mt-1">
+      <div className="flex gap-1">
+        {[1,2,3,4].map(i => (
+          <div key={i} className="flex-1 h-1 rounded-full transition-all duration-300"
+            style={{ background: i <= score ? colors[score - 1] : 'var(--border)' }} />
+        ))}
+      </div>
+      <p className="text-xs font-semibold" style={{ color: colors[score - 1] || 'var(--text-muted)' }}>
+        {labels[score - 1] || 'Enter a password'}
+      </p>
+    </div>
+  );
+}
+
 const PERKS = [
   { Icon: Gift,     text: 'Free to join — no credit card' },
   { Icon: Banknote, text: 'Withdraw from just $10'        },
@@ -203,9 +223,12 @@ export default function RegisterPage() {
               placeholder="you@example.com" autoComplete="email"
               value={form.email} onChange={handleChange} error={errors.email} />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field id="password" name="password" type="password" label="Password"
-                placeholder="Min. 8 characters" autoComplete="new-password"
-                value={form.password} onChange={handleChange} error={errors.password} />
+              <div className="flex flex-col gap-0">
+                <Field id="password" name="password" type="password" label="Password"
+                  placeholder="Min. 8 characters" autoComplete="new-password"
+                  value={form.password} onChange={handleChange} error={errors.password} />
+                <PasswordStrength password={form.password} />
+              </div>
               <Field id="password_confirmation" name="password_confirmation" type="password"
                 label="Confirm password" placeholder="••••••••" autoComplete="new-password"
                 value={form.password_confirmation} onChange={handleChange} error={errors.password_confirmation} />
