@@ -23,7 +23,7 @@ export default function TopBar({ onMenuClick, onToggleCollapse, collapsed, title
     >
       {/* ── Left ── */}
       <div className="flex items-center gap-2 shrink-0">
-        {/* Mobile hamburger */}
+        {/* Mobile hamburger — hidden since BottomNav handles mobile navigation */}
         <button
           onClick={onMenuClick}
           className="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl transition-colors hover:bg-[var(--bg)]"

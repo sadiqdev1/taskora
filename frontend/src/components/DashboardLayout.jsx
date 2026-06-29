@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 import Loader from './Loader';
+import BottomNav from './BottomNav';
 
 export default function DashboardLayout({ children, title, subtitle, adminOnly = false }) {
   const { user, loading } = useAuth();
@@ -39,10 +40,13 @@ export default function DashboardLayout({ children, title, subtitle, adminOnly =
           title={title}
           subtitle={subtitle}
         />
-        <main className="flex-1 overflow-y-auto p-5 md:p-6 page-enter">
+        <main className="flex-1 overflow-y-auto p-5 md:p-6 pb-20 lg:pb-6 page-enter">
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom nav — hidden on lg+ */}
+      <BottomNav onMenuClick={() => setMobileOpen(true)} />
     </div>
   );
 }
