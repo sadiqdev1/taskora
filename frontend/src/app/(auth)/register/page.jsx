@@ -41,7 +41,7 @@ function Field({ id, name, type = 'text', label, placeholder, autoComplete, valu
 }
 
 const PERKS = [
-  { Icon: Gift,     text: 'Free $5 bonus on sign-up'     },
+  { Icon: Gift,     text: 'Free to join — no credit card'  },
   { Icon: Banknote, text: 'Withdraw from just $10'        },
   { Icon: Zap,      text: 'Get approved in under 24 h'   },
   { Icon: Users,    text: 'Earn 10% from every referral' },
@@ -182,7 +182,7 @@ export default function RegisterPage() {
             <Field id="referral_code" name="referral_code" label="Referral code (optional)"
               placeholder="e.g. REF12345"
               value={form.referral_code} onChange={handleChange}
-              helper="Have a code? You both earn a $5 bonus." />
+              helper="Have a referral code? Enter it here." />
 
             <button type="submit" disabled={loading}
               className="bg-[#6C5CE7] hover:bg-[#5A4BD1] w-full py-3.5 rounded-xl text-white text-sm font-black mt-1 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"

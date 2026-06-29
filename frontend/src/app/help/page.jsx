@@ -29,7 +29,7 @@ const FAQ = [
     category: 'Referrals',
     Icon: Users,
     items: [
-      { q: 'How does the referral program work?',             a: 'Share your unique referral link. When someone signs up using it, you both earn a $5 bonus. You also earn 10% of their earnings for life.' },
+      { q: 'How does the referral program work?',             a: 'Share your unique referral link. When someone signs up using it, you earn 10% of their earnings for life. There is no cap on referral earnings.' },
       { q: 'Where do I find my referral link?',               a: 'Go to the Referrals page in your dashboard. Your unique link and code are displayed at the top.' },
     ],
   },

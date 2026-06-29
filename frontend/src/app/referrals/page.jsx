@@ -44,7 +44,7 @@ export default function ReferralsPage() {
       <div className="grid sm:grid-cols-3 gap-4 mb-6">
         {[
           { step: '1', Icon: Link2,         title: 'Share your link',    desc: 'Copy your unique referral link and share with friends on social media, email or messaging apps.' },
-          { step: '2', Icon: UserCheck,     title: 'Friend signs up',    desc: 'Your friend creates a free account using your link. You both receive a $5 bonus instantly.' },
+          { step: '2', Icon: UserCheck,     title: 'Friend signs up',    desc: 'Your friend creates a free account using your link and starts earning on the platform.' },
           { step: '3', Icon: DollarSign,    title: 'Earn 10% forever',   desc: 'Earn 10% of every dollar your referral earns — forever. No cap on referral earnings.' },
         ].map(s => (
           <div key={s.step} className="card rounded-2xl p-5 flex flex-col gap-3">

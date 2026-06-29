@@ -204,7 +204,7 @@ export default function LoginPage() {
           <Link href="/register"
             className="block w-full py-3 rounded-xl text-sm font-bold text-center border-2 border-[var(--border)] bg-white transition-colors hover:border-[var(--primary-light)] hover:bg-[var(--primary-muted)]"
             style={{ color:'var(--text)' }}>
-            Create a free account — earn $5 instantly
+            Create a free account
           </Link>
 
           <Link href="/" className="flex items-center justify-center gap-1.5 text-xs font-semibold transition-colors hover:text-[var(--primary)]"
