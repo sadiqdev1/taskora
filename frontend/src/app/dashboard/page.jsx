@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import DashboardLayout from '@/components/DashboardLayout';
 import Link from 'next/link';
@@ -9,7 +10,7 @@ import { getToken } from '@/lib/auth';
 import {
   Wallet, DollarSign, CheckCircle2, Star, Smartphone,
   TrendingUp, Award, CircleDollarSign, ArrowUpRight,
-  ChevronDown, Bell, Zap,
+  ChevronDown, Bell, Zap, X,
 } from 'lucide-react';
 import { FaInstagram, FaYoutube, FaXTwitter, FaFacebook, FaTiktok } from 'react-icons/fa6';
 
@@ -74,6 +75,100 @@ const MOCK_NOTIFS = [
 
 function SkeletonBox({ className, style }) {
   return <div className={`rounded-xl animate-pulse bg-[#E8E6F8] ${className}`} style={style} />;
+}
+
+/* ── Onboarding Modal ── */
+function OnboardingModal() {
+  const [open, setOpen] = React.useState(() => {
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('onboarding_dismissed') !== '1';
+  });
+
+  function dismiss() {
+    localStorage.setItem('onboarding_dismissed', '1');
+    setOpen(false);
+  }
+
+  if (!open) return null;
+
+  const STEPS = [
+    { done: true,  label: 'Create your account',          sub: "You're in!",                        href: null          },
+    { done: false, label: 'Complete your first task',      sub: 'Browse available tasks and earn',   href: '/campaigns'  },
+    { done: false, label: 'Set up withdrawal method',      sub: 'Add your bank account in Wallet',   href: '/wallet'     },
+    { done: false, label: 'Invite a friend',               sub: 'Earn 10% of their earnings forever',href: '/referrals'  },
+  ];
+
+  return (
+    /* Backdrop */
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
+      style={{ background: 'rgba(15,12,40,0.55)', backdropFilter: 'blur(4px)' }}
+      onClick={e => { if (e.target === e.currentTarget) dismiss(); }}>
+
+      {/* Modal */}
+      <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-[page-enter_280ms_cubic-bezier(0.16,1,0.3,1)_both]">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+          <div>
+            <h2 className="font-black text-lg tracking-tight" style={{ color: 'var(--text)' }}>Get started 🚀</h2>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>4 quick steps to your first earning</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#EEF2FF', color: '#6C5CE7' }}>1/4</span>
+            <button onClick={dismiss} className="w-7 h-7 flex items-center justify-center rounded-lg transition-colors hover:bg-[var(--bg)]" style={{ color: 'var(--text-muted)' }}>
+              <X size={15} strokeWidth={2.5} />
+            </button>
+          </div>
+        </div>
+
+        {/* Steps */}
+        <div className="px-4 py-3 flex flex-col gap-1">
+          {STEPS.map((s, i) => {
+            const inner = (
+              <>
+                <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 border-2 text-[0.6rem] font-black"
+                  style={s.done
+                    ? { background: '#00875A', borderColor: '#00875A', color: 'white' }
+                    : { background: 'white', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
+                  {s.done ? '✓' : i + 1}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold leading-tight" style={{ color: s.done ? '#00875A' : 'var(--text)', textDecoration: s.done ? 'line-through' : 'none' }}>
+                    {s.label}
+                  </p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{s.sub}</p>
+                </div>
+                {!s.done && s.href && (
+                  <span className="text-xs font-bold shrink-0" style={{ color: '#6C5CE7' }}>→</span>
+                )}
+              </>
+            );
+            return s.href ? (
+              <Link key={i} href={s.href} onClick={dismiss}
+                className="flex items-center gap-3 px-3 py-3 rounded-xl no-underline transition-colors hover:bg-[var(--primary-muted)]"
+                style={{ background: 'var(--bg)' }}>
+                {inner}
+              </Link>
+            ) : (
+              <div key={i} className="flex items-center gap-3 px-3 py-3 rounded-xl" style={{ background: '#F0FDF4' }}>
+                {inner}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <div className="px-6 py-4 border-t flex items-center justify-between gap-3" style={{ borderColor: 'var(--border-subtle)' }}>
+          <button onClick={dismiss} className="text-xs font-semibold hover:opacity-70 transition-opacity" style={{ color: 'var(--text-muted)' }}>
+            Dismiss
+          </button>
+          <Link href="/campaigns" onClick={dismiss}
+            className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-[#6C5CE7] hover:bg-[#5A4BD1] transition-colors no-underline">
+            Start Earning →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function DashboardPage() {
@@ -172,44 +267,8 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* ── Onboarding checklist — show only if tasks completed < 1 ── */}
-        {tasksDone === 0 && (
-          <div className="card rounded-2xl p-5 border-l-4" style={{ borderLeftColor: '#6C5CE7' }}>
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Get started 🚀</h2>
-                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Complete these steps to start earning</p>
-              </div>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#EEF2FF', color: '#6C5CE7' }}>
-                1/4 done
-              </span>
-            </div>
-            <div className="flex flex-col gap-2">
-              {[
-                { done: true,  label: 'Create your account',            sub: 'You\'re in!'                          },
-                { done: false, label: 'Complete your first task',        sub: 'Browse available tasks and earn'      },
-                { done: false, label: 'Set up your withdrawal method',   sub: 'Add your bank account in Wallet'      },
-                { done: false, label: 'Invite a friend',                 sub: 'Earn 10% of their earnings forever'   },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors"
-                  style={{ background: item.done ? '#F0FDF4' : 'var(--bg)' }}>
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 border-2"
-                    style={item.done
-                      ? { background: '#00875A', borderColor: '#00875A', color: 'white' }
-                      : { background: 'white', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
-                    {item.done && <span className="text-[0.6rem] font-black">✓</span>}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold" style={{ color: item.done ? '#00875A' : 'var(--text)', textDecoration: item.done ? 'line-through' : 'none' }}>
-                      {item.label}
-                    </p>
-                    <p className="text-[0.65rem]" style={{ color: 'var(--text-muted)' }}>{item.sub}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* ── Onboarding checklist — dismissible modal for new users ── */}
+        {tasksDone === 0 && <OnboardingModal />}
 
         {/* ── ROW 1: 4 stat cards ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
