@@ -6,6 +6,7 @@ import DashboardLayout from '@/components/DashboardLayout';
 import { apiGet, apiPost } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import Link from 'next/link';
+import confetti from 'canvas-confetti';
 import {
   Smartphone, CheckCircle2, ClipboardList, ArrowRight, ArrowLeft, Users, Clock,
 } from 'lucide-react';
@@ -42,6 +43,13 @@ export default function CampaignDetailPage() {
     try {
       await apiPost(`/tasks/${id}/submit`, { proof }, { headers: { Authorization: `Bearer ${getToken()}` } });
       setSubmitted(true);
+      // Confetti burst
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#6C5CE7', '#A29BFE', '#00B894', '#FDCB6E', '#ffffff'],
+      });
     } catch (err) {
       setError(err.message || 'Failed to submit. Please try again.');
     } finally { setSubmitting(false); }

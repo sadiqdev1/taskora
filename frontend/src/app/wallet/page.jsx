@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import Link from 'next/link';
 import { apiGet, apiPost } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import {
@@ -23,6 +24,7 @@ const LOOKUP_URL = 'https://api.paystack.co/bank/resolve';
 
 export default function WalletPage() {
   const [wallet,        setWallet]        = useState(null);
+  const [txns,          setTxns]          = useState([]);
   const [showForm,      setShowForm]      = useState(false);
   const [amount,        setAmount]        = useState('');
   const [bank,          setBank]          = useState('');
@@ -38,6 +40,8 @@ export default function WalletPage() {
   useEffect(() => {
     apiGet('/wallet', { headers: { Authorization: `Bearer ${getToken()}` } })
       .then(setWallet).catch(() => {});
+    apiGet('/transactions', { headers: { Authorization: `Bearer ${getToken()}` } })
+      .then(d => setTxns(d?.data?.slice(0, 5) || [])).catch(() => {});
   }, []);
 
   /* ── Auto-lookup account name when bank + 10-digit account number are set ── */
@@ -106,10 +110,31 @@ export default function WalletPage() {
     <DashboardLayout title="Wallet" subtitle="Manage your earnings and withdrawals">
 
       {success && (
-        <div className="flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-medium mb-5"
-          style={{ background: '#D4F6EE', color: '#00875A', border: '1px solid #A8E8D8' }}>
-          <CheckCircle2 size={18} strokeWidth={2} className="shrink-0" />
-          {success}
+        <div className="card rounded-2xl p-6 mb-5">
+          <h3 className="font-bold text-sm mb-4" style={{ color: 'var(--text)' }}>Withdrawal Request</h3>
+          <div className="flex items-center gap-0">
+            {['Submitted', 'Under Review', 'Processing', 'Sent'].map((step, i) => (
+              <div key={step} className="flex items-center flex-1 last:flex-none">
+                <div className="flex flex-col items-center gap-1.5">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black border-2 transition-all"
+                    style={i === 0
+                      ? { background: '#6C5CE7', borderColor: '#6C5CE7', color: 'white' }
+                      : { background: 'var(--bg)', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
+                    {i === 0 ? '✓' : i + 1}
+                  </div>
+                  <span className="text-[0.6rem] font-semibold whitespace-nowrap" style={{ color: i === 0 ? '#6C5CE7' : 'var(--text-muted)' }}>
+                    {step}
+                  </span>
+                </div>
+                {i < 3 && (
+                  <div className="flex-1 h-0.5 mx-1 mb-5" style={{ background: i === 0 ? '#6C5CE7' : 'var(--border)' }} />
+                )}
+              </div>
+            ))}
+          </div>
+          <p className="text-xs mt-3" style={{ color: 'var(--text-muted)' }}>
+            Your withdrawal has been submitted and is being processed within 24 hours.
+          </p>
         </div>
       )}
 
@@ -307,6 +332,36 @@ export default function WalletPage() {
           </div>
         ))}
       </div>
+
+      {/* ── Recent Transactions ── */}
+      {txns.length > 0 && (
+        <div className="card rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+            <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Recent Transactions</h2>
+            <Link href="/transactions" className="text-xs font-semibold hover:opacity-80 transition-opacity" style={{ color: '#6C5CE7' }}>
+              View all
+            </Link>
+          </div>
+          <ul>
+            {txns.map((t, i) => (
+              <li key={t.id || i} className="flex items-center gap-3 px-5 py-3 table-row-hover transition-colors"
+                style={{ borderBottom: i < txns.length - 1 ? '1px solid var(--border-subtle)' : undefined }}>
+                <span className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-base"
+                  style={{ background: t.type === 'withdrawal' ? '#FFF0F0' : '#D4F6EE' }}>
+                  {t.type === 'withdrawal' ? '↑' : '↓'}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold truncate" style={{ color: 'var(--text)' }}>{t.description || t.type}</p>
+                  <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{t.created_at ? new Date(t.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}</p>
+                </div>
+                <p className="text-sm font-bold shrink-0" style={{ color: t.type === 'withdrawal' ? '#C0392B' : '#00875A' }}>
+                  {t.type === 'withdrawal' ? '-' : '+'}{fmt(t.amount)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
     </DashboardLayout>
   );

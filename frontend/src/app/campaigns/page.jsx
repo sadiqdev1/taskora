@@ -130,8 +130,7 @@ export default function TasksPage() {
           const prog = c.progress_percentage ?? Math.round(((c.filled_slots || 0) / (c.total_slots || 1)) * 100);
           return (
             <div key={c.id}
-              className="card rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
-              style={{ borderLeft: `3px solid ${diff.color}` }}>
+              className="card rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
               <div className="h-1 w-full shrink-0" style={{ background: pm.color }} />
               <div className="p-5 flex flex-col gap-4 flex-1">
                 <div className="flex items-start justify-between gap-2">
@@ -150,6 +149,10 @@ export default function TasksPage() {
                 </div>
 
                 <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{c.description}</p>
+
+                <span className="text-[0.6rem] font-semibold px-2 py-0.5 rounded-full w-fit" style={{ background: 'var(--bg)', color: 'var(--text-muted)', border: '1px solid var(--border-subtle)' }}>
+                  ~{c.difficulty === 'hard' ? '10' : c.difficulty === 'medium' ? '5' : '2'} min
+                </span>
 
                 <div>
                   <div className="flex items-center justify-between text-xs mb-1.5" style={{ color: 'var(--text-muted)' }}>

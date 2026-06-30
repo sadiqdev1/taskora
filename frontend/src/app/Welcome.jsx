@@ -142,6 +142,20 @@ export default function Welcome() {
               </span>
             ))}
           </p>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-2">
+            {[
+              { icon: '🔒', label: 'SSL Secured' },
+              { icon: '🏦', label: 'Bank-level Encryption' },
+              { icon: '✅', label: '50K+ Verified Earners' },
+              { icon: '⚡', label: 'Instant Wallet Credits' },
+            ].map(b => (
+              <div key={b.label} className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>
+                <span>{b.icon}</span> {b.label}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ── Dashboard Mockup ── */}

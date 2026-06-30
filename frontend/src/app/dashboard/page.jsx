@@ -172,6 +172,45 @@ export default function DashboardPage() {
           </Link>
         </div>
 
+        {/* ── Onboarding checklist — show only if tasks completed < 1 ── */}
+        {tasksDone === 0 && (
+          <div className="card rounded-2xl p-5 border-l-4" style={{ borderLeftColor: '#6C5CE7' }}>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Get started 🚀</h2>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Complete these steps to start earning</p>
+              </div>
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#EEF2FF', color: '#6C5CE7' }}>
+                1/4 done
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
+              {[
+                { done: true,  label: 'Create your account',            sub: 'You\'re in!'                          },
+                { done: false, label: 'Complete your first task',        sub: 'Browse available tasks and earn'      },
+                { done: false, label: 'Set up your withdrawal method',   sub: 'Add your bank account in Wallet'      },
+                { done: false, label: 'Invite a friend',                 sub: 'Earn 10% of their earnings forever'   },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors"
+                  style={{ background: item.done ? '#F0FDF4' : 'var(--bg)' }}>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 border-2"
+                    style={item.done
+                      ? { background: '#00875A', borderColor: '#00875A', color: 'white' }
+                      : { background: 'white', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
+                    {item.done && <span className="text-[0.6rem] font-black">✓</span>}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold" style={{ color: item.done ? '#00875A' : 'var(--text)', textDecoration: item.done ? 'line-through' : 'none' }}>
+                      {item.label}
+                    </p>
+                    <p className="text-[0.65rem]" style={{ color: 'var(--text-muted)' }}>{item.sub}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* ── ROW 1: 4 stat cards ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
