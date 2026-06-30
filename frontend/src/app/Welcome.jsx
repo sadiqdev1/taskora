@@ -1,13 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import Loader from '@/components/Loader';
+import { motion } from 'framer-motion';
 import {
   Megaphone, Zap, Banknote, Target, Users, ShieldCheck,
-  ArrowRight, Check, Star, TrendingUp,
+  ArrowRight, Check, Star, TrendingUp, Plus,
 } from 'lucide-react';
 import { FaInstagram, FaYoutube, FaXTwitter, FaFacebook, FaTiktok } from 'react-icons/fa6';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+};
 
 /* ── JSON-LD ── */
 const JSONLD = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Taskora', url: 'https://taskora.io' };
@@ -49,9 +56,18 @@ const TESTIMONIALS = [
   { name: 'Marcus L.', role: 'Student',             earnings: '$890',  quote: "Best side hustle I've found. Tasks take 2–5 minutes and the pay adds up fast." },
   { name: 'Priya M.',  role: 'Stay-at-home Mom',    earnings: '$2,150',quote: "Taskora replaced my part-time job income. I do it while the kids are napping." },
 ];
+const FAQ = [
+  { q: 'How do I get paid?', a: 'Complete a task, submit your proof screenshot, and once approved your wallet is credited instantly. Withdraw anytime from $10 via bank transfer.' },
+  { q: 'Is Taskora really free to join?', a: 'Yes — 100% free. No subscription, no credit card required. You only earn, never pay.' },
+  { q: 'What countries are supported?', a: 'Taskora supports earners worldwide. Withdrawals are available via bank transfer to Nigeria, Ghana, Kenya, South Africa, and 6 other African countries.' },
+  { q: 'How quickly are tasks approved?', a: 'Most tasks are reviewed within 24 hours. Once approved, your wallet balance updates instantly.' },
+  { q: 'Can I post my own campaigns?', a: 'Yes — create a campaign, set your reward per task, and thousands of earners will complete it for you.' },
+  { q: 'Is my payment information safe?', a: 'Yes. We use bank-grade encryption. Your account details are never stored on our servers.' },
+];
 
 export default function Welcome() {
   const { user, loading } = useAuth();
+  const [faqOpen, setFaqOpen] = useState(null);
 
   if (loading) return <Loader fullscreen />;
 
@@ -195,7 +211,8 @@ export default function Welcome() {
       </section>
 
       {/* ── Platforms ── */}
-      <section id="platforms" className="py-20 px-5" style={{ background: '#FAFBFF' }}>
+      <motion.section id="platforms" className="py-20 px-5" style={{ background: '#FAFBFF' }}
+        variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
         <div className="max-w-4xl mx-auto flex flex-col gap-12">
           <div className="flex flex-col items-center text-center gap-2.5">
             <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Supported Platforms</span>
@@ -213,10 +230,11 @@ export default function Welcome() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── How it works — card style ── */}
-      <section id="how-it-works" className="py-20 px-5" style={{ background: '#F8F9FE' }}>
+      <motion.section id="how-it-works" className="py-20 px-5" style={{ background: '#F8F9FE' }}
+        variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
         <div className="max-w-4xl mx-auto flex flex-col gap-12">
           <div className="flex flex-col items-center text-center gap-3">
             <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>How it works</span>
@@ -275,10 +293,11 @@ export default function Welcome() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── Features ── */}
-      <section id="earnings" className="py-20 px-5" style={{ background: '#FAFBFF' }}>
+      <motion.section id="earnings" className="py-20 px-5" style={{ background: '#FAFBFF' }}
+        variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
         <div className="max-w-4xl mx-auto flex flex-col gap-12">
           <div className="flex flex-col gap-2.5">
             <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Why Taskora</span>
@@ -312,10 +331,11 @@ export default function Welcome() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── Who it's for — Earners vs Advertisers ── */}
-      <section className="py-20 px-5 bg-white">
+      <motion.section className="py-20 px-5 bg-white"
+        variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
         <div className="max-w-4xl mx-auto flex flex-col gap-12">
           <div className="flex flex-col items-center text-center gap-2.5">
             <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Built for everyone</span>
@@ -390,10 +410,11 @@ export default function Welcome() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── Testimonials — user quotes ── */}
-      <section id="reviews" className="py-20 px-5" style={{ background: '#F8F9FE' }}>
+      <motion.section id="reviews" className="py-20 px-5" style={{ background: '#F8F9FE' }}
+        variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
         <div className="max-w-4xl mx-auto flex flex-col gap-12">
           <div className="flex flex-col items-center text-center gap-2.5">
             <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Real Earners</span>
@@ -418,6 +439,39 @@ export default function Welcome() {
                     </p>
                   </div>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* ── FAQ ── */}
+      <section className="py-20 px-5 bg-white">
+        <div className="max-w-3xl mx-auto flex flex-col gap-10">
+          <div className="flex flex-col items-center text-center gap-2.5">
+            <span className="text-[0.7rem] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>FAQ</span>
+            <h2 className="font-black leading-tight tracking-tighter" style={{ fontSize: 'clamp(1.75rem,4vw,2.75rem)', color: 'var(--text)' }}>
+              Common questions
+            </h2>
+          </div>
+          <div className="flex flex-col gap-2">
+            {FAQ.map((item, i) => (
+              <div key={i} className="border rounded-2xl overflow-hidden transition-all" style={{ borderColor: faqOpen === i ? '#DDD6FE' : 'var(--border-subtle)' }}>
+                <button
+                  onClick={() => setFaqOpen(faqOpen === i ? null : i)}
+                  className="w-full flex items-center justify-between px-6 py-4 text-left transition-colors hover:bg-[var(--bg)]"
+                >
+                  <span className="font-bold text-sm pr-4" style={{ color: 'var(--text)' }}>{item.q}</span>
+                  <span className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-transform"
+                    style={{ background: faqOpen === i ? '#EEF2FF' : 'var(--border-subtle)', color: '#6C5CE7', transform: faqOpen === i ? 'rotate(45deg)' : 'none' }}>
+                    <Plus size={14} strokeWidth={2.5} />
+                  </span>
+                </button>
+                {faqOpen === i && (
+                  <div className="px-6 pb-4 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)', borderTop: '1px solid var(--border-subtle)' }}>
+                    <p className="pt-3">{item.a}</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>

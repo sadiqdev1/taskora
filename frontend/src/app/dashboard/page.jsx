@@ -72,10 +72,15 @@ const MOCK_NOTIFS = [
   { type: 'earning',        text: 'Task approved',        sub: 'You earned $2.50 from Facebook Like',    time: '5h ago'  },
 ];
 
+function SkeletonBox({ className, style }) {
+  return <div className={`rounded-xl animate-pulse bg-[#E8E6F8] ${className}`} style={style} />;
+}
+
 export default function DashboardPage() {
   const { user } = useAuth();
   const [walletData, setWalletData] = useState(null);
   const [campaigns,  setCampaigns]  = useState([]);
+  const [isLoading,  setIsLoading]  = useState(true);
 
   const firstName = user?.name?.split(' ')[0] ?? 'there';
   const hour      = new Date().getHours();
@@ -84,12 +89,13 @@ export default function DashboardPage() {
   const load = useCallback(async () => {
     try {
       const [w, c] = await Promise.all([
-        apiGet('/wallet',               { headers: { Authorization: `Bearer ${getToken()}` } }),
-        apiGet('/campaigns?per_page=5', { headers: { Authorization: `Bearer ${getToken()}` } }),
+        apiGet('/wallet',                        { headers: { Authorization: `Bearer ${getToken()}` } }),
+        apiGet('/campaigns?mine=1&per_page=5',   { headers: { Authorization: `Bearer ${getToken()}` } }),
       ]);
       setWalletData(w);
       setCampaigns(c?.data || []);
     } catch { /* fallback to mock */ }
+    finally { setIsLoading(false); }
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -101,6 +107,50 @@ export default function DashboardPage() {
   const thisMonth     = walletData ? parseFloat(walletData.this_month_earnings) : 3560.75;
   const lastMonth     = walletData ? parseFloat(walletData.last_month_earnings) : 3165.20;
   const data          = campaigns.length ? campaigns : MOCK_CAMPAIGNS;
+
+  if (isLoading && !walletData && campaigns.length === 0) {
+    return (
+      <DashboardLayout title="Dashboard" subtitle="Welcome back — here's your earnings overview">
+        <div className="flex flex-col gap-5">
+          {/* Header skeleton */}
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-2">
+              <SkeletonBox className="h-6 w-48" />
+              <SkeletonBox className="h-4 w-72" />
+            </div>
+            <SkeletonBox className="h-9 w-32 hidden sm:block" />
+          </div>
+          {/* Stat cards skeleton */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <SkeletonBox className="col-span-2 lg:col-span-2 h-36" />
+            <SkeletonBox className="h-36" />
+            <SkeletonBox className="h-36" />
+          </div>
+          {/* Campaigns table skeleton */}
+          <div className="bg-white rounded-2xl border border-[var(--border-subtle)] overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
+              <SkeletonBox className="h-5 w-40" />
+              <SkeletonBox className="h-4 w-16" />
+            </div>
+            <div className="flex flex-col divide-y divide-[var(--border-subtle)]">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="flex items-center gap-4 px-5 py-4">
+                  <SkeletonBox className="w-8 h-8 shrink-0" />
+                  <div className="flex flex-col gap-1.5 flex-1">
+                    <SkeletonBox className="h-3.5 w-48" />
+                    <SkeletonBox className="h-3 w-32" />
+                  </div>
+                  <SkeletonBox className="h-3 w-20 hidden sm:block" />
+                  <SkeletonBox className="h-3 w-24 hidden sm:block" />
+                  <SkeletonBox className="h-3 w-16 hidden sm:block" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout title="Dashboard" subtitle="Welcome back — here's your earnings overview">
@@ -201,7 +251,7 @@ export default function DashboardPage() {
           style={{ boxShadow: 'var(--shadow-sm)' }}>
           <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
             <div>
-              <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Active Campaigns</h2>
+              <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>My Active Campaigns</h2>
               <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Your currently running campaigns</p>
             </div>
             <Link href="/campaigns" className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"

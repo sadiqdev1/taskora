@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { register } from '@/lib/auth';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
-import { Eye, EyeOff, Gift, Banknote, Zap, Users, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, Gift, Banknote, Zap, Users, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 /* ── Google OAuth icon ── */
 function GoogleIcon() {
@@ -20,7 +20,7 @@ function GoogleIcon() {
   );
 }
 
-function Field({ id, name, type = 'text', label, placeholder, autoComplete, value, onChange, error, helper }) {
+function Field({ id, name, type = 'text', label, placeholder, autoComplete, value, onChange, error, helper, autoFocus }) {
   const [showPw, setShowPw] = useState(false);
   const isPw = type === 'password';
   return (
@@ -32,6 +32,7 @@ function Field({ id, name, type = 'text', label, placeholder, autoComplete, valu
           type={isPw ? (showPw ? 'text' : 'password') : type}
           placeholder={placeholder} autoComplete={autoComplete}
           value={value} onChange={onChange}
+          autoFocus={autoFocus}
           className={`auth-input${error ? ' error' : ''}`}
           style={{ paddingRight: isPw ? 44 : undefined }}
         />
@@ -244,7 +245,7 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
             <Field id="name" name="name" label="Full name" placeholder="Alex Johnson"
-              autoComplete="name" value={form.name} onChange={handleChange} error={errors.name} />
+              autoComplete="name" value={form.name} onChange={handleChange} error={errors.name} autoFocus />
             <Field id="email" name="email" type="email" label="Email address"
               placeholder="you@example.com" autoComplete="email"
               value={form.email} onChange={handleChange} error={errors.email} />
@@ -258,6 +259,11 @@ export default function RegisterPage() {
               <Field id="password_confirmation" name="password_confirmation" type="password"
                 label="Confirm password" placeholder="••••••••" autoComplete="new-password"
                 value={form.password_confirmation} onChange={handleChange} error={errors.password_confirmation} />
+              {form.password_confirmation && form.password === form.password_confirmation && (
+                <p className="text-xs font-semibold flex items-center gap-1 -mt-2" style={{ color: '#00875A' }}>
+                  <CheckCircle2 size={11} strokeWidth={2.5} /> Passwords match
+                </p>
+              )}
             </div>
             <Field id="referral_code" name="referral_code" label="Referral code (optional)"
               placeholder="e.g. REF12345"

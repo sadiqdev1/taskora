@@ -7,6 +7,7 @@ import { apiGet } from '@/lib/api';
 import { getToken } from '@/lib/auth';
 import { Smartphone, ArrowRight, ChevronDown } from 'lucide-react';
 import { FaInstagram, FaYoutube, FaXTwitter, FaFacebook, FaTiktok } from 'react-icons/fa6';
+import { motion } from 'framer-motion';
 
 const PLATFORM_META = {
   instagram: { Icon: FaInstagram, bg: '#FFE8F4', color: '#C13584', label: 'Instagram' },
@@ -129,7 +130,8 @@ export default function TasksPage() {
           const prog = c.progress_percentage ?? Math.round(((c.filled_slots || 0) / (c.total_slots || 1)) * 100);
           return (
             <div key={c.id}
-              className="card rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5">
+              className="card rounded-2xl overflow-hidden flex flex-col hover:shadow-lg transition-all duration-200 hover:-translate-y-0.5"
+              style={{ borderLeft: `3px solid ${diff.color}` }}>
               <div className="h-1 w-full shrink-0" style={{ background: pm.color }} />
               <div className="p-5 flex flex-col gap-4 flex-1">
                 <div className="flex items-start justify-between gap-2">
@@ -155,7 +157,12 @@ export default function TasksPage() {
                     <span>{prog}%</span>
                   </div>
                   <div className="progress-track">
-                    <div className="progress-fill" style={{ width: `${prog}%` }} />
+                    <motion.div
+                      className="progress-fill"
+                      initial={{ width: 0 }}
+                      animate={{ width: `${prog}%` }}
+                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    />
                   </div>
                 </div>
 

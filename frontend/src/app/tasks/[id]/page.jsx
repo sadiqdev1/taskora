@@ -69,7 +69,7 @@ export default function CampaignDetailPage() {
   const prog = Math.round(((c.filled_slots || 0) / (c.total_slots || 1)) * 100);
 
   return (
-    <DashboardLayout title="Task Details" subtitle={`${pm.label} task`}>
+    <DashboardLayout title={c.title} subtitle={`Tasks › ${pm.label}`}>
       <div className="max-w-2xl mx-auto flex flex-col gap-5">
 
         {/* Back button */}

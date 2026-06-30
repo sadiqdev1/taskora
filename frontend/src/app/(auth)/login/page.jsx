@@ -20,7 +20,7 @@ function GoogleIcon() {
   );
 }
 
-function Field({ id, name, type = 'text', label, placeholder, autoComplete, value, onChange, error, rightSlot }) {
+function Field({ id, name, type = 'text', label, placeholder, autoComplete, value, onChange, error, rightSlot, autoFocus }) {
   const [showPw, setShowPw] = useState(false);
   const isPw = type === 'password';
   return (
@@ -35,6 +35,7 @@ function Field({ id, name, type = 'text', label, placeholder, autoComplete, valu
           type={isPw ? (showPw ? 'text' : 'password') : type}
           placeholder={placeholder} autoComplete={autoComplete}
           value={value} onChange={onChange}
+          autoFocus={autoFocus}
           className={`auth-input${error ? ' error' : ''}`}
           style={{ paddingRight: isPw ? 44 : undefined }}
         />
@@ -239,7 +240,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
             <Field id="email" name="email" type="email" label="Email address"
               placeholder="you@example.com" autoComplete="email"
-              value={form.email} onChange={handleChange} error={errors.email} />
+              value={form.email} onChange={handleChange} error={errors.email} autoFocus />
             <Field id="password" name="password" type="password" label="Password"
               placeholder="••••••••" autoComplete="current-password"
               value={form.password} onChange={handleChange} error={errors.password}

@@ -3,6 +3,8 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ToastProvider } from '@/context/ToastContext';
 import NavigationProgress from '@/components/NavigationProgress';
+import PageTransition from '@/components/PageTransition';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const jakarta = Plus_Jakarta_Sans({
   variable: '--font-jakarta',
@@ -75,7 +77,11 @@ export default function RootLayout({ children }) {
       <body className="min-h-screen flex flex-col antialiased">
         <NavigationProgress />
         <ToastProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ErrorBoundary>
+              <PageTransition>{children}</PageTransition>
+            </ErrorBoundary>
+          </AuthProvider>
         </ToastProvider>
       </body>
     </html>
