@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import Loader from '@/components/Loader';
 import { motion } from 'framer-motion';
 import {
   Megaphone, Zap, Banknote, Target, Users, ShieldCheck,
-  ArrowRight, Check, Star, TrendingUp, Plus,
+  ArrowRight, Check, TrendingUp, Plus,
 } from 'lucide-react';
 import { FaInstagram, FaYoutube, FaXTwitter, FaFacebook, FaTiktok } from 'react-icons/fa6';
 
@@ -20,7 +20,7 @@ const fadeUp = {
 const JSONLD = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Taskora', url: 'https://taskora.io' };
 const FAQ_LD = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
   { '@type': 'Question', name: 'How do I earn money on Taskora?', acceptedAnswer: { '@type': 'Answer', text: 'Browse campaigns, complete the social media action, submit proof, and get paid once approved.' } },
-  { '@type': 'Question', name: 'What is the minimum withdrawal?', acceptedAnswer: { '@type': 'Answer', text: 'The minimum withdrawal is $10 via PayPal, bank transfer, or crypto within 24 hours.' } },
+  { '@type': 'Question', name: 'What is the minimum withdrawal?', acceptedAnswer: { '@type': 'Answer', text: 'The minimum withdrawal is ₦500 via bank transfer within 24 hours.' } },
   { '@type': 'Question', name: 'Is Taskora free to join?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, completely free. No credit card required.' } },
 ]};
 
@@ -28,7 +28,7 @@ const FAQ_LD = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntit
 const FEATURES = [
   { Icon: Megaphone,   title: 'Social Media Campaigns',  desc: 'Like, follow, comment and share on Instagram, TikTok, YouTube, Twitter and more — get paid per action.' },
   { Icon: Zap,         title: 'Instant Earnings',        desc: 'Every approved task credits your wallet immediately. No waiting weeks to see your money.' },
-  { Icon: Banknote,    title: 'Fast Withdrawals',        desc: 'Withdraw via PayPal, bank transfer or crypto. Minimum $10, processed within 24 hours.' },
+  { Icon: Banknote,    title: 'Fast Withdrawals',        desc: 'Withdraw via bank transfer. Minimum ₦500, processed within 24 hours.' },
   { Icon: Target,      title: 'Tasks for Every Level',   desc: 'Easy, medium and hard tasks with matching rewards. Start simple and level up your earnings.' },
   { Icon: Users,       title: 'Refer & Earn',            desc: "Invite friends and earn 10% of their earnings — for life. No cap on referral earnings." },
   { Icon: ShieldCheck, title: 'Safe & Secure',           desc: 'Token-based auth, encrypted payments, and verified campaigns only. Your data stays protected.' },
@@ -40,24 +40,24 @@ const PLATFORMS = [
   { Icon: FaXTwitter,  label: 'Twitter',   color: '#1DA1F2', bg: '#EFF8FF' },
   { Icon: FaFacebook,  label: 'Facebook',  color: '#1877F2', bg: '#EEF3FF' },
 ];
-const STATS = [
-  { value: '50K+',  label: 'Active Earners'  },
-  { value: '$2.1M', label: 'Total Paid Out'  },
-  { value: '98.5%', label: 'Success Rate'    },
-  { value: '500+',  label: 'Live Campaigns'  },
+const STATS_FALLBACK = [
+  { value: '50K+',   label: 'Active Earners'  },
+  { value: '₦2.1B',  label: 'Total Paid Out'  },
+  { value: '98.5%',  label: 'Success Rate'    },
+  { value: '500+',   label: 'Live Campaigns'  },
 ];
 const HOW_IT_WORKS = [
   { Icon: Users,    title: 'Create your free account', desc: 'Sign up in 30 seconds. No credit card. Just your email and name.' },
   { Icon: Target,   title: 'Browse & pick campaigns',  desc: 'Choose from hundreds of active campaigns across all major platforms.' },
-  { Icon: Banknote, title: 'Complete & earn cash',     desc: 'Submit proof, get approved, and withdraw anytime from $10.' },
+  { Icon: Banknote, title: 'Complete & earn cash',     desc: 'Submit proof, get approved, and withdraw anytime from ₦500.' },
 ];
 const TESTIMONIALS = [
-  { name: 'Sarah K.',  role: 'Freelance Designer', earnings: '$1,240', quote: "I make an extra $300–400 a month just doing tasks in my free time. The withdrawal process is super fast." },
-  { name: 'Marcus L.', role: 'Student',             earnings: '$890',  quote: "Best side hustle I've found. Tasks take 2–5 minutes and the pay adds up fast." },
-  { name: 'Priya M.',  role: 'Stay-at-home Mom',    earnings: '$2,150',quote: "Taskora replaced my part-time job income. I do it while the kids are napping." },
+  { name: 'Sarah K.',  role: 'Freelance Designer', earnings: '₦1,240,000', quote: "I make an extra ₦300K–₦400K a month just doing tasks in my free time. The withdrawal process is super fast." },
+  { name: 'Marcus L.', role: 'Student',             earnings: '₦890,000',  quote: "Best side hustle I've found. Tasks take 2–5 minutes and the pay adds up fast." },
+  { name: 'Priya M.',  role: 'Stay-at-home Mom',    earnings: '₦2,150,000',quote: "Taskora replaced my part-time job income. I do it while the kids are napping." },
 ];
 const FAQ = [
-  { q: 'How do I get paid?', a: 'Complete a task, submit your proof screenshot, and once approved your wallet is credited instantly. Withdraw anytime from $10 via bank transfer.' },
+  { q: 'How do I get paid?', a: 'Complete a task, submit your proof screenshot, and once approved your wallet is credited instantly. Withdraw anytime from ₦500 via bank transfer.' },
   { q: 'Is Taskora really free to join?', a: 'Yes — 100% free. No subscription, no credit card required. You only earn, never pay.' },
   { q: 'What countries are supported?', a: 'Taskora supports earners worldwide. Withdrawals are available via bank transfer to Nigeria, Ghana, Kenya, South Africa, and 6 other African countries.' },
   { q: 'How quickly are tasks approved?', a: 'Most tasks are reviewed within 24 hours. Once approved, your wallet balance updates instantly.' },
@@ -68,6 +68,33 @@ const FAQ = [
 export default function Welcome() {
   const { user, loading } = useAuth();
   const [faqOpen, setFaqOpen] = useState(null);
+  const [liveStats, setLiveStats] = useState(null);
+
+  // Fetch live platform stats for the stats bar — no auth needed for public data
+  useEffect(() => {
+    const base = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+    fetch(`${base}/public/stats`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) setLiveStats(d); })
+      .catch(() => {}); // silently fall back to static values
+  }, []);
+
+  // Format large naira numbers → e.g. 2100000 → ₦2.1B
+  function fmtStat(n) {
+    if (n >= 1_000_000_000) return '₦' + (n / 1_000_000_000).toFixed(1) + 'B';
+    if (n >= 1_000_000)     return '₦' + (n / 1_000_000).toFixed(1) + 'M';
+    if (n >= 1_000)         return (n / 1_000).toFixed(0) + 'K+';
+    return String(n);
+  }
+
+  const STATS = liveStats ? [
+    { value: fmtStat(liveStats.total_users),       label: 'Active Earners'  },
+    { value: fmtStat(liveStats.total_paid_out),    label: 'Total Paid Out'  },
+    { value: liveStats.active_campaigns + '+',      label: 'Live Campaigns'  },
+    { value: liveStats.total_earned_by_users
+        ? fmtStat(liveStats.total_earned_by_users)
+        : '98.5%',                                  label: liveStats.total_earned_by_users ? 'Earned by Users' : 'Success Rate' },
+  ] : STATS_FALLBACK;
 
   if (loading) return <Loader fullscreen />;
 
@@ -111,7 +138,7 @@ export default function Welcome() {
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold"
             style={{ background: 'var(--primary-muted)', borderColor: '#DDD6FE', color: 'var(--primary)' }}>
             <span className="w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: 'var(--primary)' }} />
-            $2.1M+ paid to our earners so far
+            {liveStats ? fmtStat(liveStats.total_paid_out) + '+ paid to our earners so far' : '₦2.1B+ paid to our earners so far'}
           </div>
 
           <h1 className="font-black leading-[1.06] tracking-tighter" style={{ fontSize: 'clamp(2.6rem,7vw,4.8rem)', color: 'var(--text)' }}>
@@ -136,7 +163,7 @@ export default function Welcome() {
           </div>
 
           <p className="flex flex-wrap items-center justify-center gap-4 text-xs" style={{ color: 'var(--text-muted)' }}>
-            {['No credit card required', 'Withdraw from $10', '500+ active campaigns'].map(t => (
+            {['No credit card required', 'Withdraw from ₦500', '500+ active campaigns'].map(t => (
               <span key={t} className="flex items-center gap-1.5">
                 <Check size={12} strokeWidth={2.5} style={{ color: 'var(--primary)' }} /> {t}
               </span>
@@ -148,7 +175,7 @@ export default function Welcome() {
             {[
               { icon: '🔒', label: 'SSL Secured' },
               { icon: '🏦', label: 'Bank-level Encryption' },
-              { icon: '✅', label: '50K+ Verified Earners' },
+              { icon: '✅', label: (liveStats ? fmtStat(liveStats.total_users) : '50K+') + ' Verified Earners' },
               { icon: '⚡', label: 'Instant Wallet Credits' },
             ].map(b => (
               <div key={b.label} className="flex items-center gap-1.5 text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>
@@ -158,57 +185,25 @@ export default function Welcome() {
           </div>
         </div>
 
-        {/* ── Dashboard Mockup ── */}
-        <div className="relative z-10 w-full max-w-4xl mt-14 rounded-[18px] overflow-hidden border" style={{ borderColor: 'var(--border)', boxShadow: '0 24px 80px rgba(108,92,231,0.14), 0 4px 16px rgba(0,0,0,0.06)' }}>
-          {/* Browser bar */}
+        {/* ── Dashboard Screenshot ── */}
+        <div className="relative z-10 w-full max-w-4xl mt-14 rounded-[18px] overflow-hidden border"
+          style={{ borderColor: 'var(--border)', boxShadow: '0 24px 80px rgba(108,92,231,0.18), 0 4px 16px rgba(0,0,0,0.08)' }}>
+          {/* Browser chrome */}
           <div className="flex items-center gap-1.5 px-3.5 py-2.5 border-b" style={{ background: '#F5F4FF', borderColor: 'var(--border)' }}>
             <span className="w-2.5 h-2.5 rounded-full bg-[#FC6058]" />
             <span className="w-2.5 h-2.5 rounded-full bg-[#FEC02F]" />
             <span className="w-2.5 h-2.5 rounded-full bg-[#2ACA42]" />
-            <div className="flex-1 mx-4 px-3 py-1 rounded-lg bg-white border text-center text-[0.68rem]" style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
+            <div className="flex-1 mx-4 px-3 py-1 rounded-lg bg-white border text-center text-[0.68rem]"
+              style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
               app.taskora.io/dashboard
             </div>
           </div>
-          {/* App body */}
-          <div className="flex min-h-[290px]" style={{ background: '#FAFBFF' }}>
-            {/* Sidebar */}
-            <div className="hidden sm:flex flex-col gap-1 w-40 shrink-0 p-3 bg-white border-r" style={{ borderColor: 'var(--border-subtle)' }}>
-              <div className="flex items-center gap-2 mb-4 px-1">
-                <div className="w-6 h-6 rounded-lg gradient-brand shrink-0" />
-                <div className="h-2 w-12 rounded bg-[var(--border)]" />
-              </div>
-              {['Dashboard', 'Tasks', 'My Tasks', 'Wallet', 'Transactions'].map((l, i) => (
-                <div key={l} className={`flex items-center gap-2 px-2.5 py-2 rounded-xl ${i === 0 ? 'bg-[var(--primary-muted)]' : ''}`}>
-                  <div className={`w-3 h-3 rounded-sm shrink-0 ${i === 0 ? 'bg-[var(--primary)]' : 'bg-[var(--border)]'}`} />
-                  <div className={`h-1.5 flex-1 rounded ${i === 0 ? 'bg-[#C7C0F7]' : 'bg-[var(--border-subtle)]'}`} />
-                </div>
-              ))}
-            </div>
-            {/* Content */}
-            <div className="flex-1 p-4 flex flex-col gap-3">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {[{ val: '$1,250', accent: true }, { val: '$3,560' }, { val: '128' }, { val: '98.5%' }].map((s, i) => (
-                  <div key={i} className={`p-3 rounded-xl border ${s.accent ? 'gradient-card border-transparent' : 'bg-white'}`} style={{ borderColor: s.accent ? 'transparent' : 'var(--border-subtle)' }}>
-                    <div className={`h-1.5 w-11 rounded mb-2 ${s.accent ? 'bg-white/25' : 'bg-[var(--border)]'}`} />
-                    <div className={`text-[0.7rem] font-black tracking-tight ${s.accent ? 'text-white' : ''}`} style={{ color: s.accent ? undefined : 'var(--primary)' }}>{s.val}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex-1 rounded-xl bg-white border p-3" style={{ borderColor: 'var(--border-subtle)' }}>
-                <div className="h-2 w-24 rounded bg-[var(--border)] mb-3" />
-                {['Instagram Post', 'TikTok Video', 'YouTube Boost'].map((item, i) => (
-                  <div key={item} className="flex items-center gap-2.5 py-1.5 border-b last:border-0" style={{ borderColor: 'var(--border-subtle)' }}>
-                    <div className="w-6 h-6 rounded-lg shrink-0" style={{ background: ['#FFE8F4','#F0F0F0','#FFE8E8'][i] }} />
-                    <div className="flex-1 h-1.5 rounded bg-[var(--border-subtle)]" />
-                    <div className="w-16 h-1 rounded-full bg-[var(--border)] overflow-hidden">
-                      <div className="h-full gradient-brand rounded-full" style={{ width: `${[55,38,70][i]}%` }} />
-                    </div>
-                    <span className="text-[0.6rem] font-semibold px-2 py-0.5 rounded-full" style={{ background: '#EEF2FF', color: 'var(--primary)' }}>Live</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <img
+            src="/dashboard_screenshot.png"
+            alt="Taskora dashboard"
+            className="w-full block"
+            style={{ display: 'block', maxHeight: 520, objectFit: 'cover', objectPosition: 'top' }}
+          />
         </div>
       </section>
 
@@ -267,21 +262,21 @@ export default function Welcome() {
                 Icon: Users,
                 title: 'Create your account',
                 desc: 'Sign up free in 30 seconds. No credit card needed.',
-                img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&q=80&fit=crop',
+                img: '/register_screenshot.png',
               },
               {
                 step: 2,
                 Icon: Target,
                 title: 'Browse & pick tasks',
                 desc: 'Choose from hundreds of active tasks across all major platforms.',
-                img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80&fit=crop',
+                img: '/tasks_screenshot.png',
               },
               {
                 step: 3,
                 Icon: Banknote,
                 title: 'Complete & get paid',
-                desc: 'Submit proof, get approved, and withdraw from $10 anytime.',
-                img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&q=80&fit=crop',
+                desc: 'Submit proof, get approved, and withdraw from ₦500 anytime.',
+                img: '/transactions_screenshot.png',
               },
             ].map((s) => (
               <div key={s.step} className="bg-white rounded-2xl overflow-hidden border flex flex-col" style={{ borderColor: 'var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
@@ -294,9 +289,9 @@ export default function Welcome() {
                     <s.Icon size={18} strokeWidth={1.8} />
                   </span>
                 </div>
-                {/* Screenshot */}
+                {/* Real screenshot */}
                 <div className="mx-4 rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border-subtle)' }}>
-                  <img src={s.img} alt={s.title} className="w-full object-cover" style={{ height: 150 }} />
+                  <img src={s.img} alt={s.title} className="w-full object-cover object-top" style={{ height: 150 }} />
                 </div>
                 {/* Text */}
                 <div className="px-5 py-4 flex flex-col gap-1">
@@ -372,7 +367,7 @@ export default function Welcome() {
               <ul className="flex flex-col gap-2.5">
                 {[
                   'Browse 500+ active tasks daily',
-                  'Earn $2–$10 per completed task',
+                  'Earn ₦200–₦3,000 per completed task',
                   'Get paid via bank transfer',
                   'Work from anywhere, anytime',
                   'No experience or skills required',
@@ -426,8 +421,8 @@ export default function Welcome() {
         </div>
       </motion.section>
 
-      {/* ── Testimonials — user quotes ── */}
-      <motion.section id="reviews" className="py-20 px-5" style={{ background: '#F8F9FE' }}
+      {/* ── Testimonials — modern masonry-style ── */}
+      <motion.section id="reviews" className="py-20 px-5 overflow-hidden" style={{ background: '#F8F9FE' }}
         variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
         <div className="max-w-4xl mx-auto flex flex-col gap-12">
           <div className="flex flex-col items-center text-center gap-2.5">
@@ -436,25 +431,59 @@ export default function Welcome() {
               What our earners say
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {TESTIMONIALS.map(t => (
-              <div key={t.name} className="p-6 rounded-2xl border bg-white flex flex-col gap-4" style={{ borderColor: 'var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
-                <div className="flex gap-0.5">
-                  {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#FDCB6E" stroke="none" />)}
-                </div>
-                <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--text-secondary)' }}>&ldquo;{t.quote}&rdquo;</p>
-                <div className="flex items-center gap-3 pt-3 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
-                  <span className="w-9 h-9 rounded-full bg-[#6C5CE7] flex items-center justify-center text-white text-sm font-black shrink-0">{t.name[0]}</span>
-                  <div>
-                    <p className="text-sm font-bold leading-tight" style={{ color: 'var(--text)' }}>{t.name}</p>
-                    <p className="text-xs flex items-center gap-1.5 mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                      {t.role}
-                      <span className="font-bold" style={{ color: '#00875A' }}>· Earned {t.earnings}</span>
-                    </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t, idx) => {
+              const accents = [
+                { from: '#6C5CE7', to: '#A855F7', avatarBg: '#6C5CE7' },
+                { from: '#0EA5E9', to: '#6C5CE7', avatarBg: '#0EA5E9' },
+                { from: '#10B981', to: '#0EA5E9', avatarBg: '#10B981' },
+              ];
+              const a = accents[idx % accents.length];
+              return (
+                <div key={t.name} className="relative flex flex-col gap-4 rounded-2xl p-6 overflow-hidden"
+                  style={{ background: 'white', border: '1px solid var(--border-subtle)', boxShadow: '0 4px 24px rgba(108,92,231,0.08)' }}>
+                  {/* Gradient top accent bar */}
+                  <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
+                    style={{ background: `linear-gradient(90deg, ${a.from}, ${a.to})` }} />
+
+                  {/* Giant quote mark */}
+                  <div className="absolute top-4 right-5 text-[5rem] leading-none font-black pointer-events-none select-none"
+                    style={{ color: a.from, opacity: 0.07, fontFamily: 'Georgia, serif' }}>&ldquo;</div>
+
+                  {/* Stars */}
+                  <div className="flex gap-0.5 pt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#FBBF24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    ))}
+                  </div>
+
+                  {/* Quote text */}
+                  <p className="text-sm leading-relaxed relative z-10 flex-1"
+                    style={{ color: 'var(--text-secondary)' }}>
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-3 pt-3 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-black shrink-0"
+                      style={{ background: `linear-gradient(135deg, ${a.from}, ${a.to})` }}>
+                      {t.name[0]}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold leading-tight" style={{ color: 'var(--text)' }}>{t.name}</p>
+                      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
+                    </div>
+                    <div className="ml-auto text-right shrink-0">
+                      <p className="text-sm font-black" style={{ color: '#10B981', letterSpacing: '-0.02em' }}>{t.earnings}</p>
+                      <p className="text-[0.6rem] font-semibold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>earned</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </motion.section>
@@ -517,7 +546,7 @@ export default function Welcome() {
               </Link>
             )}
           </div>
-          <p className="text-xs tracking-wide" style={{ color: 'rgba(255,255,255,0.3)' }}>No credit card · Withdraw from $10 · Cancel anytime</p>
+          <p className="text-xs tracking-wide" style={{ color: 'rgba(255,255,255,0.3)' }}>No credit card · Withdraw from ₦500 · Cancel anytime</p>
         </div>
       </section>
 
@@ -553,9 +582,26 @@ export default function Welcome() {
             </div>
           </div>
           {/* Bottom row */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
             <p className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>© {new Date().getFullYear()} Taskora. All rights reserved.</p>
-            <p className="text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>Made with ♥ for earners worldwide</p>
+            {/* SadiqDev credit */}
+            <a
+              href="https://sadiqdev-portfolio.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 no-underline group"
+            >
+              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>Built with ♥ by</span>
+              <img
+                src="/sadiqdev_logo.jpeg"
+                alt="SadiqDev"
+                className="w-5 h-5 rounded-full object-cover opacity-70 group-hover:opacity-100 transition-opacity"
+              />
+              <span className="text-xs font-bold group-hover:opacity-100 transition-opacity"
+                style={{ color: 'rgba(255,255,255,0.45)' }}>
+                SadiqDev
+              </span>
+            </a>
           </div>
         </div>
       </footer>

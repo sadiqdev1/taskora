@@ -1,113 +1,139 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
+import { useAuth } from '@/context/AuthContext';
+import { apiGet, apiPost } from '@/lib/api';
 import Link from 'next/link';
-import { Copy, CheckCircle2, ArrowLeft, Building2 } from 'lucide-react';
+import {
+  ArrowLeft, CheckCircle2, AlertCircle, Loader2, Shield, ExternalLink,
+} from 'lucide-react';
 
-const ACCOUNT = {
-  bank:   'Taskora Payments Ltd',
-  number: '0123456789',
-  name:   'Taskora User Wallet',
-};
+function fmtNGN(n) {
+  return '₦' + parseFloat(n || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 });
+}
+
+const PRESETS = [500, 1000, 2000, 5000, 10000, 20000];
 
 export default function DepositPage() {
-  const [copied, setCopied] = useState(false);
+  const { user } = useAuth();
+  const [amount,  setAmount]  = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error,   setError]   = useState('');
+  const [wallet,  setWallet]  = useState(null);
 
-  function copyAccountNumber() {
-    navigator.clipboard.writeText(ACCOUNT.number).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+  useEffect(() => {
+    apiGet('/wallet').then(setWallet).catch(() => {});
+  }, []);
+
+  async function handleDeposit(e) {
+    e.preventDefault();
+    const amt = parseFloat(amount);
+    if (!amt || amt < 100) { setError('Minimum deposit is ₦100.'); return; }
+
+    if (!user?.email) {
+      setError('Unable to load your account details. Please refresh and try again.');
+      return;
+    }
+
+    setLoading(true); setError('');
+
+    try {
+      const data = await apiPost('/deposit/initialize', { amount: amt });
+      if (!data?.authorization_url) {
+        throw new Error('Payment initialization failed. Please try again.');
+      }
+      window.location.href = data.authorization_url;
+    } catch (err) {
+      setError(err?.message || 'Could not initialize payment. Please try again.');
+      setLoading(false);
+    }
   }
 
   return (
-    <DashboardLayout title="Deposit Funds">
-      <div className="max-w-lg mx-auto flex flex-col gap-5">
+    <DashboardLayout title="Deposit Funds" subtitle="Top up your Taskora wallet">
+      <div className="max-w-md mx-auto flex flex-col gap-5">
 
-        {/* Instructions card */}
-        <div className="card rounded-2xl p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: '#EEF2FF', color: '#6C5CE7' }}>
-              <Building2 size={20} strokeWidth={1.8} />
+        <Link href="/wallet"
+          className="inline-flex items-center gap-1.5 text-sm font-medium hover:opacity-70 transition-opacity w-fit"
+          style={{ color: 'var(--text-secondary)' }}>
+          <ArrowLeft size={14} strokeWidth={2} /> Back to Wallet
+        </Link>
+
+        {/* Current balance */}
+        {wallet && (
+          <div className="flex items-center justify-between px-5 py-3 rounded-2xl"
+            style={{ background: '#EEF2FF', border: '1px solid #DDD6FE' }}>
+            <span className="text-sm font-medium" style={{ color: '#6C5CE7' }}>Current Balance</span>
+            <span className="font-black text-lg" style={{ color: '#6C5CE7', letterSpacing: '-0.02em' }}>
+              {fmtNGN(wallet.wallet_balance)}
             </span>
-            <div>
-              <h2 className="font-bold text-base" style={{ color: 'var(--text)' }}>Bank Transfer</h2>
-              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Instant wallet top-up</p>
-            </div>
           </div>
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Transfer to the account below to top up your wallet. Your balance updates automatically within minutes.
-          </p>
-        </div>
+        )}
 
-        {/* Account details card */}
-        <div className="card rounded-2xl p-6">
-          <h3 className="text-sm font-bold mb-4" style={{ color: 'var(--text)' }}>Bank Account Details</h3>
+        <div className="card rounded-2xl p-6 flex flex-col gap-5">
+          <div>
+            <h2 className="font-bold text-base" style={{ color: 'var(--text)' }}>Enter Amount</h2>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+              Minimum ₦100 · Secured by Paystack
+            </p>
+          </div>
 
-          <div className="flex flex-col gap-4"
-            style={{ background: 'var(--bg)', borderRadius: 14, padding: '20px', border: '1.5px solid var(--border)' }}>
-
-            {/* Bank */}
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Bank</span>
-              <span className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{ACCOUNT.bank}</span>
+          {error && (
+            <div className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm"
+              style={{ background: '#FFF0F0', color: '#C0392B', border: '1px solid #FFD0D0' }}>
+              <AlertCircle size={15} className="shrink-0" strokeWidth={2} /> {error}
             </div>
+          )}
 
-            {/* Divider */}
-            <div style={{ height: 1, background: 'var(--border-subtle)' }} />
-
-            {/* Account Number */}
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex flex-col gap-0.5">
-                <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Account Number</span>
-                <span className="text-lg font-black tracking-wider" style={{ color: 'var(--text)', letterSpacing: '0.06em' }}>
-                  {ACCOUNT.number}
-                </span>
-              </div>
-              <button
-                onClick={copyAccountNumber}
-                title="Copy account number"
-                className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all shrink-0"
-                style={copied
-                  ? { background: '#D4F6EE', color: '#00875A', border: '1.5px solid #A8E8D8' }
-                  : { background: '#EEF2FF', color: '#6C5CE7', border: '1.5px solid #C7D2FE' }}>
-                {copied
-                  ? <><CheckCircle2 size={13} strokeWidth={2.5} /> Copied!</>
-                  : <><Copy size={13} strokeWidth={2} /> Copy</>
-                }
+          {/* Preset amounts */}
+          <div className="grid grid-cols-3 gap-2">
+            {PRESETS.map(p => (
+              <button key={p} onClick={() => setAmount(String(p))}
+                className="py-2.5 rounded-xl text-sm font-semibold transition-all"
+                style={String(amount) === String(p)
+                  ? { background: '#6C5CE7', color: 'white', boxShadow: '0 4px 12px rgba(108,92,231,0.3)' }
+                  : { background: 'var(--bg)', color: 'var(--text)', border: '1.5px solid var(--border)' }}>
+                ₦{p.toLocaleString('en-NG')}
               </button>
-            </div>
-
-            {/* Divider */}
-            <div style={{ height: 1, background: 'var(--border-subtle)' }} />
-
-            {/* Account Name */}
-            <div className="flex flex-col gap-0.5">
-              <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>Account Name</span>
-              <span className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{ACCOUNT.name}</span>
-            </div>
+            ))}
           </div>
-        </div>
 
-        {/* Reference note */}
-        <div className="flex items-start gap-3 px-5 py-4 rounded-2xl text-sm"
-          style={{ background: '#FFF8E6', color: '#92400E', border: '1px solid #FDE68A' }}>
-          <span className="text-base leading-none mt-0.5">💡</span>
-          <span>
-            <strong>Important:</strong> Use your registered email as payment reference to ensure your wallet is credited automatically.
-          </span>
-        </div>
+          <form onSubmit={handleDeposit} className="flex flex-col gap-4">
+            <div>
+              <label className="text-xs font-semibold block mb-1.5" style={{ color: 'var(--text)' }}>
+                Custom Amount (₦)
+              </label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-sm"
+                  style={{ color: 'var(--text-muted)' }}>₦</span>
+                <input
+                  type="number" min="100" step="1"
+                  value={amount} onChange={e => setAmount(e.target.value)}
+                  placeholder="Enter amount"
+                  className="w-full pl-8 pr-4 py-3 rounded-xl text-sm outline-none"
+                  style={{ background: 'var(--bg)', border: '1.5px solid var(--border)', color: 'var(--text)' }}
+                  onFocus={e => (e.target.style.borderColor = '#6C5CE7')}
+                  onBlur={e => (e.target.style.borderColor = 'var(--border)')}
+                />
+              </div>
+            </div>
 
-        {/* Back link */}
-        <div className="flex justify-start">
-          <Link href="/wallet"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-            style={{ background: 'var(--bg)', color: 'var(--text-muted)', border: '1.5px solid var(--border)' }}>
-            <ArrowLeft size={14} strokeWidth={2} />
-            View Wallet
-          </Link>
+            <button type="submit" disabled={loading || !amount}
+              className="bg-[#6C5CE7] hover:bg-[#5A4BD1] py-3.5 rounded-xl text-white font-bold text-sm disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+              style={{ boxShadow: '0 4px 18px rgba(108,92,231,0.35)' }}>
+              {loading
+                ? <><Loader2 size={16} className="animate-spin" /> Redirecting to Paystack…</>
+                : <><ExternalLink size={15} /> Pay {amount ? fmtNGN(amount) : ''} with Paystack</>}
+            </button>
+          </form>
+
+          {/* Trust badge */}
+          <div className="flex items-center justify-center gap-2 text-xs"
+            style={{ color: 'var(--text-muted)' }}>
+            <Shield size={12} strokeWidth={2} />
+            Secured by Paystack · 256-bit SSL encryption
+          </div>
         </div>
 
       </div>

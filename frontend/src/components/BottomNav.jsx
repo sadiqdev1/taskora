@@ -2,19 +2,30 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, CheckSquare, Wallet, Menu } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { LayoutDashboard, CheckSquare, Wallet, Menu, Megaphone, ClipboardList } from 'lucide-react';
 
-const TABS = [
+const USER_TABS = [
   { label: 'Dashboard', href: '/dashboard', Icon: LayoutDashboard },
-  { label: 'Tasks',     href: '/campaigns', Icon: CheckSquare     },
-  { label: 'Wallet',    href: '/wallet',     Icon: Wallet          },
+  { label: 'Tasks',     href: '/tasks',     Icon: CheckSquare     },
+  { label: 'Wallet',    href: '/wallet',    Icon: Wallet          },
+];
+
+const ADMIN_TABS = [
+  { label: 'Overview',     href: '/admin',              Icon: LayoutDashboard },
+  { label: 'Campaigns',    href: '/admin/campaigns',    Icon: Megaphone       },
+  { label: 'Submissions',  href: '/admin/submissions',  Icon: ClipboardList   },
 ];
 
 export default function BottomNav({ onMenuClick }) {
   const pathname = usePathname();
+  const { user } = useAuth();
+
+  const isAdmin = user?.role === 'admin';
+  const TABS    = isAdmin ? ADMIN_TABS : USER_TABS;
 
   const isActive = href => {
-    if (href === '/dashboard') return pathname === href;
+    if (href === '/dashboard' || href === '/admin') return pathname === href;
     return pathname.startsWith(href);
   };
 

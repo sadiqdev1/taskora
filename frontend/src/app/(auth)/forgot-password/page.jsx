@@ -21,15 +21,9 @@ export default function ForgotPasswordPage() {
     if (!email) { setError('Email is required.'); return; }
     setLoading(true); setError('');
     try {
-      const res = await fetch('/api/forgot-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      if (!res.ok) {
-        const d = await res.json();
-        throw new Error(d.message || 'Something went wrong.');
-      }
+      // Use apiPost — raw fetch('/api/...') hits Next.js, not Laravel
+      const { apiPost } = await import('@/lib/api');
+      await apiPost('/forgot-password', { email });
       setSent(true);
     } catch (err) {
       setError(err.message || 'Failed to send reset email. Try again.');
@@ -151,7 +145,7 @@ export default function ForgotPasswordPage() {
               </div>
               <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
                 Didn&apos;t receive it?{' '}
-                <button onClick={() => { setSent(false); }} className="font-bold hover:underline underline-offset-2" style={{ color: '#6C5CE7' }}>
+                <button onClick={() => { setSent(false); setError(''); }} className="font-bold hover:underline underline-offset-2" style={{ color: '#6C5CE7' }}>
                   Resend
                 </button>
               </p>

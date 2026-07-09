@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\WithdrawalStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Withdrawal extends Model
@@ -12,6 +13,11 @@ class Withdrawal extends Model
         'status',
         'payment_method',
         'payment_details',
+        'bank_code',
+        'bank_name',
+        'account_number',
+        'account_name',
+        'reference',
         'rejection_reason',
         'processed_at',
     ];
@@ -21,9 +27,11 @@ class Withdrawal extends Model
         return [
             'amount'       => 'decimal:2',
             'processed_at' => 'datetime',
+            'status'       => WithdrawalStatus::class,
         ];
     }
 
+    /* ── Relationships ── */
     public function user()
     {
         return $this->belongsTo(User::class);

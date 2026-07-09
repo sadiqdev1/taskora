@@ -1,20 +1,17 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import React from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { useEffect, useState, useCallback } from 'react';import { useAuth } from '@/context/AuthContext';
 import DashboardLayout from '@/components/DashboardLayout';
 import Link from 'next/link';
 import { apiGet } from '@/lib/api';
-import { getToken } from '@/lib/auth';
 import {
-  Wallet, DollarSign, CheckCircle2, Star, Smartphone,
+  Wallet, DollarSign, CheckCircle2, Smartphone,
   TrendingUp, Award, CircleDollarSign, ArrowUpRight,
-  ChevronDown, Bell, Zap, X,
+  ChevronDown, Bell, Zap, Megaphone,
 } from 'lucide-react';
 import { FaInstagram, FaYoutube, FaXTwitter, FaFacebook, FaTiktok } from 'react-icons/fa6';
 
-const fmt = n => '$' + parseFloat(n || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+const fmt = n => '₦' + parseFloat(n || 0).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 const PLATFORM = {
   instagram: { Icon: FaInstagram, bg: '#FFE8F4', color: '#C13584' },
@@ -28,7 +25,7 @@ const PLATFORM = {
 const NOTIF_META = {
   earning:        { Icon: CheckCircle2,     bg: '#D4F6EE', color: '#00875A' },
   withdrawal:     { Icon: ArrowUpRight,     bg: '#E8F0FF', color: '#1877F2' },
-  campaign:       { Icon: Star,             bg: '#EEF2FF', color: '#6C5CE7' },
+  campaign:       { Icon: Megaphone,        bg: '#EEF2FF', color: '#6C5CE7' },
   referral_bonus: { Icon: Award,            bg: '#FFF3D6', color: '#B45309' },
   default:        { Icon: CircleDollarSign, bg: '#F0F0FF', color: '#6C5CE7' },
 };
@@ -57,113 +54,109 @@ function MiniChart({ data = [], color = '#6C5CE7' }) {
   );
 }
 
-const CHART_DATA = [1200, 1800, 1400, 2200, 1900, 2600, 2800, 3100, 2900, 3300, 3450, 3560];
-const MOCK_CAMPAIGNS = [
-  { id: 1, title: 'Instagram Post Engagement', description: 'Like and comment on post',     platform: 'instagram', reward_per_task: 3.00, total_slots: 100, filled_slots: 50, progress_percentage: 50 },
-  { id: 2, title: 'TikTok Video Promotion',    description: 'Watch and like TikTok video',  platform: 'tiktok',    reward_per_task: 4.00, total_slots: 50,  filled_slots: 20, progress_percentage: 40 },
-  { id: 3, title: 'YouTube Channel Boost',     description: 'Subscribe & watch full video', platform: 'youtube',   reward_per_task: 4.00, total_slots: 30,  filled_slots: 10, progress_percentage: 33 },
-  { id: 4, title: 'Twitter Post Engagement',   description: 'Retweet and like the post',    platform: 'twitter',   reward_per_task: 2.50, total_slots: 25,  filled_slots: 15, progress_percentage: 60 },
-  { id: 5, title: 'Facebook Page Like',        description: 'Like page and stay active',    platform: 'facebook',  reward_per_task: 2.50, total_slots: 50,  filled_slots: 25, progress_percentage: 50 },
-];
-const MOCK_NOTIFS = [
-  { type: 'earning',        text: 'Task approved',        sub: 'You earned $3.00 from Instagram Boost',  time: '2m ago'  },
-  { type: 'campaign',       text: 'New campaign live',    sub: 'YouTube Boost — $4.00 per task',         time: '15m ago' },
-  { type: 'withdrawal',     text: 'Withdrawal sent',      sub: '$300.00 sent to your bank account',      time: '1h ago'  },
-  { type: 'referral_bonus', text: 'Referral bonus',       sub: '$5.00 from a friend you invited',        time: '3h ago'  },
-  { type: 'earning',        text: 'Task approved',        sub: 'You earned $2.50 from Facebook Like',    time: '5h ago'  },
-];
+/* ── Onboarding Checklist Modal — compulsory until all steps done ── */
+function OnboardingModal({ tasksDone, walletData }) {
+  const step1Done = true;
+  // Step 2 ticks as soon as user has submitted ANY task (pending counts too)
+  const step2Done = (walletData?.tasks_submitted ?? tasksDone) > 0;
+  const step3Done = !!(walletData?.bank_set_up || walletData?.bank_account?.account_number);
 
-function SkeletonBox({ className, style }) {
-  return <div className={`rounded-xl animate-pulse bg-[#E8E6F8] ${className}`} style={style} />;
-}
+  const allDone   = step2Done && step3Done;
+  const doneCount = [step1Done, step2Done, step3Done].filter(Boolean).length;
 
-/* ── Onboarding Modal ── */
-function OnboardingModal() {
-  const [open, setOpen] = React.useState(() => {
-    if (typeof window === 'undefined') return false;
-    return localStorage.getItem('onboarding_dismissed') !== '1';
-  });
+  useEffect(() => {
+    if (allDone) {
+      document.documentElement.classList.remove('modal-open');
+      return;
+    }
+    document.documentElement.classList.add('modal-open');
+    return () => { document.documentElement.classList.remove('modal-open'); };
+  }, [allDone]);
 
-  function dismiss() {
-    localStorage.setItem('onboarding_dismissed', '1');
-    setOpen(false);
-  }
-
-  if (!open) return null;
+  if (allDone) return null;
 
   const STEPS = [
-    { done: true,  label: 'Create your account',          sub: "You're in!",                        href: null          },
-    { done: false, label: 'Complete your first task',      sub: 'Browse available tasks and earn',   href: '/campaigns'  },
-    { done: false, label: 'Set up withdrawal method',      sub: 'Add your bank account in Wallet',   href: '/wallet'     },
-    { done: false, label: 'Invite a friend',               sub: 'Earn 10% of their earnings forever',href: '/referrals'  },
+    { done: step1Done, label: 'Create your account',      sub: "You're in!",                       href: null      },
+    { done: step2Done, label: 'Complete your first task',  sub: 'Browse available tasks and earn',  href: '/tasks'  },
+    { done: step3Done, label: 'Set up withdrawal method',  sub: 'Add your bank account in Wallet',  href: '/wallet' },
   ];
 
   return (
-    /* Backdrop */
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4"
-      style={{ background: 'rgba(15,12,40,0.55)', backdropFilter: 'blur(4px)' }}
-      onClick={e => { if (e.target === e.currentTarget) dismiss(); }}>
+    /* Backdrop — no click-outside dismiss */
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(15,12,40,0.55)', backdropFilter: 'blur(4px)' }}>
 
-      {/* Modal */}
-      <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-[page-enter_280ms_cubic-bezier(0.16,1,0.3,1)_both]">
+      {/* Centered card on all screens */}
+      <div className="bg-white w-full sm:max-w-md rounded-2xl overflow-hidden shadow-2xl"
+        style={{ maxHeight: '90dvh', display: 'flex', flexDirection: 'column' }}>
+
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
+        <div className="flex items-center justify-between px-6 py-5 border-b shrink-0" style={{ borderColor: 'var(--border-subtle)' }}>
           <div>
             <h2 className="font-black text-lg tracking-tight" style={{ color: 'var(--text)' }}>Get started 🚀</h2>
-            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>4 quick steps to your first earning</p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Complete these steps to unlock your account</p>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#EEF2FF', color: '#6C5CE7' }}>1/4</span>
-            <button onClick={dismiss} className="w-7 h-7 flex items-center justify-center rounded-lg transition-colors hover:bg-[var(--bg)]" style={{ color: 'var(--text-muted)' }}>
-              <X size={15} strokeWidth={2.5} />
-            </button>
-          </div>
+          <span className="text-xs font-bold px-2.5 py-1 rounded-full" style={{ background: '#EEF2FF', color: '#6C5CE7' }}>
+            {doneCount}/3
+          </span>
+        </div>
+
+        {/* Progress bar */}
+        <div className="h-1 w-full shrink-0" style={{ background: 'var(--border-subtle)' }}>
+          <div className="h-full bg-[#6C5CE7] transition-all duration-500" style={{ width: `${Math.round((doneCount / 3) * 100)}%` }} />
         </div>
 
         {/* Steps */}
-        <div className="px-4 py-3 flex flex-col gap-1">
+        <div className="px-4 py-3 flex flex-col gap-1 overflow-y-auto">
           {STEPS.map((s, i) => {
             const inner = (
               <>
-                <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 border-2 text-[0.6rem] font-black"
+                <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 border-2 text-[0.6rem] font-black transition-all"
                   style={s.done
                     ? { background: '#00875A', borderColor: '#00875A', color: 'white' }
-                    : { background: 'white', borderColor: 'var(--border)', color: 'var(--text-muted)' }}>
+                    : { background: 'white', borderColor: '#6C5CE7', color: '#6C5CE7' }}>
                   {s.done ? '✓' : i + 1}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold leading-tight" style={{ color: s.done ? '#00875A' : 'var(--text)', textDecoration: s.done ? 'line-through' : 'none' }}>
+                  <p className="text-sm font-semibold leading-tight"
+                    style={{ color: s.done ? '#00875A' : 'var(--text)', textDecoration: s.done ? 'line-through' : 'none' }}>
                     {s.label}
                   </p>
                   <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{s.sub}</p>
                 </div>
                 {!s.done && s.href && (
-                  <span className="text-xs font-bold shrink-0" style={{ color: '#6C5CE7' }}>→</span>
+                  <span className="text-xs font-bold shrink-0 px-2.5 py-1 rounded-lg"
+                    style={{ background: '#EEF2FF', color: '#6C5CE7' }}>Go →</span>
+                )}
+                {s.done && (
+                  <CheckCircle2 size={16} strokeWidth={2} style={{ color: '#00875A', shrink: 0 }} />
                 )}
               </>
             );
-            return s.href ? (
-              <Link key={i} href={s.href} onClick={dismiss}
-                className="flex items-center gap-3 px-3 py-3 rounded-xl no-underline transition-colors hover:bg-[var(--primary-muted)]"
+            return s.href && !s.done ? (
+              <Link key={i} href={s.href}
+                className="flex items-center gap-3 px-3 py-3.5 rounded-xl no-underline transition-colors hover:bg-[var(--primary-muted)]"
                 style={{ background: 'var(--bg)' }}>
                 {inner}
               </Link>
             ) : (
-              <div key={i} className="flex items-center gap-3 px-3 py-3 rounded-xl" style={{ background: '#F0FDF4' }}>
+              <div key={i} className="flex items-center gap-3 px-3 py-3.5 rounded-xl"
+                style={{ background: s.done ? '#F0FDF4' : 'var(--bg)' }}>
                 {inner}
               </div>
             );
           })}
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t flex items-center justify-between gap-3" style={{ borderColor: 'var(--border-subtle)' }}>
-          <button onClick={dismiss} className="text-xs font-semibold hover:opacity-70 transition-opacity" style={{ color: 'var(--text-muted)' }}>
-            Dismiss
-          </button>
-          <Link href="/campaigns" onClick={dismiss}
+        {/* Footer — no dismiss, just CTA to next undone step */}
+        <div className="px-6 py-4 border-t shrink-0 flex items-center justify-between gap-3"
+          style={{ borderColor: 'var(--border-subtle)' }}>
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            Complete both steps to continue
+          </p>
+          <Link href={STEPS.find(s => !s.done && s.href)?.href || '/tasks'}
             className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-[#6C5CE7] hover:bg-[#5A4BD1] transition-colors no-underline">
-            Start Earning →
+            Continue →
           </Link>
         </div>
       </div>
@@ -173,9 +166,11 @@ function OnboardingModal() {
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const [walletData, setWalletData] = useState(null);
-  const [campaigns,  setCampaigns]  = useState([]);
-  const [isLoading,  setIsLoading]  = useState(true);
+  const [walletData,    setWalletData]    = useState(null);
+  const [campaigns,     setCampaigns]     = useState([]);
+  const [myCampaigns,   setMyCampaigns]   = useState([]);
+  const [notifs,        setNotifs]        = useState([]);
+  const [dataLoaded,    setDataLoaded]    = useState(false);
 
   const firstName = user?.name?.split(' ')[0] ?? 'there';
   const hour      = new Date().getHours();
@@ -183,69 +178,38 @@ export default function DashboardPage() {
 
   const load = useCallback(async () => {
     try {
-      const [w, c] = await Promise.all([
-        apiGet('/wallet',                        { headers: { Authorization: `Bearer ${getToken()}` } }),
-        apiGet('/campaigns?mine=1&per_page=5',   { headers: { Authorization: `Bearer ${getToken()}` } }),
+      const [w, c, mc, n] = await Promise.all([
+        apiGet('/wallet'),
+        apiGet('/campaigns?per_page=8'),
+        apiGet('/campaigns?mine=1&per_page=10'),
+        apiGet('/transactions?per_page=5'),
       ]);
       setWalletData(w);
       setCampaigns(c?.data || []);
-    } catch { /* fallback to mock */ }
-    finally { setIsLoading(false); }
+      setMyCampaigns(mc?.data || []);
+      setNotifs((n?.data?.slice(0, 5) || []).map(t => ({
+        type: t.type,
+        text: t.type === 'earning'        ? 'Task approved'
+            : t.type === 'withdrawal'     ? 'Withdrawal sent'
+            : t.type === 'referral_bonus' ? 'Referral bonus'
+            : 'Update',
+        sub:  t.description || '',
+        time: t.created_at ? new Date(t.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '',
+      })));
+      
+    } catch { /* api down — show zeros */ }
+    finally { setDataLoaded(true); }
   }, []);
 
   useEffect(() => { load(); }, [load]);
 
-  const walletBal     = walletData ? parseFloat(walletData.wallet_balance)      : 1250.00;
-  const totalEarnings = walletData ? parseFloat(walletData.total_earnings)      : 3560.75;
-  const tasksDone     = walletData ? walletData.tasks_completed                 : 128;
-  const successRate   = walletData ? walletData.success_rate                    : 98.5;
-  const thisMonth     = walletData ? parseFloat(walletData.this_month_earnings) : 3560.75;
-  const lastMonth     = walletData ? parseFloat(walletData.last_month_earnings) : 3165.20;
-  const data          = campaigns.length ? campaigns : MOCK_CAMPAIGNS;
-
-  if (isLoading && !walletData && campaigns.length === 0) {
-    return (
-      <DashboardLayout title="Dashboard" subtitle="Welcome back — here's your earnings overview">
-        <div className="flex flex-col gap-5">
-          {/* Header skeleton */}
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col gap-2">
-              <SkeletonBox className="h-6 w-48" />
-              <SkeletonBox className="h-4 w-72" />
-            </div>
-            <SkeletonBox className="h-9 w-32 hidden sm:block" />
-          </div>
-          {/* Stat cards skeleton */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <SkeletonBox className="col-span-2 lg:col-span-2 h-36" />
-            <SkeletonBox className="h-36" />
-            <SkeletonBox className="h-36" />
-          </div>
-          {/* Campaigns table skeleton */}
-          <div className="bg-white rounded-2xl border border-[var(--border-subtle)] overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
-              <SkeletonBox className="h-5 w-40" />
-              <SkeletonBox className="h-4 w-16" />
-            </div>
-            <div className="flex flex-col divide-y divide-[var(--border-subtle)]">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="flex items-center gap-4 px-5 py-4">
-                  <SkeletonBox className="w-8 h-8 shrink-0" />
-                  <div className="flex flex-col gap-1.5 flex-1">
-                    <SkeletonBox className="h-3.5 w-48" />
-                    <SkeletonBox className="h-3 w-32" />
-                  </div>
-                  <SkeletonBox className="h-3 w-20 hidden sm:block" />
-                  <SkeletonBox className="h-3 w-24 hidden sm:block" />
-                  <SkeletonBox className="h-3 w-16 hidden sm:block" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </DashboardLayout>
-    );
-  }
+  const walletBal     = parseFloat(walletData?.wallet_balance     ?? 0);
+  const totalEarnings = parseFloat(walletData?.total_earnings     ?? 0);
+  const tasksDone     = walletData?.tasks_completed               ?? 0;
+  const thisMonth     = parseFloat(walletData?.this_month_earnings ?? 0);
+  const lastMonth     = parseFloat(walletData?.last_month_earnings ?? 0);
+  const pendingBal    = parseFloat(walletData?.pending_balance     ?? 0);
+  const chartData     = walletData?.monthly_chart || Array(12).fill(0);
 
   return (
     <DashboardLayout title="Dashboard" subtitle="Welcome back — here's your earnings overview">
@@ -261,14 +225,13 @@ export default function DashboardPage() {
               Here&apos;s what&apos;s happening with your earnings today.
             </p>
           </div>
-          <Link href="/tasks"
+          <Link href="\/tasks"
             className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#6C5CE7] hover:bg-[#5A4BD1] transition-colors">
             <Zap size={14} strokeWidth={2.5} /> Browse Tasks
-          </Link>
-        </div>
+          </Link>        </div>
 
-        {/* ── Onboarding checklist — dismissible modal for new users ── */}
-        {tasksDone === 0 && <OnboardingModal />}
+        {/* ── Onboarding checklist — only show after data loaded to prevent flash ── */}
+        {dataLoaded && <OnboardingModal tasksDone={tasksDone} walletData={walletData} />}
 
         {/* ── ROW 1: 4 stat cards ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -286,12 +249,11 @@ export default function DashboardPage() {
                 {fmt(walletBal)}
               </p>
               <p className="text-xs text-white/50 mt-1">Available to withdraw</p>
-              {/* Pending balance */}
               <p className="text-xs mt-1 font-medium" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                Pending: <span className="text-white/80 font-bold">{fmt(walletData?.pending_balance ?? 125.00)}</span>
+                Pending: <span className="text-white/80 font-bold">{fmt(pendingBal)}</span>
               </p>
             </div>
-            {/* Always show withdraw + deposit — disable withdraw if $0 */}
+            {/* Always show withdraw + deposit — disable withdraw if balance is 0 */}
             <div className="flex items-center gap-2 mt-4">
               <Link href="/wallet"
                 className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-80"
@@ -318,8 +280,11 @@ export default function DashboardPage() {
               <p className="font-black leading-none mt-2" style={{ fontSize: '1.6rem', letterSpacing: '-0.03em', color: 'var(--text)' }}>
                 {fmt(totalEarnings)}
               </p>
-              <p className="text-xs font-semibold flex items-center gap-1 mt-2 text-emerald-600">
-                <TrendingUp size={11} strokeWidth={2.5} /> +12.5% this month
+              <p className="text-xs font-semibold flex items-center gap-1 mt-2" style={{ color: 'var(--text-muted)' }}>
+                <TrendingUp size={11} strokeWidth={2.5} />
+                {lastMonth > 0
+                  ? `${((thisMonth - lastMonth) / lastMonth * 100).toFixed(1)}% vs last month`
+                  : fmt(thisMonth) + ' this month'}
               </p>
             </div>
           </div>
@@ -336,8 +301,9 @@ export default function DashboardPage() {
               <p className="font-black leading-none mt-2" style={{ fontSize: '1.6rem', letterSpacing: '-0.03em', color: 'var(--text)' }}>
                 {tasksDone}
               </p>
-              <p className="text-xs font-semibold flex items-center gap-1 mt-2 text-emerald-600">
-                <TrendingUp size={11} strokeWidth={2.5} /> +15.6% this week
+              <p className="text-xs font-semibold flex items-center gap-1 mt-2" style={{ color: 'var(--text-muted)' }}>
+                <TrendingUp size={11} strokeWidth={2.5} />
+                {tasksDone > 0 ? `${tasksDone} approved` : 'Complete tasks to earn'}
               </p>
             </div>
           </div>
@@ -349,10 +315,10 @@ export default function DashboardPage() {
           style={{ boxShadow: 'var(--shadow-sm)' }}>
           <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
             <div>
-              <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>My Active Campaigns</h2>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Your currently running campaigns</p>
+              <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Available Tasks</h2>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Pick a task and start earning</p>
             </div>
-            <Link href="/campaigns" className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"
+            <Link href="\/tasks" className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"
               style={{ color: '#6C5CE7' }}>
               View all <ArrowUpRight size={12} />
             </Link>
@@ -362,14 +328,18 @@ export default function DashboardPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-[var(--border-subtle)]" style={{ background: 'var(--bg)' }}>
-                  {['Campaign', 'Platform', 'Progress', 'Earned', 'Status'].map(h => (
+                  {['Campaign', 'Platform', 'Progress', 'Reward', 'Status'].map(h => (
                     <th key={h} className="px-5 py-2.5 text-left text-xs font-semibold"
                       style={{ color: 'var(--text-muted)' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {data.map((c, i) => {
+                {campaigns.length === 0 ? (
+                  <tr><td colSpan={5} className="px-5 py-10 text-center text-sm" style={{ color: 'var(--text-muted)' }}>
+                    No active campaigns yet. <Link href="\/tasks" style={{ color: '#6C5CE7' }} className="font-semibold">Browse tasks →</Link>
+                  </td></tr>
+                ) : campaigns.map((c, i) => {
                   const pm     = PLATFORM[c.platform] || PLATFORM.other;
                   const filled = c.filled_slots || 0;
                   const total  = c.total_slots  || 100;
@@ -378,7 +348,7 @@ export default function DashboardPage() {
                   return (
                     <tr key={c.id}
                       className="table-row-hover transition-colors"
-                      style={{ borderBottom: i < data.length - 1 ? '1px solid var(--border-subtle)' : undefined }}>
+                      style={{ borderBottom: i < campaigns.length - 1 ? '1px solid var(--border-subtle)' : undefined }}>
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-3">
                           <span className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
@@ -391,21 +361,17 @@ export default function DashboardPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-5 py-3.5 capitalize text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>
-                        {c.platform}
-                      </td>
+                      <td className="px-5 py-3.5 capitalize text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>{c.platform}</td>
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-2">
                           <div className="progress-track w-20 shrink-0">
                             <div className="progress-fill" style={{ width: `${prog}%` }} />
                           </div>
-                          <span className="text-xs tabular-nums" style={{ color: 'var(--text-muted)' }}>
-                            {filled}/{total}
-                          </span>
+                          <span className="text-xs tabular-nums" style={{ color: 'var(--text-muted)' }}>{filled}/{total}</span>
                         </div>
                       </td>
                       <td className="px-5 py-3.5">
-                        <span className="text-sm font-bold" style={{ color: 'var(--text)' }}>{fmt(earned)}</span>
+                        <span className="text-sm font-bold" style={{ color: 'var(--text)' }}>{fmt(c.reward_per_task)}</span>
                       </td>
                       <td className="px-5 py-3.5">
                         <span className="badge badge-progress">In Progress</span>
@@ -419,7 +385,9 @@ export default function DashboardPage() {
 
           {/* Mobile card list */}
           <div className="sm:hidden flex flex-col divide-y" style={{ borderColor: 'var(--border-subtle)' }}>
-            {data.map(c => {
+            {campaigns.length === 0
+              ? <p className="text-sm text-center py-8" style={{ color: 'var(--text-muted)' }}>No campaigns yet</p>
+              : campaigns.map(c => {
               const pm     = PLATFORM[c.platform] || PLATFORM.other;
               const filled = c.filled_slots || 0;
               const total  = c.total_slots  || 100;
@@ -440,7 +408,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-sm font-bold" style={{ color: 'var(--text)' }}>{fmt(earned)}</p>
+                    <p className="text-sm font-bold" style={{ color: 'var(--text)' }}>{fmt(c.reward_per_task)}</p>
                     <span className="badge badge-progress mt-1">In Progress</span>
                   </div>
                 </div>
@@ -471,14 +439,17 @@ export default function DashboardPage() {
                 <p className="font-black leading-none" style={{ fontSize: '2rem', letterSpacing: '-0.03em', color: 'var(--text)' }}>
                   {fmt(thisMonth)}
                 </p>
-                <p className="text-xs font-semibold flex items-center gap-1 mt-1.5 text-emerald-600">
-                  <TrendingUp size={11} strokeWidth={2.5} /> 12.5% vs last month ({fmt(lastMonth)})
+                <p className="text-xs font-semibold flex items-center gap-1 mt-1.5" style={{ color: 'var(--text-muted)' }}>
+                  <TrendingUp size={11} strokeWidth={2.5} />
+                  {lastMonth > 0
+                    ? `${((thisMonth - lastMonth) / lastMonth * 100).toFixed(1)}% vs last month (${fmt(lastMonth)})`
+                    : fmt(thisMonth) + ' earned this month'}
                 </p>
               </div>
             </div>
 
             <div className="-mx-1 mt-3">
-              <MiniChart data={CHART_DATA} color="#6C5CE7" />
+              <MiniChart data={chartData} color="#6C5CE7" />
             </div>
 
             <div className="grid grid-cols-6 gap-1 mt-2 pt-3 border-t border-[var(--border-subtle)]">
@@ -494,7 +465,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Recent Notifications */}
+          {/* Recent Notifications — from real transactions */}
           <div className="bg-white rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
             style={{ boxShadow: 'var(--shadow-sm)' }}>
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
@@ -507,20 +478,20 @@ export default function DashboardPage() {
                 View all <ArrowUpRight size={11} />
               </Link>
             </div>
-            {MOCK_NOTIFS.length === 0 ? (
+            {notifs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 gap-2">
                 <Bell size={28} strokeWidth={1.5} style={{ color: 'var(--text-muted)', opacity: 0.35 }} />
-                <p className="text-sm font-semibold" style={{ color: 'var(--text-muted)' }}>You&apos;re all caught up</p>
-                <p className="text-xs" style={{ color: 'var(--text-muted)', opacity: 0.7 }}>No new notifications</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--text-muted)' }}>No activity yet</p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)', opacity: 0.7 }}>Complete tasks to see earnings here</p>
               </div>
             ) : (
               <ul>
-                {MOCK_NOTIFS.map((n, i) => {
+                {notifs.map((n, i) => {
                   const m = NOTIF_META[n.type] || NOTIF_META.default;
                   return (
                     <li key={i}
                       className="table-row-hover flex items-center gap-3 px-5 py-3 cursor-pointer transition-colors"
-                      style={{ borderBottom: i < MOCK_NOTIFS.length - 1 ? '1px solid var(--border-subtle)' : undefined }}>
+                      style={{ borderBottom: i < notifs.length - 1 ? '1px solid var(--border-subtle)' : undefined }}>
                       <span className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
                         style={{ background: m.bg, color: m.color }}>
                         <m.Icon size={13} strokeWidth={2} />
@@ -538,64 +509,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ── ROW 4: Available Tasks — full width ── */}
-        <div className="bg-white rounded-2xl border border-[var(--border-subtle)] overflow-hidden"
-          style={{ boxShadow: 'var(--shadow-sm)' }}>
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
-            <div>
-              <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Available Tasks</h2>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Pick a task and start earning</p>
-            </div>
-            <Link href="/tasks" className="text-xs font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"
-              style={{ color: '#6C5CE7' }}>
-              View all <ArrowUpRight size={12} />
-            </Link>
-          </div>
-          <div className="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {data.map(t => {
-              const pm = PLATFORM[t.platform] || PLATFORM.other;
-              const slotsLeft = (t.total_slots || 0) - (t.filled_slots || 0);
-              const diffBg = { easy: '#D4F6EE', medium: '#FFF3D6', hard: '#FFE0E0' }[t.difficulty] || '#D4F6EE';
-              const diffColor = { easy: '#00875A', medium: '#B45309', hard: '#C0392B' }[t.difficulty] || '#00875A';
-              return (
-                <div key={t.id}
-                  className="rounded-xl p-4 flex flex-col gap-3 border border-[var(--border-subtle)] transition-all hover:shadow-md hover:-translate-y-0.5 duration-150"
-                  style={{ background: 'var(--bg)' }}>
-                  <div className="flex items-center justify-between">
-                    <span className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ background: pm.bg, color: pm.color }}>
-                      <pm.Icon size={17} />
-                    </span>
-                    <span className="text-[0.65rem] font-bold px-2 py-0.5 rounded-full capitalize"
-                      style={{ background: diffBg, color: diffColor }}>
-                      {t.difficulty || 'easy'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold leading-snug" style={{ color: 'var(--text)' }}>{t.title}</p>
-                    <p className="text-sm font-black mt-1" style={{ color: '#6C5CE7', letterSpacing: '-0.02em' }}>
-                      {fmt(t.reward_per_task)}
-                    </p>
-                  </div>
-                  {/* Slots left */}
-                  <div>
-                    <div className="flex items-center justify-between text-[0.62rem] mb-1" style={{ color: 'var(--text-muted)' }}>
-                      <span>{slotsLeft} slots left</span>
-                      <span>{t.progress_percentage ?? 0}%</span>
-                    </div>
-                    <div className="progress-track" style={{ height: 4 }}>
-                      <div className="progress-fill" style={{ width: `${t.progress_percentage ?? 0}%` }} />
-                    </div>
-                  </div>
-                  <Link href={`/tasks/${t.id}`}
-                    className="w-full py-1.5 rounded-lg text-center text-xs font-semibold bg-[#6C5CE7] text-white hover:bg-[#5A4BD1] transition-colors mt-auto">
-                    Start Task
-                  </Link>
-                </div>
-              );
-            })}
-          </div>
-        </div>
 
       </div>
     </DashboardLayout>

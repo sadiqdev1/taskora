@@ -19,7 +19,7 @@ export default function DashboardLayout({ children, title, subtitle, adminOnly =
 
   useEffect(() => {
     if (!loading && !user) router.replace('/login');
-    if (!loading && user && adminOnly && user.role !== 'admin') router.replace('/dashboard');
+    if (!loading && user && adminOnly && user.role?.value !== 'admin' && user.role !== 'admin') router.replace('/dashboard');
   }, [user, loading, router, adminOnly]);
 
   if (loading || !user) return <Loader fullscreen />;
@@ -40,7 +40,7 @@ export default function DashboardLayout({ children, title, subtitle, adminOnly =
           title={title}
           subtitle={subtitle}
         />
-        <main className="flex-1 overflow-y-auto p-5 md:p-6 pb-20 lg:pb-6 page-enter">
+        <main className="flex-1 overflow-y-auto p-5 md:p-6 pb-20 lg:pb-6 page-enter" id="main-scroll">
           {children}
         </main>
       </div>

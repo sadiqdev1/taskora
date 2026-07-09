@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import DashboardLayout from '@/components/DashboardLayout';
-import { apiGet, apiPost } from '@/lib/api';
-import { getToken } from '@/lib/auth';
+import { apiGet, apiFetch } from '@/lib/api';
 import Link from 'next/link';
 import confetti from 'canvas-confetti';
 import {
@@ -26,24 +25,30 @@ const DIFF_COLORS = { easy: { bg: '#D4F6EE', color: '#00875A' }, medium: { bg: '
 export default function CampaignDetailPage() {
   const { id }    = useParams();
   const [campaign, setCampaign] = useState(null);
-  const [proof,   setProof]     = useState('');
+  const [proof,    setProof]    = useState(null);  // File | null
   const [loading, setLoading]   = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted]   = useState(false);
   const [error, setError]           = useState('');
 
+  // apiFetch wrapper already attaches the Bearer token — no manual header needed
   useEffect(() => {
-    apiGet(`/tasks/${id}`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    apiGet(`/tasks/${id}`)
       .then(setCampaign).catch(() => {}).finally(() => setLoading(false));
   }, [id]);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!proof) return;
     setSubmitting(true); setError('');
     try {
-      await apiPost(`/tasks/${id}/submit`, { proof }, { headers: { Authorization: `Bearer ${getToken()}` } });
+      // Send as FormData so the image file is included correctly.
+      // apiFetch detects FormData and omits Content-Type (browser sets multipart boundary).
+      const form = new FormData();
+      form.append('proof_image', proof);
+
+      await apiFetch(`/tasks/${id}/submit`, { method: 'POST', body: form });
       setSubmitted(true);
-      // Confetti burst
       confetti({
         particleCount: 120,
         spread: 80,
@@ -64,14 +69,16 @@ export default function CampaignDetailPage() {
     </DashboardLayout>
   );
 
-  // Fallback mock
-  const c = campaign || {
-    id, title: 'Instagram Post Engagement',
-    description: 'Like and comment on Instagram post',
-    platform: 'instagram', reward_per_task: 3.00,
-    total_slots: 100, filled_slots: 50, difficulty: 'easy',
-    instructions: 'Visit the post, like it, and leave a genuine comment of at least 5 words. Submit the URL of your comment as proof.',
-  };
+  if (!campaign) return (
+    <DashboardLayout title="Task Not Found">
+      <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
+        <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>This task could not be loaded.</p>
+        <Link href="/tasks" className="text-sm font-bold" style={{ color: '#6C5CE7' }}>← Back to Tasks</Link>
+      </div>
+    </DashboardLayout>
+  );
+
+  const c    = campaign;
   const pm   = PLATFORM_META[c.platform] || PLATFORM_META.other;
   const diff = DIFF_COLORS[c.difficulty] || DIFF_COLORS.easy;
   const prog = Math.round(((c.filled_slots || 0) / (c.total_slots || 1)) * 100);
@@ -81,7 +88,7 @@ export default function CampaignDetailPage() {
       <div className="max-w-2xl mx-auto flex flex-col gap-5">
 
         {/* Back button */}
-        <Link href="/campaigns" className="inline-flex items-center gap-1.5 text-sm font-medium hover:opacity-70 transition-opacity w-fit" style={{ color: 'var(--text-secondary)' }}>
+        <Link href="/tasks" className="inline-flex items-center gap-1.5 text-sm font-medium hover:opacity-70 transition-opacity w-fit" style={{ color: 'var(--text-secondary)' }}>
           <ArrowLeft size={14} strokeWidth={2} /> Back to Tasks
         </Link>
 
@@ -98,7 +105,7 @@ export default function CampaignDetailPage() {
             <div className="text-right flex-shrink-0">
               <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Reward</p>
               <p className="font-black text-2xl" style={{ color: 'var(--primary)', letterSpacing: '-0.02em' }}>
-                ${parseFloat(c.reward_per_task).toFixed(2)}
+                ₦{parseFloat(c.reward_per_task).toLocaleString('en-NG', { minimumFractionDigits: 2 })}
               </p>
             </div>
           </div>
@@ -107,7 +114,7 @@ export default function CampaignDetailPage() {
           <div className="grid grid-cols-3 gap-4 p-4 rounded-xl mb-5" style={{ background: 'var(--bg)' }}>
             {[
               ['Difficulty', <span key="d" className="text-xs font-bold px-2.5 py-1 rounded-full capitalize" style={{ background: diff.bg, color: diff.color }}>{c.difficulty || 'easy'}</span>],
-              ['Slots Left',  `${(c.total_slots || 0) - (c.filled_slots || 0)} remaining`],
+              ['Slots Left',  `${Math.max(0, (c.total_slots || 0) - (c.filled_slots || 0))} remaining`],
               ['Progress',    `${prog}%`],
             ].map(([label, val]) => (
               <div key={label} className="text-center">
@@ -160,7 +167,7 @@ export default function CampaignDetailPage() {
               <p className="text-sm max-w-xs text-center" style={{ color: 'var(--text-muted)' }}>
                 Your submission is under review. You&apos;ll be notified when it&apos;s approved.
               </p>
-              <Link href="/campaigns"
+              <Link href="/tasks"
                 className="bg-[#6C5CE7] hover:bg-[#5A4BD1] flex items-center gap-2 mt-2 px-6 py-2.5 rounded-xl text-white text-sm font-bold transition-colors">
                 Browse More Tasks <ArrowRight size={15} strokeWidth={2.5} />
               </Link>

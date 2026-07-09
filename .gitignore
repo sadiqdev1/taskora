@@ -14,3 +14,7 @@ backend/bootstrap/cache/services.php
 # Misc
 .DS_Store
 *.log
+
+# Windows reserved device names that Git sees as phantom untracked files
+nul
+frontend/nul

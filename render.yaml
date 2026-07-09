@@ -1,0 +1,111 @@
+services:
+  # ─────────────────────────────────────────────────
+  # Backend — Laravel API (Docker)
+  # ─────────────────────────────────────────────────
+  - type: web
+    name: taskora-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: oregon
+    branch: main
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: Taskora
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        value: https://taskora-backend.onrender.com
+
+      # Database — use Render's free PostgreSQL
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: taskora-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: taskora-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: taskora-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: taskora-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: taskora-db
+          property: password
+
+      # Cache + Queue — use database (no Redis needed on free plan)
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: SESSION_DRIVER
+        value: database
+
+      # Frontend URL (update to your Vercel/Render frontend URL after deploy)
+      - key: FRONTEND_URL
+        value: https://taskora.vercel.app
+
+      # CORS
+      - key: SANCTUM_STATEFUL_DOMAINS
+        value: taskora.vercel.app,localhost:3000
+
+      # Secrets — set manually in Render dashboard
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_DOMAIN_VERIFIED
+        value: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        value: https://taskora-backend.onrender.com/api/auth/google/callback
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  # ─────────────────────────────────────────────────
+  # Frontend — Next.js (static export or Node)
+  # ─────────────────────────────────────────────────
+  - type: web
+    name: taskora-frontend
+    runtime: node
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    plan: free
+    region: oregon
+    branch: main
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://taskora-backend.onrender.com/api
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+
+databases:
+  - name: taskora-db
+    plan: free
+    region: oregon
+    databaseName: taskora
+    user: taskora

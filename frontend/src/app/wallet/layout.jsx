@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Wallet — Taskora',
-  description: 'Manage your Taskora wallet. View balance, request withdrawals via PayPal, bank transfer or crypto.',
+  description: 'Manage your Taskora wallet. View balance and request withdrawals via bank transfer.',
   robots: { index: false },
 };
 

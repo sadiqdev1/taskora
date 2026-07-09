@@ -72,7 +72,7 @@ function PasswordStrength({ password }) {
 
 const PERKS = [
   { Icon: Gift,     text: 'Free to join — no credit card' },
-  { Icon: Banknote, text: 'Withdraw from just $10'        },
+  { Icon: Banknote, text: 'Withdraw from just ₦500'       },
   { Icon: Zap,      text: 'Get approved in under 24 h'   },
   { Icon: Users,    text: 'Earn 10% from every referral' },
 ];
@@ -113,9 +113,11 @@ export default function RegisterPage() {
       const user = await register(form);
       setUser(user);
       toast.success('Account created! Welcome to Taskora.');
-      router.replace('/dashboard');
+      router.replace('/onboarding');
     } catch (err) {
       setServerError(err.message || 'Something went wrong. Please try again.');
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   }
@@ -188,7 +190,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="relative z-10 grid grid-cols-3 gap-2">
-          {[['50K+', 'Earners'], ['$2.1M', 'Paid Out'], ['98.5%', 'Success']].map(([v, l]) => (
+          {[['50K+', 'Earners'], ['₦2.1B', 'Paid Out'], ['98.5%', 'Success']].map(([v, l]) => (
             <div key={l} className="flex flex-col items-center gap-0.5 py-3 px-2 rounded-xl text-center"
               style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)' }}>
               <span className="text-white font-black text-[1.05rem] tracking-tight">{v}</span>
@@ -280,9 +282,9 @@ export default function RegisterPage() {
 
           <p className="text-xs text-center leading-relaxed" style={{ color: 'var(--text-muted)' }}>
             By creating an account you agree to our{' '}
-            <span className="underline cursor-pointer" style={{ color: 'var(--text-secondary)' }}>Terms</span>
+            <Link href="/terms" className="underline hover:opacity-80 no-underline" style={{ color: 'var(--text-secondary)' }}>Terms</Link>
             {' '}&amp;{' '}
-            <span className="underline cursor-pointer" style={{ color: 'var(--text-secondary)' }}>Privacy Policy</span>.
+            <Link href="/privacy" className="underline hover:opacity-80 no-underline" style={{ color: 'var(--text-secondary)' }}>Privacy Policy</Link>.
           </p>
 
           {/* Social proof */}

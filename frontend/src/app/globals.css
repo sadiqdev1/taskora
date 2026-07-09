@@ -280,7 +280,11 @@ aside.fixed[data-open] {
 /* ── Table row hover (CSS-only, works on touch too) ──── */
 .table-row-hover:hover { background: var(--bg); }
 
-/* ── Auth image overlay ──────────────────────────────── */
+/* ── Lock main scroll when a modal is open ───────────── */
+html.modal-open #main-scroll,
+body.modal-open #main-scroll {
+  overflow: hidden;
+}
 .auth-overlay {
   position: absolute;
   inset: 0;
@@ -290,4 +294,12 @@ aside.fixed[data-open] {
     rgba(14,11,40,0.65) 40%,
     rgba(30,20,70,0.90) 100%
   );
+}
+
+/* ── Responsive admin table — shows as table on md+, hidden on mobile ── */
+.admin-table-wrap   { display: none; overflow-x: auto; }
+.admin-cards-wrap   { display: flex; flex-direction: column; }
+@media (min-width: 768px) {
+  .admin-table-wrap { display: block; }
+  .admin-cards-wrap { display: none; }
 }

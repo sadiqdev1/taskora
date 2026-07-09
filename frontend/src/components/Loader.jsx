@@ -2,7 +2,7 @@
  * Loader — inline spinner or fullscreen overlay.
  * size: 'sm' | 'md' | 'lg'
  */
-export default function Loader({ fullscreen = false, size = 'md' }) {
+export default function Loader({ fullscreen = false, size = 'md', message }) {
   const dims  = { sm: 'w-4 h-4',  md: 'w-6 h-6',  lg: 'w-10 h-10' }[size];
   const thick = { sm: 'border-2', md: 'border-[3px]', lg: 'border-4' }[size];
 
@@ -24,7 +24,7 @@ export default function Loader({ fullscreen = false, size = 'md' }) {
         <div className="flex flex-col items-center gap-3">
           {spinner}
           <span className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
-            Loading…
+            {message || 'Loading…'}
           </span>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { login } from '@/lib/auth';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
+import { apiGet } from '@/lib/api';
 import { Eye, EyeOff, AlertCircle, Sparkles, TrendingUp, ShieldCheck } from 'lucide-react';
 
 /* ── Google OAuth icon ── */
@@ -96,9 +97,23 @@ export default function LoginPage() {
       const user = await login(form);
       setUser(user);
       toast.success('Welcome back! Signed in successfully.');
-      router.replace(user.role === 'admin' ? '/admin' : '/dashboard');
+      if (user.role === 'admin') {
+        router.replace('/admin');
+        return;
+      }
+      // Check if onboarding is completed
+      try {
+        const onboardingData = await apiGet('/onboarding');
+        if (!onboardingData?.onboarding?.completed_at) {
+          router.replace('/onboarding');
+          return;
+        }
+      } catch { /* can't check — go to dashboard */ }
+      router.replace('/dashboard');
     } catch (err) {
       setServerError(err.message || 'Invalid email or password.');
+      setLoading(false);
+    } finally {
       setLoading(false);
     }
   }
@@ -187,7 +202,7 @@ export default function LoginPage() {
           <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0"
             style={{ boxShadow: '0 0 0 4px rgba(52,211,153,0.2)', animation: 'pulse-dot 2s ease-in-out infinite' }} />
           <span className="text-sm" style={{ color: 'rgba(255,255,255,0.65)' }}>
-            Earners made <strong className="text-white font-black">$4,280</strong> in the last hour
+            500+ active earners right now
           </span>
         </div>
       </div>
@@ -261,9 +276,9 @@ export default function LoginPage() {
 
           <p className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>
             By signing in you agree to our{' '}
-            <span className="underline cursor-pointer" style={{ color: 'var(--text-secondary)' }}>Terms</span>
+            <Link href="/terms" className="underline hover:opacity-80 no-underline" style={{ color: 'var(--text-secondary)' }}>Terms</Link>
             {' '}&amp;{' '}
-            <span className="underline cursor-pointer" style={{ color: 'var(--text-secondary)' }}>Privacy Policy</span>.
+            <Link href="/privacy" className="underline hover:opacity-80 no-underline" style={{ color: 'var(--text-secondary)' }}>Privacy Policy</Link>.
           </p>
 
           {/* Social proof */}

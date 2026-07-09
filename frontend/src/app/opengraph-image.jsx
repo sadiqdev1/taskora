@@ -39,7 +39,7 @@ export default function OGImage() {
         </p>
         {/* Stats */}
         <div style={{ display: 'flex', gap: 48 }}>
-          {[['50K+', 'Earners'], ['$2.1M', 'Paid Out'], ['500+', 'Live Tasks']].map(([v, l]) => (
+          {[['50K+', 'Earners'], ['₦2.1B', 'Paid Out'], ['500+', 'Live Tasks']].map(([v, l]) => (
             <div key={l} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <span style={{ color: '#A29BFE', fontSize: 36, fontWeight: 900 }}>{v}</span>
               <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 18 }}>{l}</span>

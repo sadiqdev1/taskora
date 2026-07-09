@@ -4,6 +4,7 @@ import { useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { apiFetch, apiPost } from '@/lib/api';
 import { User, Lock, Trash2, CheckCircle2, AlertCircle, X } from 'lucide-react';
 
 function Section({ Icon, title, children }) {
@@ -128,7 +129,7 @@ function DeleteModal({ onConfirm, onCancel, loading }) {
 }
 
 export default function SettingsPage() {
-  const { user, logout } = useAuth();
+  const { user, setUser, logout } = useAuth();
   const router = useRouter();
 
   const [profile, setProfile]   = useState({ name: user?.name || '', email: user?.email || '' });
@@ -143,28 +144,43 @@ export default function SettingsPage() {
   async function saveProfile(e) {
     e.preventDefault();
     setSaving(true); setMsg('');
-    setTimeout(() => { setMsg('✅ Profile updated successfully!'); setSaving(false); }, 600);
+    try {
+      const form = new FormData();
+      form.append('name', profile.name);
+      const updated = await apiFetch('/profile', { method: 'POST', body: form });
+      if (updated) setUser(updated);
+      setMsg('✅ Profile updated successfully!');
+    } catch (err) {
+      setMsg('❌ ' + (err.message || 'Failed to update profile.'));
+    } finally { setSaving(false); }
   }
 
   async function savePassword(e) {
     e.preventDefault();
+    if (!password.current)             { setPwMsg('❌ Please enter your current password.'); return; }
     if (password.new !== password.confirm) { setPwMsg('❌ Passwords do not match.'); return; }
     if (password.new.length < 8)           { setPwMsg('❌ Password must be at least 8 characters.'); return; }
     setPwSaving(true); setPwMsg('');
-    setTimeout(() => {
+    try {
+      await apiPost('/change-password', {
+        current_password:      password.current,
+        password:              password.new,
+        password_confirmation: password.confirm,
+      });
       setPwMsg('✅ Password changed successfully!');
-      setPwSaving(false);
       setPassword({ current: '', new: '', confirm: '' });
-    }, 600);
+    } catch (err) {
+      setPwMsg('❌ ' + (err.message || 'Failed to change password.'));
+    } finally { setPwSaving(false); }
   }
 
   async function handleDelete() {
     setDeleting(true);
-    // In production: call DELETE /account API here
-    setTimeout(async () => {
-      await logout();
-      router.replace('/');
-    }, 800);
+    try {
+      await apiFetch('/account', { method: 'DELETE' });
+    } catch { /* proceed anyway */ }
+    await logout();
+    router.replace('/');
   }
 
   return (

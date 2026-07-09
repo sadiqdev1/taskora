@@ -1,33 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { apiGet } from '@/lib/api';
 import {
   LayoutDashboard, CheckSquare, Megaphone, Wallet, ArrowLeftRight,
   Bell, Settings, HelpCircle, LogOut, BarChart2, Gift,
-  ClipboardList, UserCheck, CreditCard, UserPlus, ChevronsUpDown, X,
+  ClipboardList, UserCheck, CreditCard, UserPlus, ChevronsUpDown, X, UserCircle2, Tag,
 } from 'lucide-react';
 
 const USER_NAV = [
   { label: 'Dashboard',     href: '/dashboard',    Icon: LayoutDashboard },
-  { label: 'Tasks',         href: '/campaigns',     Icon: CheckSquare     },
-  { label: 'My Tasks',      href: '/tasks',         Icon: ClipboardList   },
-  { label: 'Wallet',        href: '/wallet',        Icon: Wallet          },
-  { label: 'Transactions',  href: '/transactions',  Icon: ArrowLeftRight  },
-  { label: 'Referrals',     href: '/referrals',     Icon: UserPlus        },
-  { label: 'Notifications', href: '/notifications', Icon: Bell, badge: 3  },
-  { label: 'Settings',      href: '/settings',      Icon: Settings        },
-  { label: 'Help Center',   href: '/help',          Icon: HelpCircle      },
+  { label: 'Tasks',         href: '/tasks',        Icon: CheckSquare     },
+  { label: 'My Tasks',      href: '/my-tasks',     Icon: ClipboardList   },
+  { label: 'Wallet',        href: '/wallet',       Icon: Wallet          },
+  { label: 'Transactions',  href: '/transactions', Icon: ArrowLeftRight  },
+  { label: 'Referrals',     href: '/referrals',    Icon: UserPlus        },
+  { label: 'Leaderboard',   href: '/leaderboard',  Icon: BarChart2       },
+  { label: 'Notifications', href: '/notifications',Icon: Bell            },
+  { label: 'Profile',       href: '/profile',      Icon: UserCircle2     },
+  { label: 'Settings',      href: '/settings',     Icon: Settings        },
+  { label: 'Help Center',   href: '/help',         Icon: HelpCircle      },
 ];
 
 const ADMIN_NAV = [
-  { label: 'Overview',    href: '/admin',             Icon: BarChart2     },
-  { label: 'Campaigns',   href: '/admin/campaigns',   Icon: Megaphone     },
-  { label: 'Submissions', href: '/admin/submissions', Icon: ClipboardList },
-  { label: 'Users',       href: '/admin/users',       Icon: UserCheck     },
-  { label: 'Withdrawals', href: '/admin/withdrawals', Icon: CreditCard    },
+  { label: 'Overview',      href: '/admin',              Icon: BarChart2      },
+  { label: 'Campaigns',     href: '/admin/campaigns',    Icon: Megaphone      },
+  { label: 'Submissions',   href: '/admin/submissions',  Icon: ClipboardList  },
+  { label: 'Users',         href: '/admin/users',        Icon: UserCheck      },
+  { label: 'Withdrawals',   href: '/admin/withdrawals',  Icon: CreditCard     },
+  { label: 'Transactions',  href: '/transactions',       Icon: ArrowLeftRight },
+  { label: 'Task Pricing',  href: '/admin/task-types',   Icon: Tag            },
+  { label: 'Settings',      href: '/admin/settings',     Icon: Settings       },
 ];
 
 export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
@@ -36,9 +42,35 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
   const router   = useRouter();
 
   const isAdmin = user?.role === 'admin';
-  const nav     = isAdmin ? ADMIN_NAV : USER_NAV;
-  const [dismissed,    setDismissed]    = useState(false);
+  const [dismissed,    setDismissed]    = useState(() => {
+    // Persist dismissal so it survives page reloads
+    if (typeof window === 'undefined') return false;
+    return localStorage.getItem('taskora_invite_dismissed') === '1';
+  });
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [unreadCount,  setUnreadCount]  = useState(0);
+
+  function dismissInvite() {
+    setDismissed(true);
+    localStorage.setItem('taskora_invite_dismissed', '1');
+  }
+
+  // Fetch real unread notification count
+  useEffect(() => {
+    if (!user) return;
+    apiGet('/notifications/unread-count')
+      .then(d => setUnreadCount(d?.count ?? 0))
+      .catch(() => {});
+    // Refresh every 60s
+    const t = setInterval(() => {
+      apiGet('/notifications/unread-count').then(d => setUnreadCount(d?.count ?? 0)).catch(() => {});
+    }, 60000);
+    return () => clearInterval(t);
+  }, [user]);
+
+  const nav = isAdmin ? ADMIN_NAV : USER_NAV.map(item =>
+    item.href === '/notifications' ? { ...item, badge: unreadCount || undefined } : item
+  );
 
   const isActive = href => {
     if (href === '/dashboard' || href === '/admin') return pathname === href;
@@ -150,7 +182,7 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
         {!isAdmin && !collapsed && !dismissed && (
           <div className="mx-2 mb-2 p-4 rounded-xl shrink-0 bg-[#6C5CE7] relative">
             <button
-              onClick={() => setDismissed(true)}
+              onClick={() => dismissInvite()}
               className="absolute top-2.5 right-2.5 w-5 h-5 flex items-center justify-center rounded-md text-white/60 hover:text-white hover:bg-white/20 transition-all"
               title="Dismiss"
             >
@@ -221,8 +253,15 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
                 className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg transition-colors duration-150 hover:bg-[var(--bg)]"
                 style={{ background: userMenuOpen ? 'var(--bg)' : undefined }}
               >
-                <div className="w-8 h-8 rounded-full bg-[#6C5CE7] flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-sm">
-                  {user?.name?.[0]?.toUpperCase()}
+                {/* Avatar */}
+                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 shadow-sm"
+                  style={{ background: '#6C5CE7' }}>
+                  {user?.avatar
+                    ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                    : <span className="w-full h-full flex items-center justify-center text-white text-xs font-bold">
+                        {user?.name?.[0]?.toUpperCase()}
+                      </span>
+                  }
                 </div>
                 <div className="flex-1 min-w-0 text-left">
                   <div className="flex items-center gap-1.5">
@@ -251,10 +290,14 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }) {
               <Link
                 href="/settings"
                 onClick={() => onMobileClose?.()}
-                className="w-9 h-9 rounded-full bg-[#6C5CE7] flex items-center justify-center text-white text-xs font-bold hover:opacity-90 transition-opacity shadow-sm"
+                className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center text-white text-xs font-bold hover:opacity-90 transition-opacity shadow-sm"
+                style={{ background: '#6C5CE7' }}
                 title={user?.name}
               >
-                {user?.name?.[0]?.toUpperCase()}
+                {user?.avatar
+                  ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                  : user?.name?.[0]?.toUpperCase()
+                }
               </Link>
               <button
                 onClick={handleLogout}

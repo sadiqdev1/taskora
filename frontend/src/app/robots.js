@@ -3,8 +3,8 @@ export default function robots() {
     rules: [
       {
         userAgent: '*',
-        allow: ['/', '/campaigns', '/help'],
-        disallow: ['/dashboard', '/admin', '/wallet', '/transactions', '/settings', '/notifications', '/referrals', '/tasks'],
+        allow: ['/', '/tasks', '/help'],
+        disallow: ['/dashboard', '/admin', '/wallet', '/transactions', '/settings', '/notifications', '/referrals', '/my-tasks'],
       },
     ],
     sitemap: 'https://taskora.io/sitemap.xml',

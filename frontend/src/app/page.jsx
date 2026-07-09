@@ -3,7 +3,7 @@ import Welcome from '@/app/Welcome';
 export const metadata = {
   title: 'Taskora — Earn Money Completing Tasks & Social Media Campaigns',
   description:
-    'Taskora is the #1 micro-task earning platform. Complete Instagram, TikTok, YouTube and social media campaigns for real cash. Join 50,000+ earners. Free to start — withdraw from $10.',
+    'Taskora is the #1 micro-task earning platform. Complete Instagram, TikTok, YouTube and social media campaigns for real cash. Join 50,000+ earners. Free to start — withdraw from ₦500.',
   keywords: [
     'earn money online', 'micro tasks', 'paid social media tasks', 'get paid to like posts',
     'earn from Instagram', 'TikTok tasks for money', 'YouTube tasks earn cash',
@@ -14,7 +14,7 @@ export const metadata = {
   ],
   openGraph: {
     title: 'Taskora — Earn Money Completing Tasks',
-    description: 'Complete social media tasks and earn real cash. 500+ active campaigns. Withdraw from $10. Join free today.',
+    description: 'Complete social media tasks and earn real cash. 500+ active campaigns. Withdraw from ₦500. Join free today.',
     url: 'https://taskora.io',
     type: 'website',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],

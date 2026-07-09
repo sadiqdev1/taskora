@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SubmissionStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class TaskSubmission extends Model
@@ -11,7 +12,10 @@ class TaskSubmission extends Model
         'campaign_id',
         'status',
         'proof',
+        'proof_image',
         'rejection_reason',
+        'reviewed_by',
+        'reviewed_at',
         'earned',
         'completed_at',
     ];
@@ -21,6 +25,8 @@ class TaskSubmission extends Model
         return [
             'earned'       => 'decimal:2',
             'completed_at' => 'datetime',
+            'reviewed_at'  => 'datetime',
+            'status'       => SubmissionStatus::class,
         ];
     }
 
@@ -33,5 +39,10 @@ class TaskSubmission extends Model
     public function campaign()
     {
         return $this->belongsTo(Campaign::class);
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }

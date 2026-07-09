@@ -4,16 +4,20 @@ import { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import Link from 'next/link';
 import { apiGet } from '@/lib/api';
-import { getToken } from '@/lib/auth';
 import {
   Users, Megaphone, ClipboardList, CreditCard, DollarSign,
   TrendingUp, UserPlus, BarChart2, ChevronRight,
   Smartphone, CheckCircle2, Clock, XCircle,
 } from 'lucide-react';
 import { FaInstagram, FaYoutube, FaXTwitter, FaFacebook, FaTiktok } from 'react-icons/fa6';
+import UserAvatar from '@/components/UserAvatar';
+import {
+  ResponsiveContainer, AreaChart, Area, XAxis, YAxis,
+  CartesianGrid, Tooltip, Legend,
+} from 'recharts';
 
 function fmt(n) {
-  return '$' + parseFloat(n || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return '₦' + parseFloat(n || 0).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 const PLATFORM_META = {
@@ -25,20 +29,6 @@ const PLATFORM_META = {
   other:     { Icon: Smartphone,  bg: '#F0EEFF', color: '#6C5CE7' },
 };
 
-const MOCK_STATS = {
-  total_users: 5240, total_campaigns: 38, active_campaigns: 12,
-  pending_submissions: 147, pending_withdrawals: 23,
-  total_paid_out: 218450.00, total_earned_by_users: 312000.00, new_users_this_month: 342,
-};
-
-const RECENT_SUBMISSIONS = [
-  { id: 1, user: { name: 'John Doe'  }, campaign: { title: 'Instagram Post Engagement', platform: 'instagram' }, reward: 3.00, status: 'pending',  time: '5m ago'  },
-  { id: 2, user: { name: 'Alice K.'  }, campaign: { title: 'TikTok Video Promotion',    platform: 'tiktok'    }, reward: 4.00, status: 'pending',  time: '12m ago' },
-  { id: 3, user: { name: 'Bob Lee'   }, campaign: { title: 'YouTube Channel Boost',     platform: 'youtube'   }, reward: 4.00, status: 'approved', time: '1h ago'  },
-  { id: 4, user: { name: 'Sara M.'   }, campaign: { title: 'Twitter Post Engagement',   platform: 'twitter'   }, reward: 2.50, status: 'rejected', time: '2h ago'  },
-  { id: 5, user: { name: 'David P.'  }, campaign: { title: 'Facebook Page Like',        platform: 'facebook'  }, reward: 2.50, status: 'pending',  time: '3h ago'  },
-];
-
 const STATUS_META = {
   approved: { Icon: CheckCircle2, bg: '#D4F6EE', color: '#00875A' },
   pending:  { Icon: Clock,        bg: '#FFF3D6', color: '#B45309' },
@@ -46,27 +36,41 @@ const STATUS_META = {
 };
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState(MOCK_STATS);
+  const [stats,       setStats]       = useState(null);
+  const [submissions, setSubmissions] = useState([]);
+  const [chartData,   setChartData]   = useState([]);
+  const [loading,     setLoading]     = useState(true);
 
   useEffect(() => {
-    apiGet('/admin/stats', { headers: { Authorization: `Bearer ${getToken()}` } })
-      .then(d => { if (d) setStats(d); }).catch(() => {});
+    Promise.all([
+      apiGet('/admin/stats'),
+      apiGet('/admin/submissions?status=pending&per_page=5'),
+    ]).then(([s, sub]) => {
+      if (s) { setStats(s); setChartData(s.chart || []); }
+      setSubmissions(sub?.data || []);
+    }).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
+  const s = stats || {
+    total_users: 0, total_campaigns: 0, active_campaigns: 0,
+    pending_submissions: 0, pending_withdrawals: 0,
+    total_paid_out: 0, total_earned_by_users: 0, new_users_this_month: 0,
+  };
+
   const statCards = [
-    { label: 'Total Users',         value: stats.total_users?.toLocaleString(), Icon: Users,       bg: '#EEF2FF', color: 'var(--primary)', link: '/admin/users'       },
-    { label: 'Active Campaigns',    value: stats.active_campaigns,               Icon: Megaphone,   bg: '#D4F6EE', color: '#00875A',        link: '/admin/campaigns'   },
-    { label: 'Pending Submissions', value: stats.pending_submissions,            Icon: ClipboardList,bg:'#FFF3D6', color: '#B45309',        link: '/admin/submissions' },
-    { label: 'Pending Withdrawals', value: stats.pending_withdrawals,            Icon: CreditCard,  bg: '#FFE0E0', color: '#C0392B',        link: '/admin/withdrawals' },
-    { label: 'Total Paid Out',      value: fmt(stats.total_paid_out),            Icon: DollarSign,  bg: '#EEF2FF', color: 'var(--primary)', link: '/admin/withdrawals' },
-    { label: 'Total User Earnings', value: fmt(stats.total_earned_by_users),     Icon: TrendingUp,  bg: '#D4F6EE', color: '#00875A',        link: null                 },
-    { label: 'New Users (Month)',   value: stats.new_users_this_month,           Icon: UserPlus,    bg: '#F0EEFF', color: '#6C5CE7',        link: '/admin/users'       },
-    { label: 'Total Campaigns',     value: stats.total_campaigns,                Icon: BarChart2,   bg: '#FFF3D6', color: '#B45309',        link: '/admin/campaigns'   },
+    { label: 'Total Users',         value: s.total_users?.toLocaleString(),  Icon: Users,        bg: '#EEF2FF', color: 'var(--primary)', link: '/admin/users'       },
+    { label: 'Active Campaigns',    value: s.active_campaigns,               Icon: Megaphone,    bg: '#D4F6EE', color: '#00875A',        link: '/admin/campaigns'   },
+    { label: 'Pending Submissions', value: s.pending_submissions,            Icon: ClipboardList,bg:'#FFF3D6',  color: '#B45309',        link: '/admin/submissions' },
+    { label: 'Pending Withdrawals', value: s.pending_withdrawals,            Icon: CreditCard,   bg: '#FFE0E0', color: '#C0392B',        link: '/admin/withdrawals' },
+    { label: 'Total Paid Out',      value: fmt(s.total_paid_out),            Icon: DollarSign,   bg: '#EEF2FF', color: 'var(--primary)', link: '/admin/withdrawals' },
+    { label: 'Total User Earnings', value: fmt(s.total_earned_by_users),     Icon: TrendingUp,   bg: '#D4F6EE', color: '#00875A',        link: null                 },
+    { label: 'New Users (Month)',   value: s.new_users_this_month,           Icon: UserPlus,     bg: '#F0EEFF', color: '#6C5CE7',        link: '/admin/users'       },
+    { label: 'Total Campaigns',     value: s.total_campaigns,                Icon: BarChart2,    bg: '#FFF3D6', color: '#B45309',        link: '/admin/campaigns'   },
   ];
 
   const quickActions = [
-    { label: 'Review Submissions', href: '/admin/submissions', Icon: ClipboardList, urgent: stats.pending_submissions > 0 },
-    { label: 'Process Withdrawals',href: '/admin/withdrawals', Icon: CreditCard,    urgent: stats.pending_withdrawals > 0 },
+    { label: 'Review Submissions', href: '/admin/submissions', Icon: ClipboardList, urgent: s.pending_submissions > 0 },
+    { label: 'Process Withdrawals',href: '/admin/withdrawals', Icon: CreditCard,    urgent: s.pending_withdrawals > 0 },
     { label: 'Manage Campaigns',   href: '/admin/campaigns',   Icon: Megaphone,     urgent: false },
     { label: 'Manage Users',       href: '/admin/users',       Icon: Users,         urgent: false },
   ];
@@ -94,6 +98,49 @@ export default function AdminDashboard() {
         ))}
       </div>
 
+      {/* Chart — 30-day earnings & users */}
+      {chartData.length > 0 && (
+        <div className="card rounded-2xl p-5 mb-6">
+          <div className="flex items-center justify-between mb-5">
+            <div>
+              <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Platform Activity</h2>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Last 30 days — earnings, new users, submissions</p>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={220}>
+            <AreaChart data={chartData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id="gEarnings" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%"  stopColor="#6C5CE7" stopOpacity={0.18} />
+                  <stop offset="95%" stopColor="#6C5CE7" stopOpacity={0}    />
+                </linearGradient>
+                <linearGradient id="gUsers" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%"  stopColor="#00875A" stopOpacity={0.15} />
+                  <stop offset="95%" stopColor="#00875A" stopOpacity={0}    />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" vertical={false} />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
+                tickLine={false} axisLine={false} interval={4} />
+              <YAxis tick={{ fontSize: 10, fill: 'var(--text-muted)' }}
+                tickLine={false} axisLine={false} />
+              <Tooltip
+                contentStyle={{ background: 'white', border: '1px solid var(--border-subtle)', borderRadius: 12, fontSize: 12 }}
+                formatter={(value, name) => [
+                  name === 'earnings' ? `₦${parseFloat(value).toLocaleString('en-NG')}` : value,
+                  name === 'earnings' ? 'Earnings' : name === 'new_users' ? 'New Users' : 'Submissions',
+                ]}
+              />
+              <Legend iconType="circle" iconSize={8}
+                formatter={v => v === 'earnings' ? 'Earnings' : v === 'new_users' ? 'New Users' : 'Submissions'} />
+              <Area type="monotone" dataKey="earnings"    stroke="#6C5CE7" strokeWidth={2} fill="url(#gEarnings)" dot={false} />
+              <Area type="monotone" dataKey="new_users"   stroke="#00875A" strokeWidth={2} fill="url(#gUsers)"    dot={false} />
+              <Area type="monotone" dataKey="submissions" stroke="#B45309" strokeWidth={1.5} fill="none"          dot={false} strokeDasharray="4 2" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
       {/* Quick actions */}
       <div className="grid sm:grid-cols-4 gap-4 mb-6">
         {quickActions.map(a => (
@@ -118,52 +165,63 @@ export default function AdminDashboard() {
             View all <ChevronRight size={12} />
           </Link>
         </div>
+        {loading ? (
+          <div className="text-center py-8">
+            <div className="w-7 h-7 rounded-full border-[3px] animate-spin mx-auto"
+              style={{ borderColor: 'var(--border-subtle)', borderTopColor: '#6C5CE7' }} />
+          </div>
+        ) : submissions.length === 0 ? (
+          <div className="text-center py-10 text-sm" style={{ color: 'var(--text-muted)' }}>
+            No pending submissions
+          </div>
+        ) : (
         <table className="w-full">
           <thead>
             <tr style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-              {['User', 'Campaign', 'Reward', 'Status', 'Time', 'Actions'].map(h => (
+              {['User', 'Campaign', 'Reward', 'Status', 'Date', 'Actions'].map(h => (
                 <th key={h} className="px-5 py-3 text-left text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {RECENT_SUBMISSIONS.map((s, i) => {
-              const pm = PLATFORM_META[s.campaign.platform] || PLATFORM_META.other;
+            {submissions.map((s, i) => {
+              const pm = PLATFORM_META[s.campaign?.platform] || PLATFORM_META.other;
               const sm = STATUS_META[s.status] || STATUS_META.pending;
               return (
                 <tr key={s.id}
-                  style={{ borderBottom: i < RECENT_SUBMISSIONS.length - 1 ? '1px solid var(--border-subtle)' : undefined }}
+                  style={{ borderBottom: i < submissions.length - 1 ? '1px solid var(--border-subtle)' : undefined }}
                   onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg)')}
                   onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-2">
-                      <span className="gradient-brand w-7 h-7 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
-                        {s.user.name[0]}
-                      </span>
-                      <span className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{s.user.name}</span>
+                      <UserAvatar user={s.user} size={28} />
+                      <span className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{s.user?.name}</span>
                     </div>
                   </td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-2">
                       <span className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: pm.bg, color: pm.color }}>
-                        <pm.Icon size={12} strokeWidth={1.8} />
+                        <pm.Icon size={12} />
                       </span>
-                      <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{s.campaign.title}</span>
+                      <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{s.campaign?.title}</span>
                     </div>
                   </td>
-                  <td className="px-5 py-3.5 text-sm font-bold" style={{ color: 'var(--text)' }}>${s.reward.toFixed(2)}</td>
+                  <td className="px-5 py-3.5 text-sm font-bold" style={{ color: 'var(--text)' }}>
+                    ₦{parseFloat(s.campaign?.reward_per_task || 0).toFixed(2)}
+                  </td>
                   <td className="px-5 py-3.5">
                     <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full w-fit" style={{ background: sm.bg, color: sm.color }}>
                       <sm.Icon size={11} strokeWidth={2.2} /> {s.status}
                     </span>
                   </td>
-                  <td className="px-5 py-3.5 text-xs" style={{ color: 'var(--text-muted)' }}>{s.time}</td>
+                  <td className="px-5 py-3.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                    {s.created_at ? new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
+                  </td>
                   <td className="px-5 py-3.5">
                     {s.status === 'pending' && (
-                      <div className="flex items-center gap-2">
-                        <button className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: '#D4F6EE', color: '#00875A' }}>Approve</button>
-                        <button className="px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: '#FFE0E0', color: '#C0392B' }}>Reject</button>
-                      </div>
+                      <Link href="/admin/submissions" className="text-xs font-semibold" style={{ color: '#6C5CE7' }}>
+                        Review →
+                      </Link>
                     )}
                   </td>
                 </tr>
@@ -171,6 +229,7 @@ export default function AdminDashboard() {
             })}
           </tbody>
         </table>
+        )}
       </div>
     </DashboardLayout>
   );

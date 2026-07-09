@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
     protected $fillable = [
         'user_id',
+        'related_user_id',
         'type',
         'amount',
         'status',
@@ -23,6 +26,8 @@ class Transaction extends Model
         return [
             'amount'        => 'decimal:2',
             'balance_after' => 'decimal:2',
+            'type'          => TransactionType::class,
+            'status'        => TransactionStatus::class,
         ];
     }
 

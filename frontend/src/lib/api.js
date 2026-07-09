@@ -12,10 +12,12 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
  */
 export async function apiFetch(endpoint, options = {}) {
   const token = getToken();
+  const isFormData = options.body instanceof FormData;
 
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     headers: {
-      'Content-Type': 'application/json',
+      // Don't set Content-Type for FormData — browser sets it with boundary automatically
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       Accept: 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
