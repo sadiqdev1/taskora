@@ -23,29 +23,23 @@ services:
       - key: APP_URL
         value: https://taskora-backend.onrender.com
 
-      # Database — use Render's free PostgreSQL
+      # Database — Supabase PostgreSQL (direct connection, works on Render's IPv6-capable Docker)
+      # The @ in the password must NOT be percent-encoded in individual env vars
+      # (only in connection URL strings). Render passes it as-is to Laravel.
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        fromDatabase:
-          name: taskora-db
-          property: host
+        value: db.grcxsnmtovwqpmjuvxwa.supabase.co
       - key: DB_PORT
-        fromDatabase:
-          name: taskora-db
-          property: port
+        value: 5432
       - key: DB_DATABASE
-        fromDatabase:
-          name: taskora-db
-          property: database
+        value: postgres
       - key: DB_USERNAME
-        fromDatabase:
-          name: taskora-db
-          property: user
+        value: postgres
       - key: DB_PASSWORD
-        fromDatabase:
-          name: taskora-db
-          property: password
+        sync: false   # Set in Render dashboard: @Abu31720082030
+      - key: DB_SSLMODE
+        value: require
 
       # Cache + Queue — use database (no Redis needed on free plan)
       - key: CACHE_STORE
@@ -103,9 +97,3 @@ services:
       - key: PORT
         value: 3000
 
-databases:
-  - name: taskora-db
-    plan: free
-    region: oregon
-    databaseName: taskora
-    user: taskora

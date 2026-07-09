@@ -18,6 +18,14 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
+# Wait for DB to be ready (Supabase pooler can take a moment on cold start)
+echo "==> Waiting for database connection..."
+for i in $(seq 1 10); do
+    php artisan db:show --no-interaction > /dev/null 2>&1 && break
+    echo "  attempt $i/10 — retrying in 3s..."
+    sleep 3
+done
+
 # Run migrations automatically on every deploy
 echo "==> Running migrations..."
 php artisan migrate --force --no-interaction
