@@ -21,7 +21,7 @@ services:
       - key: APP_KEY
         generateValue: true
       - key: APP_URL
-        value: https://taskora-backend.onrender.com
+        value: https://taskora-backend-v1ag.onrender.com
 
       # Database — Supabase PostgreSQL (direct connection, works on Render's IPv6-capable Docker)
       # The @ in the password must NOT be percent-encoded in individual env vars
@@ -69,7 +69,7 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_REDIRECT_URI
-        value: https://taskora-backend.onrender.com/api/auth/google/callback
+        value: https://taskora-backend-v1ag.onrender.com/api/auth/google/callback
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY
