@@ -17,8 +17,8 @@ RUN apk add --no-cache \
     freetype-dev \
     libzip-dev \
     oniguruma-dev \
+    postgresql-dev \
     mysql-client \
-    postgresql-client \
     bash
 
 # ── PHP extensions ───────────────────────────────────────────────────────────
