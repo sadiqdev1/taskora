@@ -51,11 +51,11 @@ services:
 
       # Frontend URL (update to your Vercel/Render frontend URL after deploy)
       - key: FRONTEND_URL
-        value: https://taskora.vercel.app
+        value: https://taskora-frontend-delta.vercel.app
 
       # CORS
       - key: SANCTUM_STATEFUL_DOMAINS
-        value: taskora.vercel.app,localhost:3000
+        value: taskora-frontend-delta.vercel.app,localhost:3000
 
       # Secrets — set manually in Render dashboard
       - key: RESEND_API_KEY
